@@ -1,0 +1,29 @@
+const express = require("express");
+const router = express.Router();
+const movieRoute = require("./movie.route");
+// const genreRoute = require("./genre.route");
+// const episodeRoute = require("./episode.route");
+// const serverRoute = require("./server.route");
+// const yearRoute = require("./year.route");
+// const countryRoute = require("./country.route");
+// const userRoute = require("./user.route");
+// const seasonRoute = require("./season.route");
+// const statusRoute = require("./status.route");
+// const imageRoute = require("./image.route");
+// const mangaRoute = require("./manga.route");
+// const chapterRoute = require("./chapter.route");
+
+router.use("/movie", movieRoute);
+// router.use("/genre", genreRoute);
+// router.use("/episode", episodeRoute);
+// router.use("/server", serverRoute);
+// router.use("/year", yearRoute);
+// router.use("/country", countryRoute);
+// router.use("/user", userRoute);
+// router.use("/season", seasonRoute);
+// router.use("/status", statusRoute);
+// router.use("/images", imageRoute);
+// router.use("/manga", mangaRoute);
+// router.use("/chapter", chapterRoute);
+
+module.exports = router;
