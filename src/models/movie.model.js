@@ -5,17 +5,18 @@ function Movie(movie) {
     this.name = movie.name;
     this.othername = movie.othername;
     this.slug = slug(movie.name);
-    this.year = movie.year;
     this.content = movie.content;
+    this.thumb = movie.thumb;
+    this.background = movie.background;
     this.viewd = 0;
     this.liked = 0;
-    this.thumb = movie.thumb;
-    this.bthumb = movie.bthumb;
+    this.year = movie.year;
+    this.status = 1;
+    this.country = movie.country;
     this.type = movie.type;
-    this.mainserver = 4;
-    this.status = 2;
+    this.mainserver = movie.server;
     this.newupdate = 0;
-    this.activate = 1;
+    this.deleted = 0;
 }
 
 Movie.getAll = async () => {
@@ -38,7 +39,7 @@ Movie.createOne = async (movie) => {
     return await promisePool.execute(
         `
         INSERT INTO tb_movie
-        VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+        VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
         `,
         [
             movie.name,
@@ -46,15 +47,16 @@ Movie.createOne = async (movie) => {
             movie.slug,
             movie.content,
             movie.thumb,
-            movie.bthumb,
+            movie.background,
             movie.viewd,
             movie.liked,
             movie.year,
             movie.status,
-            movie.mainserver,
+            movie.country,
             movie.type,
+            movie.server,
             movie.newupdate,
-            movie.activate,
+            movie.deleted,
         ]
     );
 };
@@ -67,13 +69,15 @@ Movie.updateOne = async (movie) => {
             OtherName = ?,
             Slug = ?,
             Content = ?,
-            View = ?,
+            Thumb = ?,
+            Background = ?,
+            Viewed = ?,
             Liked = ?,
             idYear = ?,
-            Thumb = ?,
-            BigThumb = ?,
+            idStatus = ?,
+            idCountry = ?,
+            idType = ?,
             MainServer = ?,
-            idStatus = ?
         WHERE idAnime = ?
         `,
         [
@@ -81,16 +85,60 @@ Movie.updateOne = async (movie) => {
             movie.othername,
             slug(movie.name),
             movie.content,
-            movie.view,
-            movie.liked,
-            movie.year,
             movie.thumb,
             movie.bthumb,
-            movie.mainserver,
+            movie.viewed,
+            movie.liked,
+            movie.year,
             movie.status,
+            movie.country,
+            movie.type,
+            movie.mainserver,
             movie.id,
         ]
     );
+};
+
+Movie.getInformation = async (id) => {
+    return await promisePool.execute(
+        `
+        SELECT * FROM tb_movie m
+        INNER JOIN tb_status s
+        ON m.idStatus = s.idStatus
+        INNER JOIN tb_year y
+        ON m.idYear = y.idYear
+        INNER JOIN tb_country c
+        ON m.idCountry = c.idCountry
+        INNER JOIN tb_type t
+        ON m.idType = t.idType
+        INNER JOIN tb_server sv
+        ON m.MainServer = sv.idServer
+        WHERE m.idMovie = ?
+        `,
+        [id]
+    );
+};
+
+Movie.deleteOrActivate = async (id, type) => {
+    if (type === 0) {
+        return await promisePool.execute(
+            `
+            UPDATE tb_movie
+            SET Deleted = 0
+            WHERE idMovie = ?
+            `,
+            [id]
+        );
+    } else {
+        return await promisePool.execute(
+            `
+            UPDATE tb_movie
+            SET Deleted = 1
+            WHERE idMovie = ?
+            `,
+            [id]
+        );
+    }
 };
 
 module.exports = Movie;

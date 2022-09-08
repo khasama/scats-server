@@ -15,6 +15,10 @@ const session = require("express-session");
 
 // const clientRedis = new Redis();
 
+app.set("view engine", "ejs");
+app.set("views", "./src/views");
+app.use("/public", express.static("./src/public"));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // app.use(cookieParser());
@@ -43,16 +47,17 @@ io.on("connection", (socket) => {
 });
 
 app.use("/api/v1", require("./src/routes"));
+app.use("/admin", require("./src/routes/admin.route"));
 
-app.use((req, res, next) => {
-    next(createError.NotFound());
-});
+// app.use((req, res, next) => {
+//     next(createError.NotFound());
+// });
 
-app.use((err, req, res, next) => {
-    return res.status(err.status).json({
-        status: "Error",
-        message: err.message,
-    });
-});
+// app.use((err, req, res, next) => {
+//     return res.status(err.status).json({
+//         status: "Error",
+//         message: err.message,
+//     });
+// });
 
 module.exports = server;
