@@ -37,7 +37,7 @@ ServerService.updateOne = async (data) => {
     try {
         const [rows] = await ServerModel.updateOne(data);
         if (rows.affectedRows != 0) {
-            const [server] = await ServerModel.getOne(data.id);
+            const [server] = await ServerModel.getInformation(data.id);
             return { status: "success", data: server };
         }
         return { status: "failed", message: "Can not update" };

@@ -80,7 +80,7 @@
                                                         <td>
                                                             <a href="javascript:void(0)" class="btn btn-primary"
                                                                 data-id="<%- movie.idMovie %>"
-                                                                onclick="getInforMovie(this)">Edit</a> |
+                                                                onclick="getInforMovie(this)">Edit</a>
                                                             <a href="javascript:void(0)" class="btn btn-danger"
                                                                 data-id="<%- movie.idMovie %>"
                                                                 onclick="deleteMovie(this)">Delete</a>
@@ -106,7 +106,7 @@
                                             <div>
                                                 <div class="form-group">
                                                     <label for="name">Name:</label>
-                                                    <input type="text" class="form-control" id="addNameProd"
+                                                    <input type="text" class="form-control" id="addName"
                                                         autocomplete="off">
                                                 </div>
                                                 <div class="form-group">
@@ -129,29 +129,45 @@
                                                 <div class="form-group d-flex">
                                                     <label for="year" style="line-height: 30px;">Year:</label>
                                                     <select id="addYear" class="w-50 form-control ml-2">
-
+                                                        <% years.forEach(year=> { %>
+                                                            <option value="<%- year.idYear %>">
+                                                                <%- year.Year %>
+                                                            </option>
+                                                            <% }); %>
                                                     </select>
                                                 </div>
                                                 <div class="form-group d-flex">
                                                     <label for="country" style="line-height: 30px;">Country:</label>
                                                     <select id="addCountry" class="w-50 form-control ml-2">
-
+                                                        <% countries.forEach(country=> { %>
+                                                            <option value="<%- country.idCountry %>">
+                                                                <%- country.Country %>
+                                                            </option>
+                                                            <% }); %>
                                                     </select>
                                                 </div>
                                                 <div class="form-group d-flex">
                                                     <label for="type" style="line-height: 30px;">Type:</label>
                                                     <select id="addType" class="w-50 form-control ml-2">
-
+                                                        <% types.forEach(type=> { %>
+                                                            <option value="<%- type.idType %>">
+                                                                <%- type.Type %>
+                                                            </option>
+                                                            <% }); %>
                                                     </select>
                                                 </div>
                                                 <div class="form-group d-flex">
                                                     <label for="server" style="line-height: 30px;">Main server:</label>
                                                     <select id="addServer" class="w-50 form-control ml-2">
-
+                                                        <% servers.forEach(server=> { %>
+                                                            <option value="<%- server.idServer %>">
+                                                                <%- server.Server %>
+                                                            </option>
+                                                            <% }); %>
                                                     </select>
                                                 </div>
 
-                                                <button id="addMovie" class="btn btn-primary">Create</button>
+                                                <button id="newMovie" class="btn btn-primary">Create</button>
                                             </div>
                                         </div>
                                     </div>

@@ -2,6 +2,8 @@ const MovieModel = require("../models/movie.model");
 const GenreModel = require("../models/genre.model");
 const YearModel = require("../models/year.model");
 const CountryModel = require("../models/country.model");
+const ServerModel = require("../models/server.model");
+const TypeModel = require("../models/type.model");
 const AdminController = {};
 
 AdminController.home = (req, res) => {
@@ -11,7 +13,17 @@ AdminController.home = (req, res) => {
 AdminController.getAllMovie = async (req, res) => {
     try {
         const [movies] = await MovieModel.getAll();
-        return res.render("pages/movie", { movies });
+        const [years] = await YearModel.getAll();
+        const [countries] = await CountryModel.getAll();
+        const [servers] = await ServerModel.getAll();
+        const [types] = await TypeModel.getAll();
+        return res.render("pages/movie", {
+            movies,
+            years,
+            countries,
+            servers,
+            types,
+        });
     } catch (error) {
         throw error;
     }
@@ -44,24 +56,22 @@ AdminController.getAllCountry = async (req, res) => {
     }
 };
 
-// AdminController.getProdDetail = async (req, res) => {
-//     const _id = mongoose.Types.ObjectId(req.params.id);
-//     try {
-//         const product = await ProductModel.find({ _id })
-//             .populate("category")
-//             .limit(1);
-//         res.status(200).json({ status: "success", data: product[0] });
-//     } catch (error) {
-//         console.log(error);
-//     }
-// };
+AdminController.getAllServer = async (req, res) => {
+    try {
+        const [servers] = await ServerModel.getAll();
+        return res.render("pages/server", { servers });
+    } catch (error) {
+        throw error;
+    }
+};
 
-// AdminController.categories = (req, res) => {
-//     res.render("admin");
-// };
-
-// AdminController.users = (req, res) => {
-//     res.render("admin");
-// };
+AdminController.getAllType = async (req, res) => {
+    try {
+        const [types] = await TypeModel.getAll();
+        return res.render("pages/type", { types });
+    } catch (error) {
+        throw error;
+    }
+};
 
 module.exports = AdminController;

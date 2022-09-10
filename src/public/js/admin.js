@@ -181,6 +181,168 @@ $(document).ready(function () {
             alert("Not emty !!!");
         }
     });
+
+    $("#newServer").click(() => {
+        const server = $("#addServer").val().trim();
+        const description = $("#addServerDesc").val().trim();
+        if (server && description) {
+            $.ajax({
+                type: "POST",
+                url: `/api/v1/server/`,
+                data: {
+                    server,
+                    description,
+                },
+                success: (result) => {
+                    if (result.status == "success") {
+                        alert(result.status);
+                        location.reload();
+                    } else {
+                        alert(result.message);
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                },
+            });
+        } else {
+            alert("Not emty !!!");
+        }
+    });
+
+    $("#updateServer").click(() => {
+        const server = $("#editServer").val().trim();
+        const description = $("#editServerDesc").val().trim();
+        const id = $("#idServer").val();
+        if (server && description) {
+            $.ajax({
+                type: "PUT",
+                url: `/api/v1/server/${id}`,
+                data: {
+                    server,
+                    description,
+                },
+                success: (result) => {
+                    if (result.status == "success") {
+                        alert(result.status);
+                        location.reload();
+                    } else {
+                        alert(result.message);
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                },
+            });
+        } else {
+            alert("Not emty !!!");
+        }
+    });
+
+    $("#newType").click(() => {
+        const type = $("#addType").val().trim();
+        if (type) {
+            $.ajax({
+                type: "POST",
+                url: `/api/v1/type/`,
+                data: {
+                    type,
+                },
+                success: (result) => {
+                    if (result.status == "success") {
+                        alert(result.status);
+                        location.reload();
+                    } else {
+                        alert(result.message);
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                },
+            });
+        } else {
+            alert("Not emty !!!");
+        }
+    });
+
+    $("#updateType").click(() => {
+        const type = $("#editType").val().trim();
+        const id = $("#idType").val();
+        if (type) {
+            $.ajax({
+                type: "PUT",
+                url: `/api/v1/type/${id}`,
+                data: {
+                    type,
+                },
+                success: (result) => {
+                    if (result.status == "success") {
+                        alert(result.status);
+                        location.reload();
+                    } else {
+                        alert(result.message);
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                },
+            });
+        } else {
+            alert("Not emty !!!");
+        }
+    });
+
+    $("#newMovie").click(() => {
+        const name = $("#addName").val().trim();
+        const othername = $("#addOtherName").val().trim();
+        const content = addContent.getData();
+        const thumb = $("#addThumb").val().trim();
+        const background = $("#addBackground").val().trim();
+        const year = $("#addYear").val();
+        const country = $("#addCountry").val();
+        const type = $("#addType").val();
+        const server = $("#addServer").val();
+        if (
+            name &&
+            othername &&
+            content &&
+            thumb &&
+            background &&
+            year &&
+            country &&
+            type &&
+            server
+        ) {
+            $.ajax({
+                type: "POST",
+                url: `/api/v1/movie/`,
+                data: {
+                    name,
+                    othername,
+                    content,
+                    thumb,
+                    background,
+                    year,
+                    country,
+                    type,
+                    server,
+                },
+                success: (result) => {
+                    if (result.status == "success") {
+                        alert(result.status);
+                        location.reload();
+                    } else {
+                        alert(result.message);
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                },
+            });
+        } else {
+            alert("Not emty !!!");
+        }
+    });
 });
 
 function getInforGenre(ele) {
@@ -291,6 +453,89 @@ function deleteCountry(ele) {
         $.ajax({
             type: "DELETE",
             url: `/api/v1/country/${id}`,
+            success: (result) => {
+                if (result.status == "success") {
+                    alert(result.status);
+                    location.reload();
+                } else {
+                    alert(result.message);
+                }
+            },
+            error: (err) => {
+                console.log(err);
+            },
+        });
+    }
+}
+
+function getInforServer(ele) {
+    const id = $(ele).attr("data-id");
+    $.ajax({
+        url: `/api/v1/server/${id}`,
+        success: (result) => {
+            if (result.status == "success") {
+                const server = result.data;
+                $("#editServer").val(server.Server);
+                $("#editServerDesc").val(server.ServerDescription);
+                $("#idServer").val(server.idServer);
+                $("#editServerModal").modal("show");
+            } else {
+                alert(result.message);
+            }
+        },
+        error: (err) => {
+            console.log(err);
+        },
+    });
+}
+
+function deleteServer(ele) {
+    const id = $(ele).attr("data-id");
+    if (confirm("Are you sure about that ???")) {
+        $.ajax({
+            type: "DELETE",
+            url: `/api/v1/server/${id}`,
+            success: (result) => {
+                if (result.status == "success") {
+                    alert(result.status);
+                    location.reload();
+                } else {
+                    alert(result.message);
+                }
+            },
+            error: (err) => {
+                console.log(err);
+            },
+        });
+    }
+}
+
+function getInforType(ele) {
+    const id = $(ele).attr("data-id");
+    $.ajax({
+        url: `/api/v1/type/${id}`,
+        success: (result) => {
+            if (result.status == "success") {
+                const type = result.data;
+                $("#editType").val(type.Type);
+                $("#idType").val(type.idType);
+                $("#editTypeModal").modal("show");
+            } else {
+                alert(result.message);
+            }
+        },
+        error: (err) => {
+            console.log(err);
+        },
+    });
+}
+
+function deleteType(ele) {
+    const id = $(ele).attr("data-id");
+    if (confirm("Are you sure about that ???")) {
+        $.ajax({
+            type: "DELETE",
+            url: `/api/v1/type/${id}`,
             success: (result) => {
                 if (result.status == "success") {
                     alert(result.status);

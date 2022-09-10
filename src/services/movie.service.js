@@ -14,8 +14,6 @@ MovieService.getAll = async () => {
 
 MovieService.createOne = async (data) => {
     try {
-        const thumb = data.thumb;
-        const background = data.thumb;
         const movie = new MovieModel({
             name: data.name,
             othername: data.othername,

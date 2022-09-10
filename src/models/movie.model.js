@@ -14,7 +14,7 @@ function Movie(movie) {
     this.status = 1;
     this.country = movie.country;
     this.type = movie.type;
-    this.mainserver = movie.server;
+    this.server = movie.server;
     this.newupdate = 0;
     this.deleted = 0;
 }
