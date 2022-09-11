@@ -5,7 +5,7 @@ const MovieController = require("../controllers/movie.controller");
 
 router.get("/", MovieController.getAll);
 router.post("/", MovieController.createOne);
-// router.put("/:id", MovieController.updateOne);
+router.put("/:id", MovieController.updateOne);
 // router.delete("/:id", MovieController.deleteSoft);
 // router.put("/activate/:id", MovieController.activateOne);
 // router.post("/add-genre", MovieController.addGenre);

@@ -1,5 +1,4 @@
 const YearModel = require("../models/year.model");
-const MovieModel = require("../models/movie.model");
 
 const YearService = {};
 

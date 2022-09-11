@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../../partials/head') %>
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- slide trái -->
+        <%- include('../../partials/left') %>
+            <!-- End slide trái -->
+
+            <!-- Content Wrapper -->
+            <div id="content-wrapper" class="d-flex flex-column">
+
+                <!-- Main Content -->
+                <div id="content">
+
+                    <!-- Top bar -->
+                    <%- include('../../partials/top') %>
+                        <!-- End of Top bar -->
+
+                        <!-- Begin Page Content -->
+                        <div class="container-fluid" style="margin: 20px 0;">
+                            <a href="/admin/movies" class="btn btn-success mb-4">Back</a>
+                            <h1>
+                                <%- movie.Name %>
+                            </h1>
+                            <div>
+                                <div class="form-group">
+                                    <label for="name">Name:</label>
+                                    <input type="text" class="form-control" id="editName" value="<%- movie.Name %> "
+                                        autocomplete="off">
+                                </div>
+                                <div class="form-group">
+                                    <label for="oname">Other name:</label>
+                                    <input type="text" class="form-control" id="editOtherName"
+                                        value="<%- movie.OtherName %> " autocomplete="off">
+                                </div>
+                                <div class="form-group">
+                                    <label for="content">Content:</label>
+                                    <textarea id="editContent"><%- movie.Content %></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <div class="d-flex mb-2">
+                                        <label for="thumb">Thumbnail:</label>
+                                        <input type="text" class="form-control ml-2" value="<%- movie.Thumb %>"
+                                            id="editThumb">
+                                    </div>
+                                    <img src="<%- movie.Thumb %>" style="max-width: 300px;">
+                                </div>
+                                <div class="form-group">
+                                    <div class="d-flex mb-2">
+                                        <label for="thumb">Background:</label>
+                                        <input type="text" class="form-control ml-2" value="<%- movie.Background %>"
+                                            id="editBackground">
+                                    </div>
+
+                                    <img src="<%- movie.Background %>" style="max-width: 300px;">
+                                </div>
+                                <div class="form-group d-flex">
+                                    <label for="year" style="line-height: 30px;">Year:</label>
+                                    <select id="editYear" class="w-50 form-control ml-2">
+                                        <% years.forEach(year=> { %>
+                                            <option value="<%- year.idYear %>" <%- year.idYear===movie.idYear
+                                                ? 'selected' : '' %> >
+                                                <%- year.Year %>
+                                            </option>
+                                            <% }); %>
+                                    </select>
+                                </div>
+                                <div class="form-group d-flex">
+                                    <label for="country" style="line-height: 30px;">Country:</label>
+                                    <select id="editCountry" class="w-50 form-control ml-2">
+                                        <% countries.forEach(country=> { %>
+                                            <option value="<%- country.idCountry %>" <%-
+                                                country.idCountry===movie.idCountry ? 'selected' : '' %>>
+                                                <%- country.Country %>
+                                            </option>
+                                            <% }); %>
+                                    </select>
+                                </div>
+                                <div class="form-group d-flex">
+                                    <label for="type" style="line-height: 30px;">Type:</label>
+                                    <select id="editType" class="w-50 form-control ml-2">
+                                        <% types.forEach(type=> { %>
+                                            <option value="<%- type.idType %>" <%- type.idType===movie.idType
+                                                ? 'selected' : '' %>>
+                                                <%- type.Type %>
+                                            </option>
+                                            <% }); %>
+                                    </select>
+                                </div>
+                                <div class="form-group d-flex">
+                                    <label for="server" style="line-height: 30px;">Main server:</label>
+                                    <select id="editServer" class="w-50 form-control ml-2">
+                                        <% servers.forEach(server=> { %>
+                                            <option value="<%- server.idServer %>" <%- server.idServer===movie.Server
+                                                ? 'selected' : '' %>>
+                                                <%- server.Server %>
+                                            </option>
+                                            <% }); %>
+                                    </select>
+                                </div>
+                                <div class="form-group d-flex">
+                                    <label for="status" style="line-height: 30px;">Status:</label>
+                                    <select id="editStatus" class="w-50 form-control ml-2">
+                                        <% statuses.forEach(status=> { %>
+                                            <option value="<%- status.idStatus %>" <%- status.idStatus===movie.Status
+                                                ? 'selected' : '' %>>
+                                                <%- status.Status %>
+                                            </option>
+                                            <% }); %>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="view">Viewed:</label>
+                                    <input type="number" value="<%- movie.Viewed %>" class="form-control"
+                                        id="editViewed" autocomplete="off">
+                                </div>
+                                <div class="form-group">
+                                    <label for="liked">Liked:</label>
+                                    <input type="number" value="<%- movie.Liked %>" class="form-control" id="editLiked"
+                                        autocomplete="off">
+                                </div>
+                                <input type="hidden" value="<%- movie.idMovie %>" id="idMovie">
+                                <button id="updateMovie" class="btn btn-primary">Save</button>
+                            </div>
+                        </div>
+                        <!-- -->
+
+                </div>
+                <!-- End of Main Content -->
+
+                <!-- Footer -->
+                <%- include('../../partials/footer') %>
+                    <!-- End of Footer -->
+
+            </div>
+            <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <%- include('../../partials/bot') %>
+
+</body>
+
+</html>

@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <%- include('../partials/head') %>
+    <%- include('../../partials/head') %>
 </head>
 
 <body id="page-top">
@@ -11,7 +11,7 @@
     <div id="wrapper">
 
         <!-- slide trái -->
-        <%- include('../partials/left') %>
+        <%- include('../../partials/left') %>
             <!-- End slide trái -->
 
             <!-- Content Wrapper -->
@@ -21,7 +21,7 @@
                 <div id="content">
 
                     <!-- Top bar -->
-                    <%- include('../partials/top') %>
+                    <%- include('../../partials/top') %>
                         <!-- End of Top bar -->
 
                         <!-- Begin Page Content -->
@@ -78,9 +78,13 @@
                                                             <%- movie.Type %>
                                                         </td>
                                                         <td>
-                                                            <a href="javascript:void(0)" class="btn btn-primary"
+                                                            <a href="/admin/movie/<%- movie.idMovie %>"
+                                                                class="btn btn-primary">Edit</a>
+                                                            <a href="javascript:void(0)" class="btn btn-success"
                                                                 data-id="<%- movie.idMovie %>"
-                                                                onclick="getInforMovie(this)">Edit</a>
+                                                                onclick="getGenreOfMovie(this)">
+                                                                Genre
+                                                            </a>
                                                             <a href="javascript:void(0)" class="btn btn-danger"
                                                                 data-id="<%- movie.idMovie %>"
                                                                 onclick="deleteMovie(this)">Delete</a>
@@ -174,56 +178,17 @@
                                 </div>
                             </div>
 
-                            <div class="modal fade" id="editProductModal" tabindex="-1" role="dialog"
-                                aria-hidden="true">
+                            <div class="modal fade" id="genreModal" tabindex="-1" role="dialog" aria-hidden="true">
                                 <div class="modal-dialog" style="max-width: 70%;">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">EDIT PRODUCT</h5>
+                                            <h5 class="modal-title" id="exampleModalLabel">MOVIE GENRE</h5>
                                             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">×</span>
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <div>
-                                                <div class="form-group">
-                                                    <label for="name">Name:</label>
-                                                    <input type="text" class="form-control" id="editNameProd"
-                                                        autocomplete="off">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="short">Short description:</label>
-                                                    <textarea id="editShortProd"></textarea>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="description">Description:</label>
-                                                    <textarea id="editProdDes"></textarea>
-                                                </div>
-                                                <div class="form-group d-flex">
-                                                    <div class="w-50" style="margin-right: 1rem;">
-                                                        <label for="price">High price:</label>
-                                                        <input type="number" class="form-control" id="editHighPriceProd"
-                                                            autocomplete="off">
-                                                    </div>
-                                                    <div class="w-50">
-                                                        <label for="price">Low price:</label>
-                                                        <input type="number" class="form-control" id="editLowPriceProd"
-                                                            autocomplete="off">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group d-flex">
-                                                    <label for="price" style="line-height: 30px;">Image:</label>
-                                                    <input type="text" class="form-control ml-2" id="editThumbProd">
-                                                </div>
-                                                <div class="form-group d-flex">
-                                                    <label for="category" style="line-height: 30px;">Category:</label>
-                                                    <select id="editCategoryProd" class="w-50 form-control ml-2">
 
-                                                    </select>
-                                                </div>
-
-                                                <button id="updateProduct" class="btn btn-primary">Update</button>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -235,7 +200,7 @@
                 <!-- End of Main Content -->
 
                 <!-- Footer -->
-                <%- include('../partials/footer') %>
+                <%- include('../../partials/footer') %>
                     <!-- End of Footer -->
 
             </div>
@@ -244,7 +209,7 @@
     </div>
     <!-- End of Page Wrapper -->
 
-    <%- include('../partials/bot') %>
+    <%- include('../../partials/bot') %>
 
 </body>
 

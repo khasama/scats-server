@@ -35,4 +35,25 @@ MovieService.createOne = async (data) => {
     }
 };
 
+MovieService.updateOne = async (data) => {
+    try {
+        const [rows] = await MovieModel.updateOne(data);
+        if (rows.affectedRows > 0) {
+            const [movie] = await MovieModel.getInformation(rows.insertId);
+            return { status: "success", data: movie[0] };
+        }
+    } catch (error) {
+        throw error;
+    }
+};
+
+MovieService.getInformation = async (id) => {
+    try {
+        const [movie] = await MovieModel.getInformation(id);
+        return { status: "success", data: movie[0] };
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = MovieService;

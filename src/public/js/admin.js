@@ -1,4 +1,4 @@
-let addContent, editShortProd;
+let addContent, editContent;
 $(document).ready(function () {
     $("#dataTable").DataTable();
 
@@ -7,11 +7,11 @@ $(document).ready(function () {
             addContent = editor;
         }
     );
-    // ClassicEditor.create(document.querySelector("#addProdDes")).then(
-    //     (editor) => {
-    //         addProdDes = editor;
-    //     }
-    // );
+    ClassicEditor.create(document.querySelector("#editContent")).then(
+        (editor) => {
+            editContent = editor;
+        }
+    );
     // ClassicEditor.create(document.querySelector("#editShortProd")).then(
     //     (editor) => {
     //         editShortProd = editor;
@@ -328,6 +328,69 @@ $(document).ready(function () {
                     server,
                 },
                 success: (result) => {
+                    if (result.status == "success") {
+                        alert(result.status);
+                        location.reload();
+                    } else {
+                        alert(result.message);
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                },
+            });
+        } else {
+            alert("Not emty !!!");
+        }
+    });
+
+    $("#updateMovie").click(() => {
+        const id = $("#idMovie").val();
+        const name = $("#editName").val().trim();
+        const othername = $("#editOtherName").val().trim();
+        const content = editContent.getData();
+        const thumb = $("#editThumb").val().trim();
+        const background = $("#editBackground").val().trim();
+        const year = $("#editYear").val();
+        const country = $("#editCountry").val();
+        const type = $("#editType").val();
+        const server = $("#editServer").val();
+        const status = $("#editStatus").val();
+        const viewed = $("#editViewed").val().trim();
+        const liked = $("#editLiked").val().trim();
+        if (
+            name &&
+            othername &&
+            content &&
+            thumb &&
+            background &&
+            year &&
+            country &&
+            type &&
+            server &&
+            status &&
+            viewed &&
+            liked
+        ) {
+            $.ajax({
+                type: "PUT",
+                url: `/api/v1/movie/${id}`,
+                data: {
+                    name,
+                    othername,
+                    content,
+                    thumb,
+                    background,
+                    year,
+                    country,
+                    type,
+                    server,
+                    status,
+                    viewed,
+                    liked,
+                },
+                success: (result) => {
+                    console.log(result);
                     if (result.status == "success") {
                         alert(result.status);
                         location.reload();

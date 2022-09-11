@@ -8,7 +8,7 @@ function Movie(movie) {
     this.content = movie.content;
     this.thumb = movie.thumb;
     this.background = movie.background;
-    this.viewd = 0;
+    this.viewed = 0;
     this.liked = 0;
     this.year = movie.year;
     this.status = 1;
@@ -48,7 +48,7 @@ Movie.createOne = async (movie) => {
             movie.content,
             movie.thumb,
             movie.background,
-            movie.viewd,
+            movie.viewed,
             movie.liked,
             movie.year,
             movie.status,
@@ -77,8 +77,8 @@ Movie.updateOne = async (movie) => {
             idStatus = ?,
             idCountry = ?,
             idType = ?,
-            MainServer = ?,
-        WHERE idAnime = ?
+            MainServer = ?
+        WHERE idMovie = ?
         `,
         [
             movie.name,
@@ -86,14 +86,14 @@ Movie.updateOne = async (movie) => {
             slug(movie.name),
             movie.content,
             movie.thumb,
-            movie.bthumb,
+            movie.background,
             movie.viewed,
             movie.liked,
             movie.year,
             movie.status,
             movie.country,
             movie.type,
-            movie.mainserver,
+            movie.server,
             movie.id,
         ]
     );
