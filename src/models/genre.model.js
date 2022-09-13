@@ -63,7 +63,7 @@ Genre.getAMOG = async (id) => {
 };
 
 // All Genre Of Movie
-Genre.getAGOM = async (id) => {
+Genre.getAGOM = async (idMovie) => {
     return await promisePool.execute(
         `
         SELECT * FROM tb_genre_movie gm
@@ -71,7 +71,39 @@ Genre.getAGOM = async (id) => {
         ON gm.idGenre = g.idGenre 
         WHERE gm.idMovie = ?
         `,
-        [id]
+        [idMovie]
+    );
+};
+
+Genre.getGenreMovie = async (idGenre, idMovie) => {
+    return await promisePool.execute(
+        `
+        SELECT * FROM tb_genre_movie
+        WHERE idGenre = ? AND idMovie = ?
+        `,
+        [idGenre, idMovie]
+    );
+};
+
+// add genre of movie
+Genre.addGenreMovie = async (idGenre, idMovie) => {
+    return await promisePool.execute(
+        `
+        INSERT INTO tb_genre_movie
+        VALUES (NULL, ?, ?)
+        `,
+        [idGenre, idMovie]
+    );
+};
+
+// remove genre of movie
+Genre.removeGenreMovie = async (idGenreMovie) => {
+    return await promisePool.execute(
+        `
+        DELETE FROM tb_genre_movie
+        WHERE idGenreMovie = ?
+        `,
+        [idGenreMovie]
     );
 };
 

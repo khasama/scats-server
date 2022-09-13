@@ -1,6 +1,7 @@
-let addContent, editContent;
+let addContent, editContent, currentMovie;
 $(document).ready(function () {
     $("#dataTable").DataTable();
+    $("#table-genre").DataTable();
 
     ClassicEditor.create(document.querySelector("#addContent")).then(
         (editor) => {
@@ -612,4 +613,84 @@ function deleteType(ele) {
             },
         });
     }
+}
+
+function getGenresOfMovie(ele) {
+    const id = $(ele).attr("data-id");
+    currentMovie = id;
+    $.ajax({
+        url: `/api/v1/genre/genre-movie/${id}`,
+        success: (result) => {
+            if (result.status == "success") {
+                const genres = result.data;
+                updateListGenres(genres);
+                $("#genreModal").modal("show");
+            } else {
+                alert(result.message);
+            }
+        },
+        error: (err) => {
+            console.log(err);
+        },
+    });
+}
+
+function addGenreOfMovie(ele) {
+    const idGenre = $(ele).attr("data-id");
+    const idMovie = currentMovie;
+    $.ajax({
+        type: "POST",
+        url: `/api/v1/genre/genre-movie/`,
+        data: {
+            idGenre,
+            idMovie,
+        },
+        success: (result) => {
+            if (result.status == "success") {
+                const genres = result.data;
+                updateListGenres(genres);
+            } else {
+                alert(result.message);
+            }
+        },
+        error: (err) => {
+            console.log(err);
+        },
+    });
+}
+
+function deleteGenreMovie(ele) {
+    const idGenreMovie = $(ele).attr("data-id");
+    $.ajax({
+        type: "DELETE",
+        url: `/api/v1/genre/genre-movie/${idGenreMovie}`,
+        success: (result) => {
+            if (result.status == "success") {
+                $(ele).parent().remove();
+            } else {
+                alert(result.message);
+            }
+        },
+        error: (err) => {
+            console.log(err);
+        },
+    });
+}
+
+function updateListGenres(genres) {
+    const list = $("#list-genre");
+    list.html("");
+    genres.forEach((ele) => {
+        list.append(
+            `
+            <div class="bg-secondary d-inline-block p-2 m-1">
+                ${ele.Genre}
+                <a href="javascript:void(0)" class="text-danger mx-1" 
+                onclick='deleteGenreMovie(this)' data-id='${ele.idGenreMovie}'>
+                    <i class="fa-solid fa-xmark"></i>
+                </a>
+            </div>
+            `
+        );
+    });
 }

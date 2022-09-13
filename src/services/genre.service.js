@@ -51,11 +51,53 @@ GenreService.deleteOne = async (id) => {
     }
 };
 
+// All movies of genre
 GenreService.getAMOG = async (id) => {
     try {
         const [movies] = await GenreModel.getAMOG(id);
         if (rows.length > 0) return { status: "success", data: movies };
         return { status: "failed", message: "Not found" };
+    } catch (error) {
+        throw error;
+    }
+};
+
+// All genres of movie
+GenreService.getAGOM = async (idMovie) => {
+    try {
+        const [genres] = await GenreModel.getAGOM(idMovie);
+        return { status: "success", data: genres };
+    } catch (error) {
+        throw error;
+    }
+};
+
+// add genre of movie
+GenreService.addGenreMovie = async (idGenre, idMovie) => {
+    try {
+        const [rows] = await GenreModel.getGenreMovie(idGenre, idMovie);
+        if (rows.length === 0) {
+            const [add] = await GenreModel.addGenreMovie(idGenre, idMovie);
+            if (add.insertId !== 0) {
+                const [genres] = await GenreModel.getAGOM(idMovie);
+                return { status: "success", data: genres };
+            }
+        } else {
+            return { status: "failed", message: "Đã có" };
+        }
+    } catch (error) {
+        throw error;
+    }
+};
+
+GenreService.removeGenreMovie = async (idGenreMovie) => {
+    try {
+        const [rows] = await GenreModel.removeGenreMovie(idGenreMovie);
+        if (rows.affectedRows === 1) {
+            return { status: "success" };
+        } else {
+            return { status: "failed", message: "Đã có lỗi xảy ra" };
+        }
     } catch (error) {
         throw error;
     }

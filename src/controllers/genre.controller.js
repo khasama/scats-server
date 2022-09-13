@@ -76,6 +76,67 @@ GenreController.getAMOG = (req, res, next) => {
     }
 };
 
+GenreController.getAGOM = (req, res, next) => {
+    const id = req.params.id;
+    if (id) {
+        GenreService.getAGOM(id)
+            .then((rs) => {
+                return res.status(200).json(rs);
+            })
+            .catch((err) => {
+                console.log(err);
+                return res
+                    .status(500)
+                    .json({ status: "error", message: "Has a fucking error" });
+            });
+    } else {
+        return res
+            .status(400)
+            .json({ status: "failed", message: "Missing params" });
+    }
+};
+
+GenreController.addGenreMovie = (req, res, next) => {
+    const idGenre = req.body.idGenre;
+    const idMovie = req.body.idMovie;
+    if (idGenre && idMovie) {
+        GenreService.addGenreMovie(idGenre, idMovie)
+            .then((rs) => {
+                return res.status(200).json(rs);
+            })
+            .catch((err) => {
+                console.log(err);
+                return res
+                    .status(500)
+                    .json({ status: "error", message: "Has a fucking error" });
+            });
+    } else {
+        return res
+            .status(400)
+            .json({ status: "failed", message: "Missing params" });
+    }
+};
+
+GenreController.removeGenreMovie = (req, res, next) => {
+    const idGenreMovie = req.params.id;
+    if (idGenreMovie) {
+        GenreService.removeGenreMovie(idGenreMovie)
+            .then((rs) => {
+                return res.status(200).json(rs);
+            })
+            .catch((err) => {
+                console.log(err);
+                return res
+                    .status(500)
+                    .json({ status: "error", message: "Has a fucking error" });
+            });
+    } else {
+        return res
+            .status(400)
+            .json({ status: "failed", message: "Missing params" });
+    }
+};
+
 GenreController.getInformation = (req, res, next) => {
     const id = req.params.id;
     if (id) {

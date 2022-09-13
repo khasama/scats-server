@@ -5,6 +5,7 @@ const CountryModel = require("../models/country.model");
 const ServerModel = require("../models/server.model");
 const TypeModel = require("../models/type.model");
 const StatusModel = require("../models/status.model");
+
 const AdminController = {};
 
 AdminController.home = (req, res) => {
@@ -18,12 +19,14 @@ AdminController.getAllMovie = async (req, res) => {
         const [countries] = await CountryModel.getAll();
         const [servers] = await ServerModel.getAll();
         const [types] = await TypeModel.getAll();
+        const [genres] = await GenreModel.getAll();
         return res.render("pages/movie", {
             movies,
             years,
             countries,
             servers,
             types,
+            genres,
         });
     } catch (error) {
         throw error;
@@ -47,6 +50,18 @@ AdminController.getMovie = async (req, res) => {
             servers,
             types,
             statuses,
+        });
+    } catch (error) {
+        throw error;
+    }
+};
+
+AdminController.getEpisodes = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const [movie] = await MovieModel.getInformation(id);
+        return res.render("pages/episode", {
+            movie: movie[0],
         });
     } catch (error) {
         throw error;

@@ -82,9 +82,11 @@
                                                                 class="btn btn-primary">Edit</a>
                                                             <a href="javascript:void(0)" class="btn btn-success"
                                                                 data-id="<%- movie.idMovie %>"
-                                                                onclick="getGenreOfMovie(this)">
+                                                                onclick="getGenresOfMovie(this)">
                                                                 Genre
                                                             </a>
+                                                            <a href="/admin/episodes/<%- movie.idMovie %>"
+                                                                class="btn btn-secondary">Episodes</a>
                                                             <a href="javascript:void(0)" class="btn btn-danger"
                                                                 data-id="<%- movie.idMovie %>"
                                                                 onclick="deleteMovie(this)">Delete</a>
@@ -179,7 +181,7 @@
                             </div>
 
                             <div class="modal fade" id="genreModal" tabindex="-1" role="dialog" aria-hidden="true">
-                                <div class="modal-dialog" style="max-width: 70%;">
+                                <div class="modal-dialog" style="max-width: 40%;">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="exampleModalLabel">MOVIE GENRE</h5>
@@ -188,7 +190,45 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-
+                                            <div class="text-light" id="list-genre">
+                                            </div>
+                                            <hr>
+                                            <div class="all-tb">
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered" id="table-genre" width="100%"
+                                                        cellspacing="0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>ID</th>
+                                                                <th>Genre</th>
+                                                                <th>
+                                                                    <i class="fa-solid fa-star"></i>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% genres.forEach(genre=> { %>
+                                                                <tr>
+                                                                    <td>
+                                                                        <%- genre.idGenre %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%- genre.Genre %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href="javascript:void(0)"
+                                                                            class="btn btn-success"
+                                                                            data-id="<%- genre.idGenre %>"
+                                                                            onclick="addGenreOfMovie(this)">
+                                                                            Add
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                                <% }); %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
