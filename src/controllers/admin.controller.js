@@ -60,8 +60,10 @@ AdminController.getEpisodes = async (req, res) => {
     const id = req.params.id;
     try {
         const [movie] = await MovieModel.getInformation(id);
+        const [servers] = await ServerModel.getAll();
         return res.render("pages/episode", {
             movie: movie[0],
+            servers,
         });
     } catch (error) {
         throw error;
