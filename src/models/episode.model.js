@@ -1,10 +1,10 @@
 const promisePool = require("../configs/db.config");
 
-function Episode(epsiode) {
-    this.idMovie = epsiode.idMovie;
-    this.idServer = epsiode.idServer;
-    this.epsiode = epsiode.epsiode;
-    this.link = epsiode.link;
+function Episode(episode) {
+    this.idMovie = episode.idMovie;
+    this.idServer = episode.idServer;
+    this.episode = episode.episode;
+    this.link = episode.link;
 }
 
 // get all ep one server
@@ -16,7 +16,6 @@ Episode.getAllEpisode = async (episode) => {
         ON e.idServer = s.idServer
         WHERE e.idMovie = ? 
         AND e.idServer = ?
-        ORDER BY e.Episode ASC
         `,
         [episode.idMovie, episode.idServer]
     );

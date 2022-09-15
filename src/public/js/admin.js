@@ -407,6 +407,40 @@ $(document).ready(function () {
             alert("Not emty !!!");
         }
     });
+
+    $("#newEpisode").click(() => {
+        const episode = $("#addEp").val().trim();
+        const link = $("#addEpLink").val().trim();
+        const idServer = $("#idMainServer").val().trim();
+        const idMovie = $("#idMovie").val().trim();
+        if (episode && link) {
+            $.ajax({
+                type: "POST",
+                url: `/api/v1/episode/`,
+                data: {
+                    episode,
+                    link,
+                    idServer,
+                    idMovie,
+                },
+                success: (result) => {
+                    if (result.status == "success") {
+                        alert(result.status);
+                        location.reload();
+                    } else {
+                        alert(result.message);
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                },
+            });
+        } else {
+            alert("Not emty !!!");
+        }
+    });
+
+
 });
 
 function getInforGenre(ele) {
@@ -693,4 +727,28 @@ function updateListGenres(genres) {
             `
         );
     });
+}
+
+function getFullLink(ele) {
+    const idMovie = $(ele).attr("data-movie");
+    const episode = $(ele).attr("data-episode");
+    $.ajax({
+        url: `/api/v1/episode/full-link/${idMovie}-${episode}`,
+        success: (result) => {
+            if (result.status == "success") {
+                const link = result.data;
+                $("#episode-detail").show();
+                setLinkEpisode(link);
+            } else {
+                alert(result.message);
+            }
+        },
+        error: (err) => {
+            console.log(err);
+        },
+    });
+}
+
+function setLinkEpisode(link) {
+    console.log(link);
 }

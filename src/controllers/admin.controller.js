@@ -5,6 +5,7 @@ const CountryModel = require("../models/country.model");
 const ServerModel = require("../models/server.model");
 const TypeModel = require("../models/type.model");
 const StatusModel = require("../models/status.model");
+const EpisodeModel = require("../models/episode.model");
 
 const AdminController = {};
 
@@ -61,9 +62,14 @@ AdminController.getEpisodes = async (req, res) => {
     try {
         const [movie] = await MovieModel.getInformation(id);
         const [servers] = await ServerModel.getAll();
+        let [episodes] = await EpisodeModel.getAllEpisode({ idMovie: movie[0].idMovie, idServer: movie[0].idServer });
+        episodes.sort((a, b) => {
+            return parseInt(a.Episode) - parseInt(b.Episode);
+        });
         return res.render("pages/episode", {
             movie: movie[0],
             servers,
+            episodes
         });
     } catch (error) {
         throw error;

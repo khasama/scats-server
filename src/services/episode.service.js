@@ -37,13 +37,7 @@ EpisodeService.addEP = async (data) => {
     try {
         const [rows] = await EpisodeModel.getOneEp(data, false);
         if (rows.length == 0) {
-            const ep = {
-                anime: data.anime,
-                episode: data.episode,
-                server: data.server,
-                link: data.link,
-            };
-            const [rs] = await EpisodeModel.addEP(ep);
+            const [rs] = await EpisodeModel.addEP(new EpisodeModel(data));
             if (rs.insertId != 0) {
                 const [link] = await EpisodeModel.getOneEp(rs.insertId, true);
                 return { status: "success", data: link[0] };
