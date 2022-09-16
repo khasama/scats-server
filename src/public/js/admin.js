@@ -440,6 +440,120 @@ $(document).ready(function () {
         }
     });
 
+    $("#newLink").click(() => {
+        const episode = $("#updateEp").val().trim();
+        const link = $("#addLink").val().trim();
+        const idServer = $("#addLinkServer").val().trim();
+        const idMovie = $("#idMovie").val().trim();
+        if (episode && link) {
+            $.ajax({
+                type: "POST",
+                url: `/api/v1/episode/`,
+                data: {
+                    episode,
+                    link,
+                    idServer,
+                    idMovie,
+                },
+                success: (result) => {
+                    if (result.status == "success") {
+                        const l = result.data;
+                        $("#list-link").append(
+                            `
+                            <a href="javascript:void(0)" class="btn btn-secondary" 
+                            data-id="${l.idEpisode}" onclick="getLink(this)">
+                                ${l.Server}
+                            </a>
+                            `
+                        )
+                    } else {
+                        alert(result.message);
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                },
+            });
+        } else {
+            alert("Not emty !!!");
+        }
+    });
+
+    $("#saveUpdateLink").click(() => {
+        const link = $("#updateLink").val().trim();
+        const idEpisode = $("#idEpisode").val().trim();
+        if (link) {
+            $.ajax({
+                type: "PUT",
+                url: `/api/v1/episode/${idEpisode}`,
+                data: {
+                    link,
+                },
+                success: (result) => {
+                    if (result.status == "success") {
+                        const l = result.data;
+                        alert(result.status);
+                        setLinkInfor(l);
+                    } else {
+                        alert(result.message);
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                },
+            });
+        } else {
+            alert("Not emty !!!");
+        }
+    });
+
+    $("#deleteLink").click(() => {
+        const currentServer = $("#deleteLink").attr("data-cs");
+        const mainServer = $("#deleteLink").attr("data-ms");
+        const idMovie = $("#idMovie").val().trim();
+        const episode = $("#updateEp").val().trim();
+        const idEpisode = $("#idEpisode").val().trim();
+        if (confirm("Are you sure about that ???")) {
+            if (idEpisode) {
+                $.ajax({
+                    type: "DELETE",
+                    url: `/api/v1/episode/${idEpisode}`,
+                    success: (result) => {
+                        if (result.status == "success") {
+                            if (currentServer == mainServer) {
+                                location.reload();
+                            } else {
+                                $.ajax({
+                                    url: `/api/v1/episode/full-link/${idMovie}-${episode}`,
+                                    success: (rs) => {
+                                        if (rs.status == "success") {
+                                            const links = rs.data;
+                                            clearInfor();
+                                            $("#episode-detail").show();
+                                            setListLink(links);
+                                        } else {
+                                            alert(rs.message);
+                                        }
+                                    },
+                                    error: (err) => {
+                                        console.log(err);
+                                    },
+                                });
+                            }
+                        } else {
+                            alert(result.message);
+                        }
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    },
+                });
+            } else {
+                alert("Not emty !!!");
+            }
+        }
+    });
+
 
 });
 
@@ -736,9 +850,10 @@ function getFullLink(ele) {
         url: `/api/v1/episode/full-link/${idMovie}-${episode}`,
         success: (result) => {
             if (result.status == "success") {
-                const link = result.data;
+                const links = result.data;
+                clearInfor();
                 $("#episode-detail").show();
-                setLinkEpisode(link);
+                setListLink(links);
             } else {
                 alert(result.message);
             }
@@ -749,6 +864,52 @@ function getFullLink(ele) {
     });
 }
 
-function setLinkEpisode(link) {
-    console.log(link);
+function setListLink(links) {
+    const list = $("#list-link");
+    list.html("");
+    links.forEach((ele) => {
+        list.append(
+            `
+            <a href="javascript:void(0)" class="btn btn-secondary" 
+            data-id="${ele.idEpisode}" onclick="getLink(this)">
+                ${ele.Server}
+            </a>
+            `
+        );
+    });
+}
+
+function getLink(ele) {
+    const id = $(ele).attr("data-id");
+    $.ajax({
+        url: `/api/v1/episode/${id}`,
+        success: (result) => {
+            if (result.status == "success") {
+                const link = result.data;
+                setLinkInfor(link);
+            } else {
+                alert(result.message);
+            }
+        },
+        error: (err) => {
+            console.log(err);
+        },
+    });
+}
+
+function setLinkInfor(link) {
+    $("#player").attr("src", link.Link);
+    $("#updateEp").val(link.Episode);
+    $("#updateServer").val(link.Server);
+    $("#updateLink").val(link.Link);
+    $("#idEpisode").val(link.idEpisode);
+    $("#deleteLink").attr("data-cs", link.idServer);
+}
+
+function clearInfor() {
+    $("#player").attr("src", '');
+    $("#updateEp").val('');
+    $("#updateServer").val('');
+    $("#updateLink").val('');
+    $("#idEpisode").val('');
 }

@@ -55,11 +55,10 @@
                                     <div id="episode-detail" class="w-100 d-flex" style="display: none !important;">
                                         <div style="width: 60%;">
                                             <div>
-                                                <iframe
-                                                    src="https://1080.hdphimonline.com/share/4fbdc7de3e31de33862586c8db456f53"
-                                                    frameborder="0" class="w-100" style="height: 400px;"
+                                                <iframe frameborder="0" class="w-100" style="height: 400px;"
                                                     id="player"></iframe>
                                             </div>
+                                            <div id="list-link"></div>
                                         </div>
                                         <div style="width: 40%; padding-left: 1rem;">
                                             <div>
@@ -82,8 +81,11 @@
                                                         autocomplete="off">
                                                 </div>
                                                 <input type="hidden" id="idEpisode">
-                                                <button class="btn btn-primary" id="updateLink">Save</button>
-                                                <button class="btn btn-danger" id="deleteLink">Delete</button>
+                                                <button class="btn btn-primary" id="saveUpdateLink">Save</button>
+                                                <button class="btn btn-danger" id="deleteLink"
+                                                    data-ms="<%- movie.MainServer %>">
+                                                    Delete
+                                                </button>
                                             </div>
                                             <hr>
                                             <div>
