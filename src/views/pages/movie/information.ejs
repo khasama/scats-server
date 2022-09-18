@@ -64,7 +64,7 @@
                                 </div>
                                 <div class="form-group d-flex">
                                     <label for="year" style="line-height: 30px;">Year:</label>
-                                    <select id="editYear" class="w-50 form-select ml-2">
+                                    <select id="editYear" class="w-50 form-control ml-2">
                                         <% years.forEach(year=> { %>
                                             <option value="<%- year.idYear %>" <%- year.idYear===movie.idYear
                                                 ? 'selected' : '' %> >
@@ -75,7 +75,7 @@
                                 </div>
                                 <div class="form-group d-flex">
                                     <label for="country" style="line-height: 30px;">Country:</label>
-                                    <select id="editCountry" class="w-50 form-select ml-2">
+                                    <select id="editCountry" class="w-50 form-control ml-2">
                                         <% countries.forEach(country=> { %>
                                             <option value="<%- country.idCountry %>" <%-
                                                 country.idCountry===movie.idCountry ? 'selected' : '' %>>
@@ -86,7 +86,7 @@
                                 </div>
                                 <div class="form-group d-flex">
                                     <label for="type" style="line-height: 30px;">Type:</label>
-                                    <select id="editType" class="w-50 form-select ml-2">
+                                    <select id="editType" class="w-50 form-control ml-2">
                                         <% types.forEach(type=> { %>
                                             <option value="<%- type.idType %>" <%- type.idType===movie.idType
                                                 ? 'selected' : '' %>>
@@ -97,7 +97,7 @@
                                 </div>
                                 <div class="form-group d-flex">
                                     <label for="server" style="line-height: 30px;">Main server:</label>
-                                    <select id="editServer" class="w-50 form-select ml-2">
+                                    <select id="editServer" class="w-50 form-control ml-2">
                                         <% servers.forEach(server=> { %>
                                             <option value="<%- server.idServer %>" <%- server.idServer===movie.Server
                                                 ? 'selected' : '' %>>
@@ -108,7 +108,7 @@
                                 </div>
                                 <div class="form-group d-flex">
                                     <label for="status" style="line-height: 30px;">Status:</label>
-                                    <select id="editStatus" class="w-50 form-select ml-2">
+                                    <select id="editStatus" class="w-50 form-control ml-2">
                                         <% statuses.forEach(status=> { %>
                                             <option value="<%- status.idStatus %>" <%- status.idStatus===movie.Status
                                                 ? 'selected' : '' %>>

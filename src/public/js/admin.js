@@ -2,11 +2,6 @@ let addContent, editContent, currentMovie;
 $(document).ready(function () {
     $("#dataTable").DataTable();
     $("#table-genre").DataTable();
-    document.getElementById("fomr-login").addEventListener("keypress", (event) => {
-        if (event.key === "Enter") {
-            login();
-        }
-    });
 
     ClassicEditor.create(document.querySelector("#addContent")).then(
         (editor) => {

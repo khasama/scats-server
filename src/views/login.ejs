@@ -31,6 +31,14 @@
 
     <%- include('partials/bot') %>
 
+        <script>
+            document.getElementById("fomr-login").addEventListener("keypress", (event) => {
+                if (event.key === "Enter") {
+                    login();
+                }
+            });
+        </script>
+
 </body>
 
 </html>
