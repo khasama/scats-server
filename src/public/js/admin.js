@@ -2,6 +2,11 @@ let addContent, editContent, currentMovie;
 $(document).ready(function () {
     $("#dataTable").DataTable();
     $("#table-genre").DataTable();
+    document.getElementById("fomr-login").addEventListener("keypress", (event) => {
+        if (event.key === "Enter") {
+            login();
+        }
+    });
 
     ClassicEditor.create(document.querySelector("#addContent")).then(
         (editor) => {
@@ -13,16 +18,6 @@ $(document).ready(function () {
             editContent = editor;
         }
     );
-    // ClassicEditor.create(document.querySelector("#editShortProd")).then(
-    //     (editor) => {
-    //         editShortProd = editor;
-    //     }
-    // );
-    // ClassicEditor.create(document.querySelector("#editProdDes")).then(
-    //     (editor) => {
-    //         editProdDes = editor;
-    //     }
-    // );
 
     $("#newGenre").click(() => {
         const genre = $("#addGenre").val().trim();
@@ -554,7 +549,6 @@ $(document).ready(function () {
         }
     });
 
-
 });
 
 function getInforGenre(ele) {
@@ -912,4 +906,48 @@ function clearInfor() {
     $("#updateServer").val('');
     $("#updateLink").val('');
     $("#idEpisode").val('');
+}
+
+function login() {
+    const username = $("#username").val();
+    const password = $("#password").val();
+    if (username && password) {
+        $.ajax({
+            type: "POST",
+            url: `/api/v1/user/login-admin`,
+            data: {
+                username,
+                password
+            },
+            success: (result) => {
+                if (result.status == "success") {
+                    alert(result.status);
+                    window.location = '/admin';
+                } else {
+                    alert(result.message);
+                }
+            },
+            error: (err) => {
+                console.log(err);
+            },
+        });
+    } else {
+        alert("Not emty !!!");
+    }
+}
+
+function logout() {
+    $.ajax({
+        url: `/api/v1/user/logout`,
+        success: (result) => {
+            if (result.status == "success") {
+                window.location = '/login';
+            } else {
+                alert(result.message);
+            }
+        },
+        error: (err) => {
+            console.log(err);
+        },
+    });
 }
