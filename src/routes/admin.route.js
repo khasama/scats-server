@@ -11,5 +11,6 @@ router.get("/years", AdminController.getAllYear);
 router.get("/countries", AdminController.getAllCountry);
 router.get("/servers", AdminController.getAllServer);
 router.get("/types", AdminController.getAllType);
+router.get("/users", AdminController.getAllUser);
 
 module.exports = router;

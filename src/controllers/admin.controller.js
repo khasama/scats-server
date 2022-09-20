@@ -6,6 +6,8 @@ const ServerModel = require("../models/server.model");
 const TypeModel = require("../models/type.model");
 const StatusModel = require("../models/status.model");
 const EpisodeModel = require("../models/episode.model");
+const UserModel = require("../models/user.model");
+const RoleModel = require("../models/role.model");
 
 const AdminController = {};
 
@@ -116,6 +118,16 @@ AdminController.getAllType = async (req, res) => {
     try {
         const [types] = await TypeModel.getAll();
         return res.render("pages/type", { types });
+    } catch (error) {
+        throw error;
+    }
+};
+
+AdminController.getAllUser = async (req, res) => {
+    try {
+        const [users] = await UserModel.getAll();
+        const [roles] = await RoleModel.getAll();
+        return res.render("pages/user", { users, roles });
     } catch (error) {
         throw error;
     }

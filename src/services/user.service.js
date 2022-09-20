@@ -100,4 +100,15 @@ UserService.getAll = async () => {
     }
 };
 
+UserService.getUser = async (idUser) => {
+    try {
+        const [user] = await UserModel.getUser(idUser);
+        if (user.length != 0) return { status: "success", data: user[0] };
+        return { status: "failed", message: "Not found" };
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+};
+
 module.exports = UserService;

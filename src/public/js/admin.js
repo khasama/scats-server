@@ -895,6 +895,28 @@ function setLinkInfor(link) {
     $("#deleteLink").attr("data-cs", link.idServer);
 }
 
+function getUser(ele) {
+    const id = $(ele).attr("data-id");
+    $.ajax({
+        url: `/api/v1/user/${id}`,
+        success: (result) => {
+            if (result.status == "success") {
+                const user = result.data;
+                $("option").removeAttr('selected')
+                $("#crUser").val(user.Username);
+                $("#idUser").val(user.idUser);
+                $(`#${user.Role}`).attr('selected', true);
+                $("#changeRole").modal("show");
+            } else {
+                alert(result.message);
+            }
+        },
+        error: (err) => {
+            console.log(err);
+        },
+    });
+}
+
 function clearInfor() {
     $("#player").attr("src", '');
     $("#updateEp").val('');
@@ -945,4 +967,28 @@ function logout() {
             console.log(err);
         },
     });
+}
+
+
+
+function calculateTime(date) {
+    const curentDate = new Date();
+    const lastAccess = parseInt((curentDate.getTime() - Date.parse(date)) / 1000 / 60 / 60);
+
+    if (lastAccess < 24) {
+        return `${lastAccess} hour${lastAccess > 1 ? 's' : ''} ago`;
+    }
+    if (lastAccess >= 24 && lastAccess < 168) {
+        return `${parseInt(lastAccess / 24)} day${parseInt(lastAccess / 24) > 1 ? 's' : ''} ago`;
+    }
+    if (lastAccess >= 168 && lastAccess < 720) {
+        return `${parseInt(lastAccess / 24 / 7)} week${parseInt(lastAccess / 24 / 7) > 1 ? 's' : ''} ago`;
+    }
+    if (lastAccess >= 720 && lastAccess < 8760) {
+        return `${parseInt(lastAccess / 24 / 7 / 30)} month${parseInt(lastAccess / 24 / 7 / 30) > 1 ? 's' : ''} ago`;
+    }
+    if (lastAccess >= 8760) {
+        return `${parseInt(lastAccess / 24 / 365)} year${parseInt(lastAccess / 24 / 365) > 1 ? 's' : ''} ago`;
+    }
+
 }

@@ -102,4 +102,23 @@ UserController.getAll = (req, res, next) => {
         });
 };
 
+UserController.getUser = (req, res, next) => {
+    const id = req.params.id;
+    if (id) {
+        UserService.getUser(id)
+            .then((rs) => {
+                return res.status(200).json(rs);
+            })
+            .catch((err) => {
+                return res
+                    .status(500)
+                    .json({ status: "error", message: "Has a fucking error" });
+            });
+    } else {
+        return res
+            .status(400)
+            .json({ status: "failed", message: "Mising params" });
+    }
+};
+
 module.exports = UserController;
