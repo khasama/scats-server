@@ -111,4 +111,15 @@ UserService.getUser = async (idUser) => {
     }
 };
 
+UserService.changeRole = async (user) => {
+    try {
+        const [row] = await UserModel.changeRole(user);
+        if (row.affectedRows != 0) return { status: "success" };
+        return { status: "failed", message: "Not found" };
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+};
+
 module.exports = UserService;

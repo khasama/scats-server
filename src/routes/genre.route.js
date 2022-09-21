@@ -10,7 +10,7 @@ router.delete("/:id", verifyToken(1), GenreController.deleteOne);
 router.get("/movie-genre/:id", GenreController.getAMOG);
 router.get("/genre-movie/:id", GenreController.getAGOM);
 router.post("/genre-movie/", verifyToken(2), GenreController.addGenreMovie);
-router.delete("/genre-movie/:id", verifyToken(1), GenreController.removeGenreMovie);
+router.delete("/genre-movie/:id", verifyToken(2), GenreController.removeGenreMovie);
 router.get("/:id", GenreController.getInformation);
 
 module.exports = router;

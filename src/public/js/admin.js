@@ -544,6 +544,26 @@ $(document).ready(function () {
         }
     });
 
+    $("#change").click(() => {
+        const idUser = $("#idUser").val();
+        const idRole = $("#role").val();
+        $.ajax({
+            type: "PUT",
+            url: `/api/v1/user/change-role/${idUser}`,
+            data: { idRole },
+            success: (result) => {
+                if (result.status == "success") {
+                    location.reload();
+                } else {
+                    alert(result.message);
+                }
+            },
+            error: (err) => {
+                alert(err.statusText);
+            },
+        });
+    });
+
 });
 
 function getInforGenre(ele) {
@@ -581,7 +601,7 @@ function deleteGenre(ele) {
                 }
             },
             error: (err) => {
-                console.log(err);
+                alert(err.statusText);
             },
         });
     }
@@ -622,7 +642,7 @@ function deleteYear(ele) {
                 }
             },
             error: (err) => {
-                console.log(err);
+                alert(err.statusText);
             },
         });
     }
@@ -663,7 +683,7 @@ function deleteCountry(ele) {
                 }
             },
             error: (err) => {
-                console.log(err);
+                alert(err.statusText);
             },
         });
     }
@@ -705,7 +725,7 @@ function deleteServer(ele) {
                 }
             },
             error: (err) => {
-                console.log(err);
+                alert(err.statusText);
             },
         });
     }
@@ -746,7 +766,7 @@ function deleteType(ele) {
                 }
             },
             error: (err) => {
-                console.log(err);
+                alert(err.statusText);
             },
         });
     }

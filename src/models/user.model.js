@@ -78,4 +78,15 @@ User.getUser = async (idUser) => {
     );
 };
 
+User.changeRole = async (user) => {
+    return await promisePool.execute(
+        `
+        UPDATE tb_user
+        SET idRole = ?
+        WHERE idUser = ?
+        `,
+        [user.idRole, user.idUser]
+    );
+};
+
 module.exports = User;

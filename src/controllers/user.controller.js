@@ -121,4 +121,24 @@ UserController.getUser = (req, res, next) => {
     }
 };
 
+UserController.changeRole = (req, res, next) => {
+    const idUser = req.params.id;
+    const idRole = req.body.idRole;
+    if (idUser && idRole) {
+        UserService.changeRole({ idUser, idRole })
+            .then((rs) => {
+                return res.status(200).json(rs);
+            })
+            .catch((err) => {
+                return res
+                    .status(500)
+                    .json({ status: "error", message: "Has a fucking error" });
+            });
+    } else {
+        return res
+            .status(400)
+            .json({ status: "failed", message: "Mising params" });
+    }
+};
+
 module.exports = UserController;
