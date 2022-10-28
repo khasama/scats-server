@@ -1,11 +1,20 @@
-const promisePool = require("../configs/db.config");
+const Sequelize = require("sequelize");
+const sequelize = require("../configs/sequelize.config");
 
-function Role(role) {
-    this.role = role.role;
-}
-
-Role.getAll = async () => {
-    return await promisePool.execute(`SELECT * FROM tb_role`);
-};
+const Role = sequelize.define(
+    'Role',
+    {
+        name: {
+            type: Sequelize.STRING,
+            allowNull: false
+        }
+    },
+    {
+        timestamps: true,
+        paranoid: true,
+        underscored: true,
+        tableName: 'tb_role'
+    }
+);
 
 module.exports = Role;

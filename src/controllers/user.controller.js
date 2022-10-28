@@ -125,7 +125,7 @@ UserController.changeRole = (req, res, next) => {
     const idUser = req.params.id;
     const idRole = req.body.idRole;
     if (idUser && idRole) {
-        UserService.changeRole({ idUser, idRole })
+        UserService.changeRole(idUser, idRole)
             .then((rs) => {
                 return res.status(200).json(rs);
             })

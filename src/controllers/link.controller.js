@@ -1,24 +1,11 @@
-const TypeService = require("../services/type.service");
+const LinkService = require("../services/link.service");
 
-const TypeController = {};
+const LinkController = {};
 
-TypeController.getAll = (req, res, next) => {
-    TypeService.getAll()
-        .then((rs) => {
-            return res.status(200).json(rs);
-        })
-        .catch((err) => {
-            console.log(err);
-            return res
-                .status(500)
-                .json({ status: "error", message: "Has a fucking error" });
-        });
-};
-
-TypeController.getInformation = (req, res, next) => {
+LinkController.getInformation = (req, res, next) => {
     const id = req.params.id;
     if (id) {
-        TypeService.getInformation(id)
+        LinkService.getInformation(id)
             .then((rs) => {
                 return res.status(200).json(rs);
             })
@@ -35,10 +22,12 @@ TypeController.getInformation = (req, res, next) => {
     }
 };
 
-TypeController.createOne = (req, res, next) => {
-    const type = req.body.type;
-    if (type) {
-        TypeService.createOne(type)
+LinkController.createOne = (req, res, next) => {
+    const link = req.body.link;
+    const idEpisode = req.body.idEpisode;
+    const idServer = req.body.idServer;
+    if (link && idEpisode && idServer) {
+        LinkService.createOne({ link, idEpisode, idServer })
             .then((rs) => {
                 return res.status(200).json(rs);
             })
@@ -55,15 +44,15 @@ TypeController.createOne = (req, res, next) => {
     }
 };
 
-TypeController.updateOne = (req, res, next) => {
+LinkController.updateOne = (req, res, next) => {
     const id = req.params.id;
-    const type = req.body.type;
-    if (id && type) {
+    const link = req.body.link;
+    if (id && link) {
         const data = {
             id,
-            type,
+            link,
         };
-        TypeService.updateOne(data)
+        LinkService.updateOne(data)
             .then((rs) => {
                 return res.status(200).json(rs);
             })
@@ -80,10 +69,10 @@ TypeController.updateOne = (req, res, next) => {
     }
 };
 
-TypeController.deleteOne = (req, res, next) => {
+LinkController.deleteOne = (req, res, next) => {
     const id = req.params.id;
     if (id) {
-        TypeService.deleteOne(id)
+        LinkService.deleteOne(id)
             .then((rs) => {
                 return res.status(200).json(rs);
             })
@@ -96,4 +85,4 @@ TypeController.deleteOne = (req, res, next) => {
     }
 };
 
-module.exports = TypeController;
+module.exports = LinkController;

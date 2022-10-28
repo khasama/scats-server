@@ -57,38 +57,39 @@
                                                 <% movies.forEach(movie=> { %>
                                                     <tr>
                                                         <td>
-                                                            <%- movie.idMovie; %>
+                                                            <%- movie.id; %>
                                                         </td>
                                                         <td>
-                                                            <%- movie.Name %>
+                                                            <%- movie.name %>
                                                         </td>
                                                         <td>
-                                                            <img src="<%- movie.Thumb %>" width="100">
+                                                            <img src="<%- movie.thumb %>" width="100">
                                                         </td>
                                                         <td>
-                                                            <img src="<%- movie.Background %>" width="150">
+                                                            <img src="<%- movie.background %>" width="150">
                                                         </td>
                                                         <td>
-                                                            <%- movie.Year %>
+                                                            <%- movie.Year.name %>
                                                         </td>
                                                         <td>
-                                                            <%- movie.Status %>
+                                                            <%- movie.Status.name %>
                                                         </td>
                                                         <td>
-                                                            <%- movie.Type %>
+                                                            <%- movie.Type.name %>
                                                         </td>
                                                         <td>
-                                                            <a href="/admin/movie/<%- movie.idMovie %>"
+                                                            <a href="/admin/movie/<%- movie.id %>"
                                                                 class="btn btn-primary">Edit</a>
                                                             <a href="javascript:void(0)" class="btn btn-success"
-                                                                data-id="<%- movie.idMovie %>"
+                                                                data-id="<%- movie.id %>"
+                                                                data-genre='<%- JSON.stringify(movie.Genres) %>'
                                                                 onclick="getGenresOfMovie(this)">
                                                                 Genre
                                                             </a>
-                                                            <a href="/admin/episodes/<%- movie.idMovie %>"
+                                                            <a href="/admin/episodes/<%- movie.id %>"
                                                                 class="btn btn-secondary">Episodes</a>
                                                             <a href="javascript:void(0)" class="btn btn-danger"
-                                                                data-id="<%- movie.idMovie %>"
+                                                                data-id="<%- movie.id %>"
                                                                 onclick="deleteMovie(this)">Delete</a>
                                                         </td>
                                                     </tr>
@@ -136,8 +137,8 @@
                                                     <label for="year" style="line-height: 30px;">Year:</label>
                                                     <select id="addYear" class="w-50 form-control ml-2">
                                                         <% years.forEach(year=> { %>
-                                                            <option value="<%- year.idYear %>">
-                                                                <%- year.Year %>
+                                                            <option value="<%- year.id %>">
+                                                                <%- year.name %>
                                                             </option>
                                                             <% }); %>
                                                     </select>
@@ -146,8 +147,8 @@
                                                     <label for="country" style="line-height: 30px;">Country:</label>
                                                     <select id="addCountry" class="w-50 form-control ml-2">
                                                         <% countries.forEach(country=> { %>
-                                                            <option value="<%- country.idCountry %>">
-                                                                <%- country.Country %>
+                                                            <option value="<%- country.id %>">
+                                                                <%- country.name %>
                                                             </option>
                                                             <% }); %>
                                                     </select>
@@ -156,18 +157,8 @@
                                                     <label for="type" style="line-height: 30px;">Type:</label>
                                                     <select id="addType" class="w-50 form-control ml-2">
                                                         <% types.forEach(type=> { %>
-                                                            <option value="<%- type.idType %>">
-                                                                <%- type.Type %>
-                                                            </option>
-                                                            <% }); %>
-                                                    </select>
-                                                </div>
-                                                <div class="form-group d-flex">
-                                                    <label for="server" style="line-height: 30px;">Main server:</label>
-                                                    <select id="addServer" class="w-50 form-control ml-2">
-                                                        <% servers.forEach(server=> { %>
-                                                            <option value="<%- server.idServer %>">
-                                                                <%- server.Server %>
+                                                            <option value="<%- type.id %>">
+                                                                <%- type.name %>
                                                             </option>
                                                             <% }); %>
                                                     </select>
@@ -210,15 +201,15 @@
                                                             <% genres.forEach(genre=> { %>
                                                                 <tr>
                                                                     <td>
-                                                                        <%- genre.idGenre %>
+                                                                        <%- genre.id %>
                                                                     </td>
                                                                     <td>
-                                                                        <%- genre.Genre %>
+                                                                        <%- genre.name %>
                                                                     </td>
                                                                     <td>
                                                                         <a href="javascript:void(0)"
                                                                             class="btn btn-success"
-                                                                            data-id="<%- genre.idGenre %>"
+                                                                            data-id="<%- genre.id %>"
                                                                             onclick="addGenreOfMovie(this)">
                                                                             Add
                                                                         </a>

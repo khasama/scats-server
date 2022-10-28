@@ -39,10 +39,9 @@
                                             <thead>
                                                 <tr>
                                                     <th>ID</th>
-                                                    <th>User name</th>
                                                     <th>Email</th>
+                                                    <th>Username</th>
                                                     <th>Role</th>
-                                                    <th>Last access</th>
                                                     <th style="width: 25%;">
                                                         <i class="fa-solid fa-bolt"></i>
                                                     </th>
@@ -52,30 +51,27 @@
                                                 <% users.forEach(user=> { %>
                                                     <tr>
                                                         <td>
-                                                            <%- user.idUser; %>
+                                                            <%- user.id; %>
                                                         </td>
                                                         <td>
-                                                            <%- user.Username %>
+                                                            <%- user.email %>
                                                         </td>
                                                         <td>
-                                                            <%- user.Email %>
+                                                            <%- user.username %>
                                                         </td>
                                                         <td>
-                                                            <%- user.Role %>
-                                                        </td>
-                                                        <td>
-                                                            <%- user.LastAccess %>
+                                                            <%- user.Role.name %>
                                                         </td>
                                                         <td>
                                                             <a href="javascript:void(0)" class="btn btn-primary"
-                                                                data-id="<%- user.idUser %>"
-                                                                onclick="getUser(this)">Change Role
+                                                                data-id="<%- user.id %>" onclick="getUser(this)">Change
+                                                                Role
                                                             </a>
                                                             <a href="javascript:void(0)" class="btn btn-warning"
-                                                                data-id="<%- user.idUser %>" onclick="banUser(this)">Ban
+                                                                data-id="<%- user.id %>" onclick="banUser(this)">Ban
                                                             </a>
                                                             <a href="javascript:void(0)" class="btn btn-danger"
-                                                                data-id="<%- user.idUser %>"
+                                                                data-id="<%- user.id %>"
                                                                 onclick="deleteUser(this)">Delete
                                                             </a>
                                                         </td>
@@ -107,8 +103,8 @@
                                                     <label for="role">Role:</label>
                                                     <select id="role" class="form-control">
                                                         <% roles.forEach(role=> { %>
-                                                            <option value="<%- role.idRole %>" id="<%- role.Role %>">
-                                                                <%- role.Role %>
+                                                            <option value="<%- role.id %>" id="<%- role.name %>">
+                                                                <%- role.name %>
                                                             </option>
                                                             <% }); %>
                                                     </select>
@@ -121,30 +117,6 @@
                                 </div>
                             </div>
 
-                            <div class="modal fade" id="editYearModal" tabindex="-1" role="dialog" aria-hidden="true">
-                                <div class="modal-dialog" style="max-width: 50%;">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">EDIT YEAR</h5>
-                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">×</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div>
-                                                <div class="form-group">
-                                                    <label for="year">Year:</label>
-                                                    <input type="text" class="form-control" id="editYear"
-                                                        autocomplete="off">
-                                                </div>
-
-                                                <input type="hidden" id="idYear">
-                                                <button id="updateYear" class="btn btn-primary">Update</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         <!-- -->
 

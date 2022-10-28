@@ -38,8 +38,7 @@ YearController.getInformation = (req, res, next) => {
 YearController.createOne = (req, res, next) => {
     const year = req.body.year;
     if (year) {
-        const data = { year };
-        YearService.createOne(data)
+        YearService.createOne(year)
             .then((rs) => {
                 return res.status(200).json(rs);
             })

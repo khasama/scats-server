@@ -53,20 +53,20 @@
                                                 <% countries.forEach( country=> { %>
                                                     <tr>
                                                         <td>
-                                                            <%- country .idCountry; %>
+                                                            <%- country .id; %>
                                                         </td>
                                                         <td>
-                                                            <%- country.Country %>
+                                                            <%- country.name %>
                                                         </td>
                                                         <td>
-                                                            <%- country.CountrySlug %>
+                                                            <%- country.slug %>
                                                         </td>
                                                         <td>
                                                             <a href="javascript:void(0)" class="btn btn-primary"
-                                                                data-id="<%- country.idCountry %>"
+                                                                data-id="<%- country.id %>"
                                                                 onclick="getInforCountry(this)">Edit</a>
                                                             <a href="javascript:void(0)" class="btn btn-danger"
-                                                                data-id="<%- country.idCountry %>"
+                                                                data-id="<%- country.id %>"
                                                                 onclick="deleteCountry(this)">Delete</a>
                                                         </td>
                                                     </tr>
@@ -78,7 +78,7 @@
                             </div>
 
                             <div class="modal fade" id="newCountryModal" tabindex="-1" role="dialog" aria-hidden="true">
-                                <div class="modal-dialog" style="max-width: 50%;">
+                                <div class="modal-dialog" style="max-width: 25%;">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="exampleModalLabel">NEW COUNTRY</h5>
@@ -102,7 +102,7 @@
 
                             <div class="modal fade" id="editCountryModal" tabindex="-1" role="dialog"
                                 aria-hidden="true">
-                                <div class="modal-dialog" style="max-width: 50%;">
+                                <div class="modal-dialog" style="max-width: 25%;">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="exampleModalLabel">EDIT COUNTRY</h5>

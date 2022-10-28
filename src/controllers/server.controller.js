@@ -17,11 +17,11 @@ ServerController.getAll = (req, res, next) => {
 
 ServerController.createOne = (req, res, next) => {
     const server = req.body.server;
-    const description = req.body.description;
-    if (server && description) {
+    const desc = req.body.desc;
+    if (server && desc) {
         const data = {
             server,
-            description,
+            desc,
         };
         ServerService.createOne(data)
             .then((rs) => {
@@ -43,12 +43,12 @@ ServerController.createOne = (req, res, next) => {
 ServerController.updateOne = (req, res, next) => {
     const id = req.params.id;
     const server = req.body.server;
-    const description = req.body.description;
-    if (id && server && description) {
+    const desc = req.body.desc;
+    if (id && server && desc) {
         const data = {
             id,
             server,
-            description,
+            desc,
         };
         ServerService.updateOne(data)
             .then((rs) => {

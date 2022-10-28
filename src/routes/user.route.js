@@ -9,8 +9,8 @@ router.get('/logout', UserController.logout);
 router.post('/register', UserController.register);
 router.put('/change-role/:id', verifyToken(1), UserController.changeRole);
 
-router.get('/:id', verifyToken(2), UserController.getUser);
-router.get('/', verifyToken(2), UserController.getAll);
+router.get('/:id', UserController.getUser);
+router.get('/', UserController.getAll);
 // router.delete('/delete/:id', UserController.deleteOne);
 
 module.exports = router;

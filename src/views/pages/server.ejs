@@ -53,20 +53,20 @@
                                                 <% servers.forEach(server=> { %>
                                                     <tr>
                                                         <td>
-                                                            <%- server.idServer; %>
+                                                            <%- server.id; %>
                                                         </td>
                                                         <td>
-                                                            <%- server.Server %>
+                                                            <%- server.name %>
                                                         </td>
                                                         <td>
-                                                            <%- server.ServerDescription %>
+                                                            <%- server.desc %>
                                                         </td>
                                                         <td>
                                                             <a href="javascript:void(0)" class="btn btn-primary"
-                                                                data-id="<%- server.idServer %>"
+                                                                data-id="<%- server.id %>"
                                                                 onclick="getInforServer(this)">Edit</a>
                                                             <a href="javascript:void(0)" class="btn btn-danger"
-                                                                data-id="<%- server.idServer %>"
+                                                                data-id="<%- server.id %>"
                                                                 onclick="deleteServer(this)">Delete</a>
                                                         </td>
                                                     </tr>
@@ -78,7 +78,7 @@
                             </div>
 
                             <div class="modal fade" id="newServerModal" tabindex="-1" role="dialog" aria-hidden="true">
-                                <div class="modal-dialog" style="max-width: 50%;">
+                                <div class="modal-dialog" style="max-width: 30%;">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="exampleModalLabel">NEW SERVER</h5>
@@ -106,7 +106,7 @@
                             </div>
 
                             <div class="modal fade" id="editServerModal" tabindex="-1" role="dialog" aria-hidden="true">
-                                <div class="modal-dialog" style="max-width: 50%;">
+                                <div class="modal-dialog" style="max-width: 30%;">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="exampleModalLabel">EDIT SERVER</h5>

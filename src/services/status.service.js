@@ -1,10 +1,12 @@
 const StatusModel = require("../models/status.model");
+const MovieModel = require("../models/movie.model");
+const slug = require("slug");
 
 const StatusService = {};
 
 StatusService.getAll = async () => {
     try {
-        const [statuses] = await StatusModel.getAll();
+        const statuses = await StatusModel.findAll();
         return { status: "success", data: statuses };
     } catch (error) {
         throw error;
@@ -13,21 +15,24 @@ StatusService.getAll = async () => {
 
 StatusService.getInformation = async (id) => {
     try {
-        const [stt] = await StatusModel.getInformation(id);
-        return { status: "success", data: stt[0] };
+        const status = await StatusModel.findOne({
+            where: {
+                id
+            }
+        });
+        return { status: "success", data: status };
     } catch (error) {
         throw error;
     }
 };
 
-StatusService.createOne = async (data) => {
+StatusService.createOne = async (status) => {
     try {
-        const [rows] = await StatusModel.createOne(new StatusModel(data));
-        if (rows.insertId > 0) {
-            const [stt] = await StatusModel.getInformation(rows.insertId);
-            return { status: "success", data: stt[0] };
-        }
-        return { status: "failed", message: "Can not create" };
+        const newStatus = await StatusModel.create({
+            name: status,
+            slug: slug(status)
+        });
+        return { status: "success", data: newStatus };
     } catch (error) {
         throw error;
     }
@@ -35,8 +40,17 @@ StatusService.createOne = async (data) => {
 
 StatusService.updateOne = async (data) => {
     try {
-        const [stt] = await StatusModel.updateOne(data);
-        return { status: "success", data: stt };
+        await StatusModel.update(
+            {
+                name: data.status,
+                slug: slug(data.status)
+            },
+            {
+                where: {
+                    id: data.id
+                }
+            });
+        return { status: "success" };
     } catch (error) {
         throw error;
     }
@@ -44,12 +58,14 @@ StatusService.updateOne = async (data) => {
 
 StatusService.deleteOne = async (id) => {
     try {
-        const [movies] = await StatusModel.getAMOT(id);
-        if (movies.length === 0) {
-            const [rows] = await StatusModel.deleteOne(id);
-            if (rows.affectedRows !== 0) return { status: "success" };
-        }
-        return { status: "failed", message: "Can not delete" };
+        const movie = await MovieModel.findOne({
+            where: {
+                status_id: id
+            }
+        });
+        if (movie) return { status: "failed", message: "Status being used" };
+        await StatusModel.destroy({ where: { id } });
+        return { status: "success" };
     } catch (error) {
         throw error;
     }

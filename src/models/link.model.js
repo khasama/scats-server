@@ -1,19 +1,19 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../configs/sequelize.config");
-const Movie = require("./movie.model");
+const Episode = require("./episode.model");
 
-const Episode = sequelize.define(
-    'Episode',
+const Link = sequelize.define(
+    'Link',
     {
-        episode: {
+        link: {
             type: Sequelize.STRING,
             allowNull: false
         },
-        hls: {
-            type: Sequelize.STRING,
+        server_id: {
+            type: Sequelize.INTEGER,
             allowNull: false
         },
-        movie_id: {
+        episode_id: {
             type: Sequelize.INTEGER,
             allowNull: false
         }
@@ -22,8 +22,8 @@ const Episode = sequelize.define(
         timestamps: true,
         paranoid: true,
         underscored: true,
-        tableName: 'tb_episode'
+        tableName: 'tb_link'
     }
 );
 
-module.exports = Episode;
+module.exports = Link;

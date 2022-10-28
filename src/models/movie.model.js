@@ -1,144 +1,153 @@
-const promisePool = require("../configs/db.config");
-const slug = require("slug");
+const Sequelize = require("sequelize");
+const sequelize = require("../configs/sequelize.config");
+const Country = require("./country.model");
+const Status = require("./status.model");
+const Year = require("./year.model");
+const Type = require("./type.model");
+const Genre = require("./genre.model");
+const Episode = require("./episode.model");
+const Link = require("./link.model");
+const Server = require("./server.model");
+const GenreMovie = require("./genre.movie.model");
 
-function Movie(movie) {
-    this.name = movie.name;
-    this.othername = movie.othername;
-    this.slug = slug(movie.name);
-    this.content = movie.content;
-    this.thumb = movie.thumb;
-    this.background = movie.background;
-    this.viewed = 0;
-    this.liked = 0;
-    this.year = movie.year;
-    this.status = 1;
-    this.country = movie.country;
-    this.type = movie.type;
-    this.server = movie.server;
-    this.newupdate = 0;
-    this.deleted = 0;
-}
-
-Movie.getAll = async () => {
-    return await promisePool.execute(
-        `
-        SELECT * FROM tb_movie m
-        INNER JOIN tb_status s
-        ON m.idStatus = s.idStatus
-        INNER JOIN tb_year y
-        ON m.idYear = y.idYear
-        INNER JOIN tb_country c
-        ON m.idCountry = c.idCountry
-        INNER JOIN tb_type t
-        ON m.idType = t.idType
-        `
-    );
-};
-
-Movie.createOne = async (movie) => {
-    return await promisePool.execute(
-        `
-        INSERT INTO tb_movie
-        VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-        `,
-        [
-            movie.name,
-            movie.othername,
-            movie.slug,
-            movie.content,
-            movie.thumb,
-            movie.background,
-            movie.viewed,
-            movie.liked,
-            movie.year,
-            movie.status,
-            movie.country,
-            movie.type,
-            movie.server,
-            movie.newupdate,
-            movie.deleted,
-        ]
-    );
-};
-
-Movie.updateOne = async (movie) => {
-    return await promisePool.execute(
-        `
-        UPDATE tb_movie
-        SET Name = ?,
-            OtherName = ?,
-            Slug = ?,
-            Content = ?,
-            Thumb = ?,
-            Background = ?,
-            Viewed = ?,
-            Liked = ?,
-            idYear = ?,
-            idStatus = ?,
-            idCountry = ?,
-            idType = ?,
-            MainServer = ?
-        WHERE idMovie = ?
-        `,
-        [
-            movie.name,
-            movie.othername,
-            slug(movie.name),
-            movie.content,
-            movie.thumb,
-            movie.background,
-            movie.viewed,
-            movie.liked,
-            movie.year,
-            movie.status,
-            movie.country,
-            movie.type,
-            movie.server,
-            movie.id,
-        ]
-    );
-};
-
-Movie.getInformation = async (id) => {
-    return await promisePool.execute(
-        `
-        SELECT * FROM tb_movie m
-        INNER JOIN tb_status s
-        ON m.idStatus = s.idStatus
-        INNER JOIN tb_year y
-        ON m.idYear = y.idYear
-        INNER JOIN tb_country c
-        ON m.idCountry = c.idCountry
-        INNER JOIN tb_type t
-        ON m.idType = t.idType
-        INNER JOIN tb_server sv
-        ON m.MainServer = sv.idServer
-        WHERE m.idMovie = ?
-        `,
-        [id]
-    );
-};
-
-Movie.deleteOrActivate = async (id, type) => {
-    if (type === 0) {
-        return await promisePool.execute(
-            `
-            UPDATE tb_movie
-            SET Deleted = 0
-            WHERE idMovie = ?
-            `,
-            [id]
-        );
-    } else {
-        return await promisePool.execute(
-            `
-            UPDATE tb_movie
-            SET Deleted = 1
-            WHERE idMovie = ?
-            `,
-            [id]
-        );
+const Movie = sequelize.define(
+    'Movie',
+    {
+        name: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        slug: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        aka: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        content: {
+            type: Sequelize.STRING(5000),
+            allowNull: false
+        },
+        thumb: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        background: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        viewed: {
+            type: Sequelize.INTEGER,
+            defaultValue: 0
+        },
+        liked: {
+            type: Sequelize.INTEGER,
+            defaultValue: 0
+        },
+        searched: {
+            type: Sequelize.INTEGER,
+            defaultValue: 0
+        },
+        year_id: {
+            type: Sequelize.INTEGER,
+        },
+        status_id: {
+            type: Sequelize.INTEGER,
+            defaultValue: 1
+        },
+        type_id: {
+            type: Sequelize.INTEGER,
+        },
+        country_id: {
+            type: Sequelize.INTEGER,
+        },
+        new: {
+            type: Sequelize.INTEGER,
+            defaultValue: 0
+        }
+    },
+    {
+        timestamps: true,
+        paranoid: true,
+        underscored: true,
+        tableName: 'tb_movie'
     }
-};
+);
+Movie.belongsTo(Country, {
+    foreignKey: {
+        name: 'country_id'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
+Movie.belongsTo(Year, {
+    foreignKey: {
+        name: 'year_id'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
+Movie.belongsTo(Status, {
+    foreignKey: {
+        name: 'status_id'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
+Movie.belongsTo(Type, {
+    foreignKey: {
+        name: 'type_id'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
+
+Episode.belongsTo(Movie, {
+    foreignKey: {
+        name: 'movie_id'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
+Movie.hasMany(Episode, {
+    foreignKey: {
+        name: 'movie_id'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
+Movie.belongsToMany(Genre, { through: GenreMovie });
+
+Episode.hasMany(Link, {
+    foreignKey: {
+        name: 'episode_id'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
+Link.belongsTo(Episode, {
+    foreignKey: {
+        name: 'episode_id'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
+
+Link.belongsTo(Server, {
+    foreignKey: {
+        name: 'server_id'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
+GenreMovie.belongsTo(Genre, {
+    foreignKey: {
+        name: 'GenreId'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
+
 
 module.exports = Movie;

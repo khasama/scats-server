@@ -1,9 +1,9 @@
-const TypeService = require("../services/type.service");
+const RoleService = require("../services/role.service");
 
-const TypeController = {};
+const RoleController = {};
 
-TypeController.getAll = (req, res, next) => {
-    TypeService.getAll()
+RoleController.getAll = (req, res, next) => {
+    RoleService.getAll()
         .then((rs) => {
             return res.status(200).json(rs);
         })
@@ -15,10 +15,10 @@ TypeController.getAll = (req, res, next) => {
         });
 };
 
-TypeController.getInformation = (req, res, next) => {
+RoleController.getInformation = (req, res, next) => {
     const id = req.params.id;
     if (id) {
-        TypeService.getInformation(id)
+        RoleService.getInformation(id)
             .then((rs) => {
                 return res.status(200).json(rs);
             })
@@ -35,10 +35,10 @@ TypeController.getInformation = (req, res, next) => {
     }
 };
 
-TypeController.createOne = (req, res, next) => {
-    const type = req.body.type;
-    if (type) {
-        TypeService.createOne(type)
+RoleController.createOne = (req, res, next) => {
+    const role = req.body.role;
+    if (role) {
+        RoleService.createOne(role)
             .then((rs) => {
                 return res.status(200).json(rs);
             })
@@ -55,15 +55,15 @@ TypeController.createOne = (req, res, next) => {
     }
 };
 
-TypeController.updateOne = (req, res, next) => {
+RoleController.updateOne = (req, res, next) => {
     const id = req.params.id;
-    const type = req.body.type;
-    if (id && type) {
+    const role = req.body.role;
+    if (id && role) {
         const data = {
             id,
-            type,
+            role,
         };
-        TypeService.updateOne(data)
+        RoleService.updateOne(data)
             .then((rs) => {
                 return res.status(200).json(rs);
             })
@@ -80,10 +80,10 @@ TypeController.updateOne = (req, res, next) => {
     }
 };
 
-TypeController.deleteOne = (req, res, next) => {
+RoleController.deleteOne = (req, res, next) => {
     const id = req.params.id;
     if (id) {
-        TypeService.deleteOne(id)
+        RoleService.deleteOne(id)
             .then((rs) => {
                 return res.status(200).json(rs);
             })
@@ -96,4 +96,4 @@ TypeController.deleteOne = (req, res, next) => {
     }
 };
 
-module.exports = TypeController;
+module.exports = RoleController;

@@ -1,10 +1,12 @@
 const YearModel = require("../models/year.model");
+const MovieModel = require("../models/movie.model");
+const slug = require("slug");
 
 const YearService = {};
 
 YearService.getAll = async () => {
     try {
-        const [years] = await YearModel.getAll();
+        const years = await YearModel.findAll();
         return { status: "success", data: years };
     } catch (error) {
         throw error;
@@ -13,21 +15,24 @@ YearService.getAll = async () => {
 
 YearService.getInformation = async (id) => {
     try {
-        const [year] = await YearModel.getInformation(id);
-        return { status: "success", data: year[0] };
+        const year = await YearModel.findOne({
+            where: {
+                id
+            }
+        });
+        return { status: "success", data: year };
     } catch (error) {
         throw error;
     }
 };
 
-YearService.createOne = async (data) => {
+YearService.createOne = async (year) => {
     try {
-        const [rows] = await YearModel.createOne(new YearModel(data));
-        if (rows.insertId > 0) {
-            const [year] = await YearModel.getInformation(rows.insertId);
-            return { status: "success", data: year[0] };
-        }
-        return { status: "failed", message: "Can not create" };
+        const newYear = await YearModel.create({
+            name: year,
+            slug: slug(year)
+        });
+        return { status: "success", data: newYear };
     } catch (error) {
         throw error;
     }
@@ -35,8 +40,17 @@ YearService.createOne = async (data) => {
 
 YearService.updateOne = async (data) => {
     try {
-        const [year] = await YearModel.updateOne(data);
-        return { status: "success", data: year };
+        await YearModel.update(
+            {
+                name: data.year,
+                slug: slug(data.year)
+            },
+            {
+                where: {
+                    id: data.id
+                }
+            });
+        return { status: "success" };
     } catch (error) {
         throw error;
     }
@@ -44,12 +58,14 @@ YearService.updateOne = async (data) => {
 
 YearService.deleteOne = async (id) => {
     try {
-        const [movies] = await YearModel.getAMOY(id);
-        if (movies.length === 0) {
-            const [rows] = await YearModel.deleteOne(id);
-            if (rows.affectedRows !== 0) return { status: "success" };
-        }
-        return { status: "failed", message: "Can not delete" };
+        const movie = await MovieModel.findOne({
+            where: {
+                year_id: id
+            }
+        });
+        if (movie) return { status: "failed", message: "Year being used" };
+        await YearModel.destroy({ where: { id } });
+        return { status: "success" };
     } catch (error) {
         throw error;
     }

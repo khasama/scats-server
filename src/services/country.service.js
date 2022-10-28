@@ -1,11 +1,13 @@
 const CountryModel = require("../models/country.model");
+const MovieModel = require("../models/movie.model");
+const slug = require("slug");
 
 const CountryService = {};
 
 CountryService.getAll = async () => {
     try {
-        const [rows] = await CountryModel.getAll();
-        return { status: "success", data: rows };
+        const countries = await CountryModel.findAll();
+        return { status: "success", data: countries };
     } catch (error) {
         throw error;
     }
@@ -13,9 +15,12 @@ CountryService.getAll = async () => {
 
 CountryService.getInformation = async (id) => {
     try {
-        const [rows] = await CountryModel.getInformation(id);
-        if (rows.length > 0) return { status: "success", data: rows[0] };
-        return { status: "failed", message: "Not found" };
+        const country = await CountryModel.findOne({
+            where: {
+                id
+            }
+        });
+        return { status: "success", data: country };
     } catch (error) {
         throw error;
     }
@@ -23,14 +28,11 @@ CountryService.getInformation = async (id) => {
 
 CountryService.createOne = async (country) => {
     try {
-        const [rows] = await CountryModel.createOne(
-            new CountryModel({ country })
-        );
-        if (rows.insertId != 0) {
-            const [country] = await CountryModel.getInformation(rows.insertId);
-            return { status: "success", data: country[0] };
-        }
-        return { status: "failed", message: "Can not create" };
+        const newCountry = await CountryModel.create({
+            name: country,
+            slug: slug(country)
+        });
+        return { status: "success", data: newCountry };
     } catch (error) {
         throw error;
     }
@@ -38,24 +40,14 @@ CountryService.createOne = async (country) => {
 
 CountryService.deleteOne = async (id) => {
     try {
-        const [movies] = await CountryModel.getAMOC(id);
-        if (movies.length == 0) {
-            const [rows] = await CountryModel.deleteOne(id);
-            if (rows.affectedRows != 0) {
-                return { status: "success" };
+        const movie = await MovieModel.findOne({
+            where: {
+                country_id: id
             }
-        }
-        return { status: "failed", message: "Genre is being used" };
-    } catch (error) {
-        throw error;
-    }
-};
-
-CountryService.getAMOC = async (id) => {
-    try {
-        const [movies] = await CountryModel.getAMOC(id);
-        if (rows.length > 0) return { status: "success", data: movies };
-        return { status: "failed", message: "Not found" };
+        });
+        if (movie) return { status: "failed", message: "Country being used" };
+        await CountryModel.destroy({ where: { id } });
+        return { status: "success" };
     } catch (error) {
         throw error;
     }
@@ -63,12 +55,17 @@ CountryService.getAMOC = async (id) => {
 
 CountryService.updateOne = async (data) => {
     try {
-        const [rows] = await CountryModel.updateOne(data);
-        if (rows.affectedRows > 0) {
-            const [country] = await CountryModel.getInformation(data.id);
-            return { status: "success", data: country[0] };
-        }
-        return { status: "failed", message: "Not found" };
+        await CountryModel.update(
+            {
+                name: data.country,
+                slug: slug(data.country)
+            },
+            {
+                where: {
+                    id: data.id
+                }
+            });
+        return { status: "success" };
     } catch (error) {
         throw error;
     }

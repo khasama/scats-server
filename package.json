@@ -21,6 +21,7 @@
     "ioredis": "^5.2.3",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3",
+    "sequelize": "^6.25.3",
     "slug": "^8.0.0",
     "socket.io": "^4.5.2"
   }

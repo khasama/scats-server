@@ -8,6 +8,7 @@ const StatusModel = require("../models/status.model");
 const EpisodeModel = require("../models/episode.model");
 const UserModel = require("../models/user.model");
 const RoleModel = require("../models/role.model");
+const LinkModel = require("../models/link.model");
 
 const AdminController = {};
 
@@ -17,12 +18,35 @@ AdminController.home = (req, res) => {
 
 AdminController.getAllMovie = async (req, res) => {
     try {
-        const [movies] = await MovieModel.getAll();
-        const [years] = await YearModel.getAll();
-        const [countries] = await CountryModel.getAll();
-        const [servers] = await ServerModel.getAll();
-        const [types] = await TypeModel.getAll();
-        const [genres] = await GenreModel.getAll();
+        const movies = await MovieModel.findAll({
+            include: [
+                {
+                    model: GenreModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: CountryModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: TypeModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: StatusModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: YearModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+            ]
+        });
+        const years = await YearModel.findAll();
+        const countries = await CountryModel.findAll();
+        const servers = await ServerModel.findAll();
+        const types = await TypeModel.findAll();
+        const genres = await GenreModel.findAll();
         return res.render("pages/movie", {
             movies,
             years,
@@ -40,14 +64,40 @@ AdminController.getMovie = async (req, res) => {
     const id = req.params.id;
 
     try {
-        const [movie] = await MovieModel.getInformation(id);
-        const [years] = await YearModel.getAll();
-        const [countries] = await CountryModel.getAll();
-        const [servers] = await ServerModel.getAll();
-        const [types] = await TypeModel.getAll();
-        const [statuses] = await StatusModel.getAll();
+        const movie = await MovieModel.findOne({
+            where: {
+                id
+            },
+            include: [
+                {
+                    model: GenreModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: CountryModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: TypeModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: StatusModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: YearModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+            ]
+        });
+        const years = await YearModel.findAll();
+        const countries = await CountryModel.findAll();
+        const servers = await ServerModel.findAll();
+        const types = await TypeModel.findAll();
+        const statuses = await StatusModel.findAll();
         return res.render("pages/movie/information", {
-            movie: movie[0],
+            movie,
             years,
             countries,
             servers,
@@ -62,14 +112,33 @@ AdminController.getMovie = async (req, res) => {
 AdminController.getEpisodes = async (req, res) => {
     const id = req.params.id;
     try {
-        const [movie] = await MovieModel.getInformation(id);
-        const [servers] = await ServerModel.getAll();
-        let [episodes] = await EpisodeModel.getAllEpisode({ idMovie: movie[0].idMovie, idServer: movie[0].idServer });
+        const movie = await MovieModel.findOne({
+            attributes: ['id', 'name'],
+            where: {
+                id
+            },
+            include: [
+                {
+                    model: EpisodeModel,
+                    attributes: ['id', 'episode', 'hls'],
+                    include: [{
+                        model: LinkModel,
+                        attributes: ['id', 'link'],
+                        include: [{
+                            model: ServerModel,
+                            attributes: ['id', 'name']
+                        }]
+                    }]
+                },
+            ]
+        });
+        const servers = await ServerModel.findAll();
+        let episodes = movie.Episodes;
         episodes.sort((a, b) => {
-            return parseInt(a.Episode) - parseInt(b.Episode);
+            return parseInt(a.episode) - parseInt(b.episode);
         });
         return res.render("pages/episode", {
-            movie: movie[0],
+            movie,
             servers,
             episodes
         });
@@ -80,7 +149,7 @@ AdminController.getEpisodes = async (req, res) => {
 
 AdminController.getAllGenre = async (req, res) => {
     try {
-        const [genres] = await GenreModel.getAll();
+        const genres = await GenreModel.findAll();
         return res.render("pages/genre", { genres });
     } catch (error) {
         throw error;
@@ -89,7 +158,7 @@ AdminController.getAllGenre = async (req, res) => {
 
 AdminController.getAllYear = async (req, res) => {
     try {
-        const [years] = await YearModel.getAll();
+        const years = await YearModel.findAll();
         return res.render("pages/year", { years });
     } catch (error) {
         throw error;
@@ -98,7 +167,7 @@ AdminController.getAllYear = async (req, res) => {
 
 AdminController.getAllCountry = async (req, res) => {
     try {
-        const [countries] = await CountryModel.getAll();
+        const countries = await CountryModel.findAll();
         return res.render("pages/country", { countries });
     } catch (error) {
         throw error;
@@ -107,7 +176,7 @@ AdminController.getAllCountry = async (req, res) => {
 
 AdminController.getAllServer = async (req, res) => {
     try {
-        const [servers] = await ServerModel.getAll();
+        const servers = await ServerModel.findAll();
         return res.render("pages/server", { servers });
     } catch (error) {
         throw error;
@@ -116,7 +185,7 @@ AdminController.getAllServer = async (req, res) => {
 
 AdminController.getAllType = async (req, res) => {
     try {
-        const [types] = await TypeModel.getAll();
+        const types = await TypeModel.findAll();
         return res.render("pages/type", { types });
     } catch (error) {
         throw error;
@@ -125,8 +194,10 @@ AdminController.getAllType = async (req, res) => {
 
 AdminController.getAllUser = async (req, res) => {
     try {
-        const [users] = await UserModel.getAll();
-        const [roles] = await RoleModel.getAll();
+        const users = await UserModel.findAll({
+            include: [RoleModel]
+        });
+        const roles = await RoleModel.findAll();
         return res.render("pages/user", { users, roles });
     } catch (error) {
         throw error;

@@ -28,47 +28,47 @@
                         <div class="container-fluid" style="margin: 20px 0;">
                             <a href="/admin/movies" class="btn btn-success mb-4">Back</a>
                             <h1>
-                                <%- movie.Name %>
+                                <%- movie.name %>
                             </h1>
                             <div>
                                 <div class="form-group">
-                                    <label for="name">Name:</label>
-                                    <input type="text" class="form-control" id="editName" value="<%- movie.Name %> "
+                                    <label for="name">name:</label>
+                                    <input type="text" class="form-control" id="editName" value="<%- movie.name %> "
                                         autocomplete="off">
                                 </div>
                                 <div class="form-group">
                                     <label for="oname">Other name:</label>
-                                    <input type="text" class="form-control" id="editOtherName"
-                                        value="<%- movie.OtherName %> " autocomplete="off">
+                                    <input type="text" class="form-control" id="editOtherName" value="<%- movie.aka %> "
+                                        autocomplete="off">
                                 </div>
                                 <div class="form-group">
                                     <label for="content">Content:</label>
-                                    <textarea id="editContent"><%- movie.Content %></textarea>
+                                    <textarea id="editContent"><%- movie.content %></textarea>
                                 </div>
                                 <div class="form-group">
                                     <div class="d-flex mb-2">
                                         <label for="thumb">Thumbnail:</label>
-                                        <input type="text" class="form-control ml-2" value="<%- movie.Thumb %>"
+                                        <input type="text" class="form-control ml-2" value="<%- movie.thumb %>"
                                             id="editThumb">
                                     </div>
-                                    <img src="<%- movie.Thumb %>" style="max-width: 300px;">
+                                    <img src="<%- movie.thumb %>" style="max-width: 300px;">
                                 </div>
                                 <div class="form-group">
                                     <div class="d-flex mb-2">
                                         <label for="thumb">Background:</label>
-                                        <input type="text" class="form-control ml-2" value="<%- movie.Background %>"
+                                        <input type="text" class="form-control ml-2" value="<%- movie.background %>"
                                             id="editBackground">
                                     </div>
 
-                                    <img src="<%- movie.Background %>" style="max-width: 300px;">
+                                    <img src="<%- movie.background %>" style="max-width: 300px;">
                                 </div>
                                 <div class="form-group d-flex">
                                     <label for="year" style="line-height: 30px;">Year:</label>
                                     <select id="editYear" class="w-50 form-control ml-2">
                                         <% years.forEach(year=> { %>
-                                            <option value="<%- year.idYear %>" <%- year.idYear===movie.idYear
-                                                ? 'selected' : '' %> >
-                                                <%- year.Year %>
+                                            <option value="<%- year.id %>" <%- year.id===movie.Year.id ? 'selected' : ''
+                                                %> >
+                                                <%- year.name %>
                                             </option>
                                             <% }); %>
                                     </select>
@@ -77,9 +77,9 @@
                                     <label for="country" style="line-height: 30px;">Country:</label>
                                     <select id="editCountry" class="w-50 form-control ml-2">
                                         <% countries.forEach(country=> { %>
-                                            <option value="<%- country.idCountry %>" <%-
-                                                country.idCountry===movie.idCountry ? 'selected' : '' %>>
-                                                <%- country.Country %>
+                                            <option value="<%- country.id %>" <%- country.id===movie.Country.id
+                                                ? 'selected' : '' %>>
+                                                <%- country.name %>
                                             </option>
                                             <% }); %>
                                     </select>
@@ -88,20 +88,9 @@
                                     <label for="type" style="line-height: 30px;">Type:</label>
                                     <select id="editType" class="w-50 form-control ml-2">
                                         <% types.forEach(type=> { %>
-                                            <option value="<%- type.idType %>" <%- type.idType===movie.idType
-                                                ? 'selected' : '' %>>
-                                                <%- type.Type %>
-                                            </option>
-                                            <% }); %>
-                                    </select>
-                                </div>
-                                <div class="form-group d-flex">
-                                    <label for="server" style="line-height: 30px;">Main server:</label>
-                                    <select id="editServer" class="w-50 form-control ml-2">
-                                        <% servers.forEach(server=> { %>
-                                            <option value="<%- server.idServer %>" <%- server.idServer===movie.Server
-                                                ? 'selected' : '' %>>
-                                                <%- server.Server %>
+                                            <option value="<%- type.id %>" <%- type.id===movie.Type.id ? 'selected' : ''
+                                                %>>
+                                                <%- type.name %>
                                             </option>
                                             <% }); %>
                                     </select>
@@ -110,24 +99,24 @@
                                     <label for="status" style="line-height: 30px;">Status:</label>
                                     <select id="editStatus" class="w-50 form-control ml-2">
                                         <% statuses.forEach(status=> { %>
-                                            <option value="<%- status.idStatus %>" <%- status.idStatus===movie.Status
+                                            <option value="<%- status.id %>" <%- status.id===movie.Status.id
                                                 ? 'selected' : '' %>>
-                                                <%- status.Status %>
+                                                <%- status.name %>
                                             </option>
                                             <% }); %>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="view">Viewed:</label>
-                                    <input type="number" value="<%- movie.Viewed %>" class="form-control"
+                                    <input type="number" value="<%- movie.viewed %>" class="form-control"
                                         id="editViewed" autocomplete="off">
                                 </div>
                                 <div class="form-group">
                                     <label for="liked">Liked:</label>
-                                    <input type="number" value="<%- movie.Liked %>" class="form-control" id="editLiked"
+                                    <input type="number" value="<%- movie.liked %>" class="form-control" id="editLiked"
                                         autocomplete="off">
                                 </div>
-                                <input type="hidden" value="<%- movie.idMovie %>" id="idMovie">
+                                <input type="hidden" value="<%- movie.id %>" id="idMovie">
                                 <button id="updateMovie" class="btn btn-primary">Save</button>
                             </div>
                         </div>

@@ -53,20 +53,20 @@
                                                 <% genres.forEach(genre=> { %>
                                                     <tr>
                                                         <td>
-                                                            <%- genre.idGenre; %>
+                                                            <%- genre.id %>
                                                         </td>
                                                         <td>
-                                                            <%- genre.Genre %>
+                                                            <%- genre.name %>
                                                         </td>
                                                         <td>
-                                                            <%- genre.GenreSlug %>
+                                                            <%- genre.slug %>
                                                         </td>
                                                         <td>
                                                             <a href="javascript:void(0)" class="btn btn-primary"
-                                                                data-id="<%- genre.idGenre %>"
+                                                                data-id="<%- genre.id %>"
                                                                 onclick="getInforGenre(this)">Edit</a>
                                                             <a href="javascript:void(0)" class="btn btn-danger"
-                                                                data-id="<%- genre.idGenre %>"
+                                                                data-id="<%- genre.id %>"
                                                                 onclick="deleteGenre(this)">Delete</a>
                                                         </td>
                                                     </tr>
@@ -78,7 +78,7 @@
                             </div>
 
                             <div class="modal fade" id="newGenreModal" tabindex="-1" role="dialog" aria-hidden="true">
-                                <div class="modal-dialog" style="max-width: 50%;">
+                                <div class="modal-dialog" style="max-width: 30%;">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="exampleModalLabel">NEW GENRE</h5>
@@ -101,7 +101,7 @@
                             </div>
 
                             <div class="modal fade" id="editGenreModal" tabindex="-1" role="dialog" aria-hidden="true">
-                                <div class="modal-dialog" style="max-width: 50%;">
+                                <div class="modal-dialog" style="max-width: 30%;">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="exampleModalLabel">EDIT GENRE</h5>

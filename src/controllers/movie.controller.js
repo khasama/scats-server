@@ -17,36 +17,33 @@ MovieController.getAll = (req, res, next) => {
 
 MovieController.createOne = (req, res, next) => {
     const name = req.body.name;
-    const othername = req.body.othername;
+    const aka = req.body.aka;
     const content = req.body.content;
     const thumb = req.body.thumb;
     const background = req.body.background;
     const year = req.body.year;
     const country = req.body.country;
     const type = req.body.type;
-    const server = req.body.server;
 
     if (
         thumb &&
         background &&
         name &&
-        othername &&
+        aka &&
         content &&
         year &&
         country &&
-        type &&
-        server
+        type
     ) {
         const data = {
             name,
-            othername,
+            aka,
             content,
             thumb,
             background,
             year,
             country,
             type,
-            server,
         };
         MovieService.createOne(data)
             .then((rs) => {
@@ -68,14 +65,13 @@ MovieController.createOne = (req, res, next) => {
 MovieController.updateOne = (req, res, next) => {
     const id = req.params.id;
     const name = req.body.name;
-    const othername = req.body.othername;
+    const aka = req.body.aka;
     const content = req.body.content;
     const thumb = req.body.thumb;
     const background = req.body.background;
     const year = req.body.year;
     const country = req.body.country;
     const type = req.body.type;
-    const server = req.body.server;
     const status = req.body.status;
     const viewed = req.body.viewed;
     const liked = req.body.liked;
@@ -83,26 +79,24 @@ MovieController.updateOne = (req, res, next) => {
         thumb &&
         background &&
         name &&
-        othername &&
+        aka &&
         content &&
         year &&
         country &&
         type &&
-        server &&
         status &&
         viewed &&
         liked
     ) {
         const data = {
             name,
-            othername,
+            aka,
             content,
             thumb,
             background,
             year,
             country,
             type,
-            server,
             status,
             viewed,
             liked,
@@ -126,10 +120,72 @@ MovieController.updateOne = (req, res, next) => {
     }
 };
 
+MovieController.delete = (req, res, next) => {
+    const id = req.params.id;
+    if (id) {
+        MovieService.delete(id)
+            .then((rs) => {
+                return res.status(200).json(rs);
+            })
+            .catch((err) => {
+                console.log(err);
+                return res
+                    .status(500)
+                    .json({ status: "error", message: "Has a fucking error" });
+            });
+    } else {
+        return res
+            .status(400)
+            .json({ status: "failed", message: "Missing params" });
+    }
+};
+
 MovieController.getInformation = (req, res, next) => {
     const id = req.params.id;
     if (id) {
         MovieService.getInformation(id)
+            .then((rs) => {
+                return res.status(200).json(rs);
+            })
+            .catch((err) => {
+                console.log(err);
+                return res
+                    .status(500)
+                    .json({ status: "error", message: "Has a fucking error" });
+            });
+    } else {
+        return res
+            .status(400)
+            .json({ status: "failed", message: "Missing params" });
+    }
+};
+
+MovieController.addGenre = (req, res, next) => {
+    const id = req.body.idMovie;
+    const idGenre = req.body.idGenre;
+    if (id) {
+        MovieService.addGenre(id, idGenre)
+            .then((rs) => {
+                return res.status(200).json(rs);
+            })
+            .catch((err) => {
+                console.log(err);
+                return res
+                    .status(500)
+                    .json({ status: "error", message: "Has a fucking error" });
+            });
+    } else {
+        return res
+            .status(400)
+            .json({ status: "failed", message: "Missing params" });
+    }
+};
+
+MovieController.deleteGenre = (req, res, next) => {
+    const id = req.params.idMovie;
+    const idGenre = req.params.idGenre;
+    if (id) {
+        MovieService.deleteGenre(id, idGenre)
             .then((rs) => {
                 return res.status(200).json(rs);
             })

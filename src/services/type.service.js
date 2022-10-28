@@ -1,10 +1,12 @@
 const TypeModel = require("../models/type.model");
+const MovieModel = require("../models/movie.model");
+const slug = require("slug");
 
 const TypeService = {};
 
 TypeService.getAll = async () => {
     try {
-        const [types] = await TypeModel.getAll();
+        const types = await TypeModel.findAll();
         return { status: "success", data: types };
     } catch (error) {
         throw error;
@@ -13,21 +15,24 @@ TypeService.getAll = async () => {
 
 TypeService.getInformation = async (id) => {
     try {
-        const [type] = await TypeModel.getInformation(id);
-        return { status: "success", data: type[0] };
+        const type = await TypeModel.findOne({
+            where: {
+                id
+            }
+        });
+        return { status: "success", data: type };
     } catch (error) {
         throw error;
     }
 };
 
-TypeService.createOne = async (data) => {
+TypeService.createOne = async (type) => {
     try {
-        const [rows] = await TypeModel.createOne(new TypeModel(data));
-        if (rows.insertId > 0) {
-            const [type] = await TypeModel.getInformation(rows.insertId);
-            return { status: "success", data: type[0] };
-        }
-        return { status: "failed", message: "Can not create" };
+        const newType = await TypeModel.create({
+            name: type,
+            slug: slug(type)
+        });
+        return { status: "success", data: newType };
     } catch (error) {
         throw error;
     }
@@ -35,8 +40,17 @@ TypeService.createOne = async (data) => {
 
 TypeService.updateOne = async (data) => {
     try {
-        const [type] = await TypeModel.updateOne(data);
-        return { status: "success", data: type };
+        await TypeModel.update(
+            {
+                name: data.type,
+                slug: slug(data.type)
+            },
+            {
+                where: {
+                    id: data.id
+                }
+            });
+        return { status: "success" };
     } catch (error) {
         throw error;
     }
@@ -44,12 +58,14 @@ TypeService.updateOne = async (data) => {
 
 TypeService.deleteOne = async (id) => {
     try {
-        const [movies] = await TypeModel.getAMOT(id);
-        if (movies.length === 0) {
-            const [rows] = await TypeModel.deleteOne(id);
-            if (rows.affectedRows !== 0) return { status: "success" };
-        }
-        return { status: "failed", message: "Can not delete" };
+        const movie = await MovieModel.findOne({
+            where: {
+                type_id: id
+            }
+        });
+        if (movie) return { status: "failed", message: "Type being used" };
+        await TypeModel.destroy({ where: { id } });
+        return { status: "success" };
     } catch (error) {
         throw error;
     }

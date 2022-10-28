@@ -175,14 +175,14 @@ $(document).ready(function () {
 
     $("#newServer").click(() => {
         const server = $("#addServer").val().trim();
-        const description = $("#addServerDesc").val().trim();
-        if (server && description) {
+        const desc = $("#addServerDesc").val().trim();
+        if (server && desc) {
             $.ajax({
                 type: "POST",
                 url: `/api/v1/server/`,
                 data: {
                     server,
-                    description,
+                    desc,
                 },
                 success: (result) => {
                     if (result.status == "success") {
@@ -203,15 +203,15 @@ $(document).ready(function () {
 
     $("#updateServer").click(() => {
         const server = $("#editServer").val().trim();
-        const description = $("#editServerDesc").val().trim();
+        const desc = $("#editServerDesc").val().trim();
         const id = $("#idServer").val();
-        if (server && description) {
+        if (server && desc) {
             $.ajax({
                 type: "PUT",
                 url: `/api/v1/server/${id}`,
                 data: {
                     server,
-                    description,
+                    desc,
                 },
                 success: (result) => {
                     if (result.status == "success") {
@@ -285,38 +285,35 @@ $(document).ready(function () {
 
     $("#newMovie").click(() => {
         const name = $("#addName").val().trim();
-        const othername = $("#addOtherName").val().trim();
+        const aka = $("#addOtherName").val().trim();
         const content = addContent.getData();
         const thumb = $("#addThumb").val().trim();
         const background = $("#addBackground").val().trim();
         const year = $("#addYear").val();
         const country = $("#addCountry").val();
         const type = $("#addType").val();
-        const server = $("#addServer").val();
         if (
             name &&
-            othername &&
+            aka &&
             content &&
             thumb &&
             background &&
             year &&
             country &&
-            type &&
-            server
+            type
         ) {
             $.ajax({
                 type: "POST",
                 url: `/api/v1/movie/`,
                 data: {
                     name,
-                    othername,
+                    aka,
                     content,
                     thumb,
                     background,
                     year,
                     country,
                     type,
-                    server,
                 },
                 success: (result) => {
                     if (result.status == "success") {
@@ -338,27 +335,25 @@ $(document).ready(function () {
     $("#updateMovie").click(() => {
         const id = $("#idMovie").val();
         const name = $("#editName").val().trim();
-        const othername = $("#editOtherName").val().trim();
+        const aka = $("#editOtherName").val().trim();
         const content = editContent.getData();
         const thumb = $("#editThumb").val().trim();
         const background = $("#editBackground").val().trim();
         const year = $("#editYear").val();
         const country = $("#editCountry").val();
         const type = $("#editType").val();
-        const server = $("#editServer").val();
         const status = $("#editStatus").val();
         const viewed = $("#editViewed").val().trim();
         const liked = $("#editLiked").val().trim();
         if (
             name &&
-            othername &&
+            aka &&
             content &&
             thumb &&
             background &&
             year &&
             country &&
             type &&
-            server &&
             status &&
             viewed &&
             liked
@@ -368,14 +363,13 @@ $(document).ready(function () {
                 url: `/api/v1/movie/${id}`,
                 data: {
                     name,
-                    othername,
+                    aka,
                     content,
                     thumb,
                     background,
                     year,
                     country,
                     type,
-                    server,
                     status,
                     viewed,
                     liked,
@@ -400,17 +394,15 @@ $(document).ready(function () {
 
     $("#newEpisode").click(() => {
         const episode = $("#addEp").val().trim();
-        const link = $("#addEpLink").val().trim();
-        const idServer = $("#idMainServer").val().trim();
+        const hls = $("#addEpHls").val().trim();
         const idMovie = $("#idMovie").val().trim();
-        if (episode && link) {
+        if (episode && hls) {
             $.ajax({
                 type: "POST",
                 url: `/api/v1/episode/`,
                 data: {
                     episode,
-                    link,
-                    idServer,
+                    hls,
                     idMovie,
                 },
                 success: (result) => {
@@ -431,31 +423,21 @@ $(document).ready(function () {
     });
 
     $("#newLink").click(() => {
-        const episode = $("#updateEp").val().trim();
         const link = $("#addLink").val().trim();
         const idServer = $("#addLinkServer").val().trim();
-        const idMovie = $("#idMovie").val().trim();
-        if (episode && link) {
+        const idEpisode = $("#idEpisode").val().trim();
+        if (idEpisode && link) {
             $.ajax({
                 type: "POST",
-                url: `/api/v1/episode/`,
+                url: `/api/v1/link/`,
                 data: {
-                    episode,
+                    idEpisode,
                     link,
                     idServer,
-                    idMovie,
                 },
                 success: (result) => {
                     if (result.status == "success") {
-                        const l = result.data;
-                        $("#list-link").append(
-                            `
-                            <a href="javascript:void(0)" class="btn btn-secondary" 
-                            data-id="${l.idEpisode}" onclick="getLink(this)">
-                                ${l.Server}
-                            </a>
-                            `
-                        )
+                        location.reload();
                     } else {
                         alert(result.message);
                     }
@@ -471,19 +453,45 @@ $(document).ready(function () {
 
     $("#saveUpdateLink").click(() => {
         const link = $("#updateLink").val().trim();
-        const idEpisode = $("#idEpisode").val().trim();
-        if (link) {
+        const idLink = $("#idLink").val().trim();
+        if (link && idLink) {
             $.ajax({
                 type: "PUT",
-                url: `/api/v1/episode/${idEpisode}`,
+                url: `/api/v1/link/${idLink}`,
                 data: {
                     link,
                 },
                 success: (result) => {
                     if (result.status == "success") {
-                        const l = result.data;
-                        alert(result.status);
-                        setLinkInfor(l);
+                        location.reload();
+                    } else {
+                        alert(result.message);
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                },
+            });
+        } else {
+            alert("Not emty !!!");
+        }
+    });
+
+    $("#updateHls").click(() => {
+        const hls = $("#updateLink").val().trim();
+        const episode = $("#updateEp").val().trim();
+        const idEpisode = $("#idEpisode").val().trim();
+        if (hls && idEpisode && episode) {
+            $.ajax({
+                type: "PUT",
+                url: `/api/v1/episode/${idEpisode}`,
+                data: {
+                    hls,
+                    episode
+                },
+                success: (result) => {
+                    if (result.status == "success") {
+                        location.reload();
                     } else {
                         alert(result.message);
                     }
@@ -498,38 +506,15 @@ $(document).ready(function () {
     });
 
     $("#deleteLink").click(() => {
-        const currentServer = $("#deleteLink").attr("data-cs");
-        const mainServer = $("#deleteLink").attr("data-ms");
-        const idMovie = $("#idMovie").val().trim();
-        const episode = $("#updateEp").val().trim();
-        const idEpisode = $("#idEpisode").val().trim();
+        const idLink = $("#idLink").val().trim();
         if (confirm("Are you sure about that ???")) {
-            if (idEpisode) {
+            if (idLink) {
                 $.ajax({
                     type: "DELETE",
-                    url: `/api/v1/episode/${idEpisode}`,
+                    url: `/api/v1/link/${idLink}`,
                     success: (result) => {
                         if (result.status == "success") {
-                            if (currentServer == mainServer) {
-                                location.reload();
-                            } else {
-                                $.ajax({
-                                    url: `/api/v1/episode/full-link/${idMovie}-${episode}`,
-                                    success: (rs) => {
-                                        if (rs.status == "success") {
-                                            const links = rs.data;
-                                            clearInfor();
-                                            $("#episode-detail").show();
-                                            setListLink(links);
-                                        } else {
-                                            alert(rs.message);
-                                        }
-                                    },
-                                    error: (err) => {
-                                        console.log(err);
-                                    },
-                                });
-                            }
+                            location.reload();
                         } else {
                             alert(result.message);
                         }
@@ -573,8 +558,8 @@ function getInforGenre(ele) {
         success: (result) => {
             if (result.status == "success") {
                 const genre = result.data;
-                $("#editGenre").val(genre.Genre);
-                $("#idGenre").val(genre.idGenre);
+                $("#editGenre").val(genre.name);
+                $("#idGenre").val(genre.id);
                 $("#editGenreModal").modal("show");
             } else {
                 alert(result.message);
@@ -601,7 +586,7 @@ function deleteGenre(ele) {
                 }
             },
             error: (err) => {
-                alert(err.statusText);
+                console.log(err)
             },
         });
     }
@@ -614,15 +599,15 @@ function getInforYear(ele) {
         success: (result) => {
             if (result.status == "success") {
                 const year = result.data;
-                $("#editYear").val(year.Year);
-                $("#idYear").val(year.idYear);
+                $("#editYear").val(year.name);
+                $("#idYear").val(year.id);
                 $("#editYearModal").modal("show");
             } else {
                 alert(result.message);
             }
         },
         error: (err) => {
-            console.log(err);
+            alert(err.statusText);
         },
     });
 }
@@ -655,15 +640,15 @@ function getInforCountry(ele) {
         success: (result) => {
             if (result.status == "success") {
                 const country = result.data;
-                $("#editCountry").val(country.Country);
-                $("#idCountry").val(country.idCountry);
+                $("#editCountry").val(country.name);
+                $("#idCountry").val(country.id);
                 $("#editCountryModal").modal("show");
             } else {
                 alert(result.message);
             }
         },
         error: (err) => {
-            console.log(err);
+            alert(err.statusText);
         },
     });
 }
@@ -696,16 +681,16 @@ function getInforServer(ele) {
         success: (result) => {
             if (result.status == "success") {
                 const server = result.data;
-                $("#editServer").val(server.Server);
-                $("#editServerDesc").val(server.ServerDescription);
-                $("#idServer").val(server.idServer);
+                $("#editServer").val(server.name);
+                $("#editServerDesc").val(server.desc);
+                $("#idServer").val(server.id);
                 $("#editServerModal").modal("show");
             } else {
                 alert(result.message);
             }
         },
         error: (err) => {
-            console.log(err);
+            alert(err.statusText);
         },
     });
 }
@@ -738,15 +723,15 @@ function getInforType(ele) {
         success: (result) => {
             if (result.status == "success") {
                 const type = result.data;
-                $("#editType").val(type.Type);
-                $("#idType").val(type.idType);
+                $("#editType").val(type.name);
+                $("#idType").val(type.id);
                 $("#editTypeModal").modal("show");
             } else {
                 alert(result.message);
             }
         },
         error: (err) => {
-            console.log(err);
+            alert(err.statusText);
         },
     });
 }
@@ -774,22 +759,10 @@ function deleteType(ele) {
 
 function getGenresOfMovie(ele) {
     const id = $(ele).attr("data-id");
+    const genres = $(ele).attr("data-genre");
+    updateListGenres(JSON.parse(genres));
+    $("#genreModal").modal("show");
     currentMovie = id;
-    $.ajax({
-        url: `/api/v1/genre/genre-movie/${id}`,
-        success: (result) => {
-            if (result.status == "success") {
-                const genres = result.data;
-                updateListGenres(genres);
-                $("#genreModal").modal("show");
-            } else {
-                alert(result.message);
-            }
-        },
-        error: (err) => {
-            console.log(err);
-        },
-    });
 }
 
 function addGenreOfMovie(ele) {
@@ -797,7 +770,7 @@ function addGenreOfMovie(ele) {
     const idMovie = currentMovie;
     $.ajax({
         type: "POST",
-        url: `/api/v1/genre/genre-movie/`,
+        url: `/api/v1/movie/add-genre/`,
         data: {
             idGenre,
             idMovie,
@@ -817,10 +790,10 @@ function addGenreOfMovie(ele) {
 }
 
 function deleteGenreMovie(ele) {
-    const idGenreMovie = $(ele).attr("data-id");
+    const idGenre = $(ele).attr("data-id");
     $.ajax({
         type: "DELETE",
-        url: `/api/v1/genre/genre-movie/${idGenreMovie}`,
+        url: `/api/v1/movie/delete-genre/${currentMovie}-${idGenre}`,
         success: (result) => {
             if (result.status == "success") {
                 $(ele).parent().remove();
@@ -841,9 +814,9 @@ function updateListGenres(genres) {
         list.append(
             `
             <div class="bg-secondary d-inline-block p-2 m-1">
-                ${ele.Genre}
+                ${ele.name || ele.Genre.name}
                 <a href="javascript:void(0)" class="text-danger mx-1" 
-                onclick='deleteGenreMovie(this)' data-id='${ele.idGenreMovie}'>
+                onclick='deleteGenreMovie(this)' data-id='${ele.id || ele.Genre.id}'>
                     <i class="fa-solid fa-xmark"></i>
                 </a>
             </div>
@@ -853,24 +826,34 @@ function updateListGenres(genres) {
 }
 
 function getFullLink(ele) {
-    const idMovie = $(ele).attr("data-movie");
-    const episode = $(ele).attr("data-episode");
-    $.ajax({
-        url: `/api/v1/episode/full-link/${idMovie}-${episode}`,
-        success: (result) => {
-            if (result.status == "success") {
-                const links = result.data;
-                clearInfor();
-                $("#episode-detail").show();
-                setListLink(links);
-            } else {
-                alert(result.message);
+    const hls = $(ele).attr("data-hls");
+    const id = $(ele).attr("data-id");
+    const ep = $(ele).attr("data-episode");
+    const links = JSON.parse($(ele).attr("data-links"));
+    $("#mediaplayer").show();
+    $("#updateHls").show();
+    $("#idEpisode").val(id);
+    $("#player").attr("src", '');
+    $("#player").hide();
+    $("#linkAction").hide();
+    jwplayer.key = "ITWMv7t88JGzI0xPwW8I0+LveiXX9SWbfdmt0ArUSyc=";
+    jwplayer('mediaplayer').setup({
+        "sources": [
+            {
+                "default": false,
+                "type": "hls",
+                "file": hls,
+                "label": "0",
+                "preload": "metadata"
             }
-        },
-        error: (err) => {
-            console.log(err);
-        },
+        ]
     });
+    // clearInfor()
+    $("#episode-detail").show();
+    $("#updateServer").val('');
+    $("#updateEp").val(ep);
+    $("#updateLink").val(hls);
+    setListLink(links);
 }
 
 function setListLink(links) {
@@ -880,8 +863,8 @@ function setListLink(links) {
         list.append(
             `
             <a href="javascript:void(0)" class="btn btn-secondary" 
-            data-id="${ele.idEpisode}" onclick="getLink(this)">
-                ${ele.Server}
+            data-link='${JSON.stringify(ele)}' data-server="${ele.Server.name}" onclick="getLink(this)">
+                ${ele.Server.name}
             </a>
             `
         );
@@ -889,30 +872,16 @@ function setListLink(links) {
 }
 
 function getLink(ele) {
-    const id = $(ele).attr("data-id");
-    $.ajax({
-        url: `/api/v1/episode/${id}`,
-        success: (result) => {
-            if (result.status == "success") {
-                const link = result.data;
-                setLinkInfor(link);
-            } else {
-                alert(result.message);
-            }
-        },
-        error: (err) => {
-            console.log(err);
-        },
-    });
-}
-
-function setLinkInfor(link) {
-    $("#player").attr("src", link.Link);
-    $("#updateEp").val(link.Episode);
-    $("#updateServer").val(link.Server);
-    $("#updateLink").val(link.Link);
-    $("#idEpisode").val(link.idEpisode);
-    $("#deleteLink").attr("data-cs", link.idServer);
+    const link = JSON.parse($(ele).attr("data-link"));
+    const server = $(ele).attr("data-server");
+    $("#mediaplayer").hide();
+    $("#updateHls").hide();
+    $("#player").show();
+    $("#linkAction").show();
+    $("#player").attr("src", link.link);
+    $("#updateServer").val(server);
+    $("#updateLink").val(link.link);
+    $("#idLink").val(link.id);
 }
 
 function getUser(ele) {
@@ -988,8 +957,6 @@ function logout() {
         },
     });
 }
-
-
 
 function calculateTime(date) {
     const curentDate = new Date();

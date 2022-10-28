@@ -1,10 +1,11 @@
 const ServerModel = require("../models/server.model");
+const LinkModel = require("../models/link.model");
 
 const ServerService = {};
 
 ServerService.getAll = async () => {
     try {
-        const [servers] = await ServerModel.getAll();
+        const servers = await ServerModel.findAll();
         return { status: "success", data: servers };
     } catch (error) {
         throw error;
@@ -13,8 +14,12 @@ ServerService.getAll = async () => {
 
 ServerService.getInformation = async (id) => {
     try {
-        const [server] = await ServerModel.getInformation(id);
-        return { status: "success", data: server[0] };
+        const server = await ServerModel.findOne({
+            where: {
+                id
+            }
+        });
+        return { status: "success", data: server };
     } catch (error) {
         throw error;
     }
@@ -22,12 +27,11 @@ ServerService.getInformation = async (id) => {
 
 ServerService.createOne = async (data) => {
     try {
-        const [rows] = await ServerModel.createOne(new ServerModel(data));
-        if (rows.insertId > 0) {
-            const [server] = await ServerModel.getInformation(rows.insertId);
-            return { status: "success", data: server[0] };
-        }
-        return { status: "failed", message: "Can not create" };
+        const newServer = await ServerModel.create({
+            name: data.server,
+            desc: data.desc
+        });
+        return { status: "success", data: newServer };
     } catch (error) {
         throw error;
     }
@@ -35,12 +39,17 @@ ServerService.createOne = async (data) => {
 
 ServerService.updateOne = async (data) => {
     try {
-        const [rows] = await ServerModel.updateOne(data);
-        if (rows.affectedRows != 0) {
-            const [server] = await ServerModel.getInformation(data.id);
-            return { status: "success", data: server };
-        }
-        return { status: "failed", message: "Can not update" };
+        await ServerModel.update(
+            {
+                name: data.server,
+                desc: data.desc
+            },
+            {
+                where: {
+                    id: data.id
+                }
+            });
+        return { status: "success" };
     } catch (error) {
         throw error;
     }
@@ -48,12 +57,9 @@ ServerService.updateOne = async (data) => {
 
 ServerService.deleteOne = async (id) => {
     try {
-        const [check] = await ServerModel.getOneEp(id);
-        if (check.length == 0) {
-            const [rows] = await ServerModel.deleteOne(id);
-            if (rows.affectedRows != 0) return { status: "success" };
-        }
-        return { status: "failed", message: "Server is in use" };
+        await LinkModel.destroy({ where: { server_id: id }, force: true });
+        await ServerModel.destroy({ where: { id }, force: true });
+        return { status: "success" };
     } catch (error) {
         throw error;
     }

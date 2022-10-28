@@ -38,8 +38,7 @@ StatusController.getInformation = (req, res, next) => {
 StatusController.createOne = (req, res, next) => {
     const status = req.body.status;
     if (status) {
-        const data = { status };
-        StatusService.createOne(data)
+        StatusService.createOne(status)
             .then((rs) => {
                 return res.status(200).json(rs);
             })
