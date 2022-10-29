@@ -66,4 +66,23 @@ GenreService.deleteOne = async (id) => {
     }
 };
 
+GenreService.getGenresOfMovie = async (id) => {
+    try {
+        const genres = await GenreMovie.findAll({
+            where: {
+                MovieId: id
+            },
+            include: [
+                {
+                    model: GenreModel,
+                    attributes: ['id', 'name']
+                }
+            ]
+        });
+        return { status: "success", data: genres };
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = GenreService;

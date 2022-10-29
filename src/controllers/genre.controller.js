@@ -100,4 +100,24 @@ GenreController.updateOne = (req, res, next) => {
     }
 };
 
+GenreController.getGenresOfMovie = (req, res, next) => {
+    const id = req.params.id;
+    if (id) {
+        GenreService.getGenresOfMovie(id)
+            .then((rs) => {
+                return res.status(200).json(rs);
+            })
+            .catch((err) => {
+                console.log(err);
+                return res
+                    .status(500)
+                    .json({ status: "error", message: "Has a fucking error" });
+            });
+    } else {
+        return res
+            .status(400)
+            .json({ status: "failed", message: "Missing params" });
+    }
+};
+
 module.exports = GenreController;

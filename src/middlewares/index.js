@@ -3,11 +3,11 @@ const jwt = require("jsonwebtoken");
 const createError = require("http-errors");
 
 module.exports = {
-    verifyToken: (type = 3) => {
+    verifyTokenManager: (type) => {
         return (req, res, next) => {
             const token = req.session.token;
             if (!token) {
-                return next(createError.Unauthorized());
+                return res.redirect('/login');
             }
 
             jwt.verify(
@@ -19,14 +19,14 @@ module.exports = {
 
                     switch (type) {
                         case 1:
-                            if (role == 1) {
+                            if (role == "Admin") {
                                 next();
                                 break;
                             }
                             return next(createError.Forbidden());
 
                         case 2:
-                            if (role == 1 || role == 2) {
+                            if (role == "Admin" || role == "Mod") {
                                 next();
                                 break;
                             }

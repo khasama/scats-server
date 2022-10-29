@@ -1,6 +1,24 @@
 const LinkModel = require("../models/link.model");
+const ServerModel = require("../models/server.model");
 
 const LinkService = {};
+
+LinkService.getFullLink = async (id) => {
+    try {
+        const links = await LinkModel.findAll({
+            where: {
+                episode_id: id
+            },
+            include: [{
+                model: ServerModel,
+                attributes: ['id', 'name']
+            }]
+        });
+        return { status: "success", data: links };
+    } catch (error) {
+        throw error;
+    }
+};
 
 LinkService.getInformation = async (id) => {
     try {
@@ -17,12 +35,29 @@ LinkService.getInformation = async (id) => {
 
 LinkService.createOne = async (data) => {
     try {
+        const hasLink = await LinkModel.findOne({
+            where: {
+                episode_id: data.idEpisode,
+                server_id: data.idServer,
+            }
+        });
+        if (hasLink) return { status: "failed", message: "Link already exists" };
         const newLink = await LinkModel.create({
             link: data.link,
             episode_id: data.idEpisode,
             server_id: data.idServer,
         });
-        return { status: "success", data: newLink };
+        const link = await LinkModel.findOne({
+            where: {
+                id: newLink.id
+            },
+            attributes: ['id', 'link'],
+            include: [{
+                model: ServerModel,
+                attributes: ['id', 'name']
+            }]
+        })
+        return { status: "success", data: link };
     } catch (error) {
         throw error;
     }

@@ -57,4 +57,11 @@ module.exports = {
         });
     },
     getRealLink,
+    convertMulti: (multi, idMovie) => {
+        const arrEps = multi.split('\n');
+        const newArrEps = arrEps.map(ep => {
+            return { episode: ep.split('|')[0], hls: ep.split('|')[1], movie_id: idMovie };
+        });
+        return newArrEps;
+    }
 }

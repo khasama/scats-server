@@ -1,9 +1,9 @@
 require("dotenv").config();
 const Sequelize = require("sequelize");
-const HOST = "localhost";
-const USER = "root";
-const PASS = "";
-const DATABASE = "scats2";
+const HOST = process.env.MYSQL_HOST || "localhost";
+const USER = process.env.MYSQL_USER || "root";
+const PASS = process.env.MYSQL_PASS || "";
+const DATABASE = process.env.MYSQL_DB || "scats2";
 const sequelize = new Sequelize(
     DATABASE,
     USER,

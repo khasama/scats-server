@@ -120,15 +120,7 @@ AdminController.getEpisodes = async (req, res) => {
             include: [
                 {
                     model: EpisodeModel,
-                    attributes: ['id', 'episode', 'hls'],
-                    include: [{
-                        model: LinkModel,
-                        attributes: ['id', 'link'],
-                        include: [{
-                            model: ServerModel,
-                            attributes: ['id', 'name']
-                        }]
-                    }]
+                    attributes: ['id', 'episode', 'hls']
                 },
             ]
         });

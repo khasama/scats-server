@@ -2,6 +2,8 @@ let addContent, editContent, currentMovie;
 $(document).ready(function () {
     $("#dataTable").DataTable();
     $("#table-genre").DataTable();
+    jwplayer.key = "ITWMv7t88JGzI0xPwW8I0+LveiXX9SWbfdmt0ArUSyc=";
+
 
     ClassicEditor.create(document.querySelector("#addContent")).then(
         (editor) => {
@@ -407,8 +409,17 @@ $(document).ready(function () {
                 },
                 success: (result) => {
                     if (result.status == "success") {
-                        alert(result.status);
-                        location.reload();
+                        const episode = result.data;
+                        $("#list-eps").append(
+                            `
+                            <a href="javascript:void(0)" class="btn btn-warning my-2 d-block"
+                                data-episode="${episode.episode}" data-hls="${episode.hls}"
+                                id="ep-${episode.id}" data-id="${episode.id}" onclick="getFullLink(this)">
+                                ${episode.episode}
+                            </a>
+                            `
+                        );
+                        $("#addEpisode").modal("hide");
                     } else {
                         alert(result.message);
                     }
@@ -417,6 +428,71 @@ $(document).ready(function () {
                     console.log(err);
                 },
             });
+        } else {
+            alert("Not emty !!!");
+        }
+    });
+
+    $("#newMultiEpisode").click(() => {
+        const multi = $("#multiEp").val().trim();
+        const idMovie = $("#idMovie").val().trim();
+        if (multi && idMovie) {
+            $.ajax({
+                type: "POST",
+                url: `/api/v1/episode/add-multi`,
+                data: {
+                    multi,
+                    idMovie,
+                },
+                success: (result) => {
+                    if (result.status == "success") {
+                        const episodes = result.data;
+                        $("#list-eps").html('')
+                        episodes.forEach(episode => {
+                            $("#list-eps").append(
+                                `
+                                <a href="javascript:void(0)" class="btn btn-warning my-2 d-block"
+                                    data-episode="${episode.episode}" data-hls="${episode.hls}"
+                                    id="ep-${episode.id}" data-id="${episode.id}" onclick="getFullLink(this)">
+                                    ${episode.episode}
+                                </a>
+                                `
+                            );
+                        });
+
+                        $("#addMultiEpisode").modal("hide");
+                    } else {
+                        alert(result.message);
+                    }
+                },
+                error: (err) => {
+                    console.log(err);
+                },
+            });
+        } else {
+            alert("Not emty !!!");
+        }
+    });
+
+    $("#deleteEpisode").click(() => {
+        const id = $("#idEpisode").val().trim();
+        if (id) {
+            if (confirm("Xóa tập sẽ xóa hết những link nhúng, bạn đã chắc chưa ??")) {
+                $.ajax({
+                    type: "DELETE",
+                    url: `/api/v1/episode/${id}`,
+                    success: (result) => {
+                        if (result.status == "success") {
+                            $(`#ep-${id}`).remove();
+                        } else {
+                            alert(result.message);
+                        }
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    },
+                });
+            }
         } else {
             alert("Not emty !!!");
         }
@@ -437,7 +513,17 @@ $(document).ready(function () {
                 },
                 success: (result) => {
                     if (result.status == "success") {
-                        location.reload();
+                        const link = result.data
+                        console.l
+                        $("#list-link").append(
+                            `
+                            <a href="javascript:void(0)" class="btn btn-secondary" id="link-${link.id}" 
+                            data-id="${link.id}" data-server="${link.Server.name}" onclick="getLink(this)">
+                                ${link.Server.name}
+                            </a>
+                            `
+                        );
+                        $("#addLink").val('');
                     } else {
                         alert(result.message);
                     }
@@ -463,7 +549,7 @@ $(document).ready(function () {
                 },
                 success: (result) => {
                     if (result.status == "success") {
-                        location.reload();
+                        $("#player").attr("src", link);
                     } else {
                         alert(result.message);
                     }
@@ -491,7 +577,18 @@ $(document).ready(function () {
                 },
                 success: (result) => {
                     if (result.status == "success") {
-                        location.reload();
+                        $(`#ep-${idEpisode}`).attr("data-hls", hls)
+                        jwplayer('mediaplayer').setup({
+                            "sources": [
+                                {
+                                    "default": false,
+                                    "type": "hls",
+                                    "file": hls,
+                                    "label": "0",
+                                    "preload": "metadata"
+                                }
+                            ]
+                        });
                     } else {
                         alert(result.message);
                     }
@@ -514,7 +611,11 @@ $(document).ready(function () {
                     url: `/api/v1/link/${idLink}`,
                     success: (result) => {
                         if (result.status == "success") {
-                            location.reload();
+                            $(`#link-${idLink}`).remove();
+                            $("#idLink").val("");
+                            $("#player").attr("src", '');
+                            $("#updateServer").val('');
+                            $("#updateLink").val('');
                         } else {
                             alert(result.message);
                         }
@@ -759,10 +860,22 @@ function deleteType(ele) {
 
 function getGenresOfMovie(ele) {
     const id = $(ele).attr("data-id");
-    const genres = $(ele).attr("data-genre");
-    updateListGenres(JSON.parse(genres));
-    $("#genreModal").modal("show");
     currentMovie = id;
+    $.ajax({
+        url: `/api/v1/genre/genre-movie/${id}`,
+        success: (result) => {
+            if (result.status == "success") {
+                const genres = result.data;
+                updateListGenres(genres);
+                $("#genreModal").modal("show");
+            } else {
+                alert(result.message);
+            }
+        },
+        error: (err) => {
+            alert(err.statusText);
+        },
+    });
 }
 
 function addGenreOfMovie(ele) {
@@ -829,14 +942,13 @@ function getFullLink(ele) {
     const hls = $(ele).attr("data-hls");
     const id = $(ele).attr("data-id");
     const ep = $(ele).attr("data-episode");
-    const links = JSON.parse($(ele).attr("data-links"));
     $("#mediaplayer").show();
     $("#updateHls").show();
     $("#idEpisode").val(id);
-    $("#player").attr("src", '');
-    $("#player").hide();
-    $("#linkAction").hide();
-    jwplayer.key = "ITWMv7t88JGzI0xPwW8I0+LveiXX9SWbfdmt0ArUSyc=";
+    $("#episode-detail").show();
+    $("#updateEp").val(ep);
+    $("#updateLink").val(hls);
+
     jwplayer('mediaplayer').setup({
         "sources": [
             {
@@ -848,12 +960,27 @@ function getFullLink(ele) {
             }
         ]
     });
-    // clearInfor()
-    $("#episode-detail").show();
+
+    $.ajax({
+        url: `/api/v1/link/full-link/${id}`,
+        success: (result) => {
+            if (result.status == "success") {
+                const links = result.data;
+                setListLink(links);
+            } else {
+                alert(result.message);
+            }
+        },
+        error: (err) => {
+            alert(err.statusText);
+        },
+    });
+
+    $("#player").attr("src", '');
+    $("#player").hide();
+    $("#linkAction").hide();
     $("#updateServer").val('');
-    $("#updateEp").val(ep);
-    $("#updateLink").val(hls);
-    setListLink(links);
+
 }
 
 function setListLink(links) {
@@ -862,8 +989,8 @@ function setListLink(links) {
     links.forEach((ele) => {
         list.append(
             `
-            <a href="javascript:void(0)" class="btn btn-secondary" 
-            data-link='${JSON.stringify(ele)}' data-server="${ele.Server.name}" onclick="getLink(this)">
+            <a href="javascript:void(0)" class="btn btn-secondary" id="link-${ele.id}" 
+            data-id="${ele.id}" data-server="${ele.Server.name}" onclick="getLink(this)">
                 ${ele.Server.name}
             </a>
             `
@@ -872,16 +999,29 @@ function setListLink(links) {
 }
 
 function getLink(ele) {
-    const link = JSON.parse($(ele).attr("data-link"));
+    const id = $(ele).attr("data-id");
     const server = $(ele).attr("data-server");
-    $("#mediaplayer").hide();
-    $("#updateHls").hide();
-    $("#player").show();
-    $("#linkAction").show();
-    $("#player").attr("src", link.link);
-    $("#updateServer").val(server);
-    $("#updateLink").val(link.link);
-    $("#idLink").val(link.id);
+    $.ajax({
+        url: `/api/v1/link/${id}`,
+        success: (result) => {
+            if (result.status == "success") {
+                const link = result.data;
+                $("#mediaplayer").hide();
+                $("#updateHls").hide();
+                $("#player").show();
+                $("#linkAction").show();
+                $("#player").attr("src", link.link);
+                $("#updateServer").val(server);
+                $("#updateLink").val(link.link);
+                $("#idLink").val(id);
+            } else {
+                alert(result.message);
+            }
+        },
+        error: (err) => {
+            alert(err.statusText);
+        },
+    });
 }
 
 function getUser(ele) {
@@ -904,14 +1044,6 @@ function getUser(ele) {
             console.log(err);
         },
     });
-}
-
-function clearInfor() {
-    $("#player").attr("src", '');
-    $("#updateEp").val('');
-    $("#updateServer").val('');
-    $("#updateLink").val('');
-    $("#idEpisode").val('');
 }
 
 function login() {
