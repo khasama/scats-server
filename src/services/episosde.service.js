@@ -42,7 +42,10 @@ EpisodeService.addMultiEpisode = async (data) => {
         const arrEps = convertMulti(data.multi, data.idMovie);
         for (const episode of arrEps) {
             const hasEpisode = await EpisodeModel.findOne({
-                where: { episode: episode.episode }
+                where: {
+                    episode: episode.episode,
+                    movie_id: data.idMovie
+                }
             });
             if (!hasEpisode) {
                 await EpisodeModel.create({
