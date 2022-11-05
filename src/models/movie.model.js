@@ -31,11 +31,9 @@ const Movie = sequelize.define(
         },
         thumb: {
             type: Sequelize.STRING,
-            allowNull: false
         },
         background: {
             type: Sequelize.STRING,
-            allowNull: false
         },
         viewed: {
             type: Sequelize.INTEGER,

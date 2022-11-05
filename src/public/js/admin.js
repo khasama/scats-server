@@ -286,37 +286,30 @@ $(document).ready(function () {
     });
 
     $("#newMovie").click(() => {
+        const formData = new FormData();
         const name = $("#addName").val().trim();
         const aka = $("#addOtherName").val().trim();
         const content = addContent.getData();
-        const thumb = $("#addThumb").val().trim();
-        const background = $("#addBackground").val().trim();
+        const thumb = $("#addThumb")[0].files[0];
+        const background = $("#addBackground")[0].files[0];
         const year = $("#addYear").val();
         const country = $("#addCountry").val();
         const type = $("#addType").val();
-        if (
-            name &&
-            aka &&
-            content &&
-            thumb &&
-            background &&
-            year &&
-            country &&
-            type
-        ) {
+        if (name && aka && content && year && country && type) {
+            formData.append("name", name);
+            formData.append("aka", aka);
+            formData.append("content", content);
+            formData.append("year", year);
+            formData.append("country", country);
+            formData.append("type", type);
+            formData.append("thumb", thumb);
+            formData.append("background", background);
             $.ajax({
                 type: "POST",
                 url: `/api/v1/movie/`,
-                data: {
-                    name,
-                    aka,
-                    content,
-                    thumb,
-                    background,
-                    year,
-                    country,
-                    type,
-                },
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: (result) => {
                     if (result.status == "success") {
                         alert(result.status);
@@ -335,47 +328,38 @@ $(document).ready(function () {
     });
 
     $("#updateMovie").click(() => {
+        const formData = new FormData();
         const id = $("#idMovie").val();
         const name = $("#editName").val().trim();
         const aka = $("#editOtherName").val().trim();
         const content = editContent.getData();
-        const thumb = $("#editThumb").val().trim();
-        const background = $("#editBackground").val().trim();
+        const thumb = $("#updateThumb")[0].files[0];
+        const background = $("#updateBackground")[0].files[0];
         const year = $("#editYear").val();
         const country = $("#editCountry").val();
         const type = $("#editType").val();
         const status = $("#editStatus").val();
         const viewed = $("#editViewed").val().trim();
         const liked = $("#editLiked").val().trim();
-        if (
-            name &&
-            aka &&
-            content &&
-            thumb &&
-            background &&
-            year &&
-            country &&
-            type &&
-            status &&
-            viewed &&
-            liked
-        ) {
+        if (name && aka && content && year && country && type && status && viewed && liked) {
+            formData.append("id", id);
+            formData.append("name", name);
+            formData.append("aka", aka);
+            formData.append("content", content);
+            formData.append("year", year);
+            formData.append("country", country);
+            formData.append("type", type);
+            formData.append("status", status);
+            formData.append("viewed", viewed);
+            formData.append("liked", liked);
+            formData.append("thumb", thumb);
+            formData.append("background", background);
             $.ajax({
                 type: "PUT",
                 url: `/api/v1/movie/${id}`,
-                data: {
-                    name,
-                    aka,
-                    content,
-                    thumb,
-                    background,
-                    year,
-                    country,
-                    type,
-                    status,
-                    viewed,
-                    liked,
-                },
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: (result) => {
                     console.log(result);
                     if (result.status == "success") {

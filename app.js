@@ -8,6 +8,8 @@ const SocketService = require("./src/services/socket.service");
 const createError = require("http-errors");
 const cors = require("cors");
 const session = require("express-session");
+const fileUpload = require("express-fileupload");
+
 // const cookieParser = require("cookie-parser");
 // const Redis = require("ioredis");
 // const RedisStore = require("connect-redis")(session);
@@ -20,6 +22,9 @@ app.set("view engine", "ejs");
 app.set("views", "./src/views");
 app.use("/public", express.static("./src/public"));
 
+app.use(fileUpload({
+    limits: { fileSize: 50 * 1024 * 1024 },
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // app.use(cookieParser());

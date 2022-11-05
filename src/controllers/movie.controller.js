@@ -19,32 +19,23 @@ MovieController.createOne = (req, res, next) => {
     const name = req.body.name;
     const aka = req.body.aka;
     const content = req.body.content;
-    const thumb = req.body.thumb;
-    const background = req.body.background;
     const year = req.body.year;
     const country = req.body.country;
     const type = req.body.type;
 
-    if (
-        thumb &&
-        background &&
-        name &&
-        aka &&
-        content &&
-        year &&
-        country &&
-        type
-    ) {
-        const data = {
+    if (name && aka && content && year && country && type) {
+        let data = {
             name,
             aka,
             content,
-            thumb,
-            background,
             year,
             country,
             type,
         };
+        if (req.files) {
+            if (req.files.thumb) data = { ...data, ...{ thumb: req.files.thumb } };
+            if (req.files.background) data = { ...data, ...{ background: req.files.background } };
+        }
         MovieService.createOne(data)
             .then((rs) => {
                 return res.status(200).json(rs);
@@ -67,33 +58,17 @@ MovieController.updateOne = (req, res, next) => {
     const name = req.body.name;
     const aka = req.body.aka;
     const content = req.body.content;
-    const thumb = req.body.thumb;
-    const background = req.body.background;
     const year = req.body.year;
     const country = req.body.country;
     const type = req.body.type;
     const status = req.body.status;
     const viewed = req.body.viewed;
     const liked = req.body.liked;
-    if (
-        thumb &&
-        background &&
-        name &&
-        aka &&
-        content &&
-        year &&
-        country &&
-        type &&
-        status &&
-        viewed &&
-        liked
-    ) {
-        const data = {
+    if (name && aka && content && year && country && type && status && viewed && liked) {
+        let data = {
             name,
             aka,
             content,
-            thumb,
-            background,
             year,
             country,
             type,
@@ -102,6 +77,10 @@ MovieController.updateOne = (req, res, next) => {
             liked,
             id,
         };
+        if (req.files) {
+            if (req.files.thumb) data = { ...data, ...{ thumb: req.files.thumb } };
+            if (req.files.background) data = { ...data, ...{ background: req.files.background } };
+        }
 
         MovieService.updateOne(data)
             .then((rs) => {

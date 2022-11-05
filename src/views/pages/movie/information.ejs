@@ -48,16 +48,14 @@
                                 <div class="form-group">
                                     <div class="d-flex mb-2">
                                         <label for="thumb">Thumbnail:</label>
-                                        <input type="text" class="form-control ml-2" value="<%- movie.thumb %>"
-                                            id="editThumb">
+                                        <input type="file" class="form-control" id="updateThumb" accept="image/*">
                                     </div>
                                     <img src="<%- movie.thumb %>" style="max-width: 300px;">
                                 </div>
                                 <div class="form-group">
                                     <div class="d-flex mb-2">
                                         <label for="thumb">Background:</label>
-                                        <input type="text" class="form-control ml-2" value="<%- movie.background %>"
-                                            id="editBackground">
+                                        <input type="file" class="form-control" id="updateBackground" accept="image/*">
                                     </div>
 
                                     <img src="<%- movie.background %>" style="max-width: 300px;">

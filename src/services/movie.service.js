@@ -8,6 +8,8 @@ const EpisodeModel = require("../models/episode.model");
 const GenreMovie = require("../models/genre.movie.model");
 const LinkModel = require("../models/link.model");
 const ServerModel = require("../models/server.model");
+const drive = require("../utils/drive");
+const image = require("../utils/image");
 const slug = require("slug");
 
 const MovieService = {};
@@ -47,18 +49,29 @@ MovieService.getAll = async () => {
 
 MovieService.createOne = async (data) => {
     try {
-        const movie = await MovieModel.create({
+        let movie = {
             name: data.name,
             slug: slug(data.name),
             aka: data.aka,
             content: data.content,
-            thumb: data.thumb,
-            background: data.background,
             year_id: data.year,
             type_id: data.type,
             country_id: data.country
-        });
-        return { status: "success", data: movie };
+        }
+        if (data.thumb) {
+            const thumb = data.thumb;
+            const thumbBuffer = await image.resize(thumb.data, "thumb");
+            const thumbID = await drive.uploadFile({ name: `${slug(data.name)}.webp`, buffer: thumbBuffer, type: "webp" }, true);
+            movie = { ...movie, ...{ thumb: `https://drive.google.com/uc?id=${thumbID}` } };
+        }
+        if (data.background) {
+            const background = data.background;
+            const backgroundBuffer = await image.resize(background.data, "background");
+            const backgroundID = await drive.uploadFile({ name: `${slug(data.name)}-bg.webp`, buffer: backgroundBuffer, type: "webp" }, true);
+            movie = { ...movie, ...{ background: `https://drive.google.com/uc?id=${backgroundID}` } };
+        }
+        const newMovie = await MovieModel.create(movie);
+        return { status: "success", data: newMovie };
     } catch (error) {
         throw error;
     }
@@ -66,21 +79,35 @@ MovieService.createOne = async (data) => {
 
 MovieService.updateOne = async (data) => {
     try {
+        let movie = {
+            name: data.name,
+            slug: slug(data.name),
+            aka: data.aka,
+            content: data.content,
+            viewed: data.viewed,
+            liked: data.liked,
+            year_id: data.year,
+            type_id: data.type,
+            country_id: data.country,
+            status_id: data.status,
+        }
+        const m = await MovieModel.findOne({ where: { id: data.id } });
+        if (data.thumb) {
+            if (m.thumb) drive.deleteFile(m.thumb.split("=")[1]);
+            const thumb = data.thumb;
+            const thumbBuffer = await image.resize(thumb.data, "thumb");
+            const thumbID = await drive.uploadFile({ name: `${slug(data.name)}.webp`, buffer: thumbBuffer, type: "webp" }, true);
+            movie = { ...movie, ...{ thumb: `https://drive.google.com/uc?id=${thumbID}` } };
+        }
+        if (data.background) {
+            if (m.background) drive.deleteFile(m.background.split("=")[1]);
+            const background = data.background;
+            const backgroundBuffer = await image.resize(background.data, "background");
+            const backgroundID = await drive.uploadFile({ name: `${slug(data.name)}-bg.webp`, buffer: backgroundBuffer, type: "webp" }, true);
+            movie = { ...movie, ...{ background: `https://drive.google.com/uc?id=${backgroundID}` } };
+        }
         await MovieModel.update(
-            {
-                name: data.name,
-                slug: slug(data.name),
-                aka: data.aka,
-                content: data.content,
-                thumb: data.thumb,
-                background: data.background,
-                viewed: data.viewed,
-                liked: data.liked,
-                year_id: data.year,
-                type_id: data.type,
-                country_id: data.country,
-                status_id: data.status,
-            },
+            movie,
             {
                 where: {
                     id: data.id
