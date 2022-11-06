@@ -1,7 +1,7 @@
 const UserModel = require("../models/user.model");
 const RoleModel = require("../models/role.model");
 const bcrypt = require("bcrypt");
-const { signAccessToken } = require("../utils");
+const { signAccessToken, signRefreshToken } = require("../utils");
 
 const UserService = {};
 
@@ -43,8 +43,9 @@ UserService.login = async (data) => {
                     role: hasUser.Role.name,
                 };
                 const accessToken = await signAccessToken(user);
+                const refreshToken = await signRefreshToken(user);
 
-                return { status: "success", data: { user, accessToken } };
+                return { status: "success", data: { user, accessToken, refreshToken } };
             } else {
                 return { status: "failed", message: "Wrong password" };
             }
@@ -78,8 +79,9 @@ UserService.loginAdminSite = async (data) => {
                         role: hasUser.Role.name,
                     };
                     const accessToken = await signAccessToken(user);
+                    const refreshToken = await signRefreshToken(user);
 
-                    return { status: "success", data: { user, accessToken } };
+                    return { status: "success", data: { user, accessToken, refreshToken } };
                 } else {
                     return { status: "failed", message: "You not admin" };
                 }

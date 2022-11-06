@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const StatusController = require("../controllers/status.controller");
-// const { verifyToken } = require('../middlewares');
+const { verifyTokenManager } = require('../middlewares');
 
 router.get("/", StatusController.getAll);
-router.post("/", StatusController.createOne);
-router.put("/:id", StatusController.updateOne);
-router.delete("/:id", StatusController.deleteOne);
+router.post("/", verifyTokenManager(2), StatusController.createOne);
+router.put("/:id", verifyTokenManager(2), StatusController.updateOne);
+router.delete("/:id", verifyTokenManager(1), StatusController.deleteOne);
 router.get("/:id", StatusController.getInformation);
 
 module.exports = router;

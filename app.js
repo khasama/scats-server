@@ -3,8 +3,6 @@ const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const io = require("socket.io")(server);
-const SocketService = require("./src/services/socket.service");
-
 const createError = require("http-errors");
 const cors = require("cors");
 const session = require("express-session");
@@ -16,6 +14,7 @@ const fileUpload = require("express-fileupload");
 // const connect = require("./src/configs/mongo");
 
 // const clientRedis = new Redis();
+const SocketService = require("./src/services/socket.service");
 const { verifyTokenManager } = require("./src/middlewares");
 
 app.set("view engine", "ejs");
@@ -58,6 +57,10 @@ app.use("/admin", verifyTokenManager(2), require("./src/routes/admin.route"));
 app.get('/login', (req, res) => {
     if (req.session.token) return res.redirect('/admin');
     return res.render("login");
+});
+app.get('/', (req, res) => {
+    if (req.session.token) return res.redirect('/admin');
+    return res.redirect('/login');
 });
 
 app.use((req, res, next) => {

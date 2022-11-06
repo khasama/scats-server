@@ -634,6 +634,13 @@ $(document).ready(function () {
         });
     });
 
+}).bind("ajaxError", (event, request, settings) => {
+    if (request.status === 401) {
+        sendRefreshToken();
+    } else {
+        alert(`Lỗi Server ${request.statusText}`);
+    }
+
 });
 
 function getInforGenre(ele) {
@@ -1094,4 +1101,18 @@ function calculateTime(date) {
         return `${parseInt(lastAccess / 24 / 365)} year${parseInt(lastAccess / 24 / 365) > 1 ? 's' : ''} ago`;
     }
 
+}
+
+function sendRefreshToken() {
+    $.ajax({
+        url: `/api/v1/user/refresh-token`,
+        type: "POST",
+        success: (result) => {
+            if (result.status == "success") {
+                alert("renew access token !!!");
+            } else {
+                window.location = '/login';
+            }
+        }
+    });
 }

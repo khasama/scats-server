@@ -5,7 +5,7 @@ const createError = require("http-errors");
 module.exports = {
     verifyTokenManager: (type) => {
         return (req, res, next) => {
-            const token = req.session.token;
+            const token = req.session.access_token;
             if (!token) {
                 return res.redirect('/login');
             }

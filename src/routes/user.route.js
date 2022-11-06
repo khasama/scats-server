@@ -9,8 +9,9 @@ router.get('/logout', UserController.logout);
 router.post('/register', UserController.register);
 router.put('/change-role/:id', verifyTokenManager(1), UserController.changeRole);
 
-router.get('/:id', UserController.getUser);
-router.get('/', UserController.getAll);
+router.post('/refresh-token', UserController.refreshToken);
+router.get('/:id', verifyTokenManager(2), UserController.getUser);
+router.get('/', verifyTokenManager(2), UserController.getAll);
 // router.delete('/delete/:id', UserController.deleteOne);
 
 module.exports = router;

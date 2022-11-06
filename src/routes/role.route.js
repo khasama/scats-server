@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const RoleController = require("../controllers/role.controller");
-// const { verifyToken } = require('../middlewares');
+const { verifyTokenManager } = require('../middlewares');
 
 router.get("/", RoleController.getAll);
-router.post("/", RoleController.createOne);
-router.put("/:id", RoleController.updateOne);
-router.delete("/:id", RoleController.deleteOne);
+router.post("/", verifyTokenManager(1), RoleController.createOne);
+router.put("/:id", verifyTokenManager(1), RoleController.updateOne);
+router.delete("/:id", verifyTokenManager(1), RoleController.deleteOne);
 router.get("/:id", RoleController.getInformation);
 
 module.exports = router;

@@ -11,9 +11,6 @@ const episodeRoute = require("./episode.route");
 const userRoute = require("./user.route");
 const roleRoute = require("./role.route");
 const linkRoute = require("./link.route");
-// const imageRoute = require("./image.route");
-// const mangaRoute = require("./manga.route");
-// const chapterRoute = require("./chapter.route");
 
 router.use("/movie", movieRoute);
 router.use("/genre", genreRoute);
@@ -26,8 +23,5 @@ router.use("/episode", episodeRoute);
 router.use("/user", userRoute);
 router.use("/role", roleRoute);
 router.use("/link", linkRoute);
-// router.use("/images", imageRoute);
-// router.use("/manga", mangaRoute);
-// router.use("/chapter", chapterRoute);
 
 module.exports = router;
