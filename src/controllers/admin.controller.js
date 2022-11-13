@@ -196,4 +196,18 @@ AdminController.getAllUser = async (req, res) => {
     }
 };
 
+AdminController.getAllBanner = async (req, res) => {
+    try {
+        const banners = await MovieModel.findAll({
+            where: {
+                slide: true
+            }
+        });
+        const movies = await MovieModel.findAll();
+        return res.render("pages/banner", { banners, movies });
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = AdminController;

@@ -1037,6 +1037,45 @@ function getUser(ele) {
     });
 }
 
+function addBanner(ele) {
+    const idMovie = $(ele).attr("data-id");
+    $.ajax({
+        type: "POST",
+        url: `/api/v1/movie/add-banner/`,
+        data: {
+            idMovie,
+        },
+        success: (result) => {
+            if (result.status == "success") {
+                location.reload()
+            } else {
+                alert(result.message);
+            }
+        },
+        error: (err) => {
+            console.log(err);
+        },
+    });
+}
+
+function deleteBanner(ele) {
+    const idMovie = $(ele).attr("data-id");
+    $.ajax({
+        type: "DELETE",
+        url: `/api/v1/movie/delete-banner/${idMovie}`,
+        success: (result) => {
+            if (result.status == "success") {
+                location.reload()
+            } else {
+                alert(result.message);
+            }
+        },
+        error: (err) => {
+            console.log(err);
+        },
+    });
+}
+
 function login() {
     const username = $("#username").val();
     const password = $("#password").val();

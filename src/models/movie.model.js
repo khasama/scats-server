@@ -63,6 +63,10 @@ const Movie = sequelize.define(
         new: {
             type: Sequelize.INTEGER,
             defaultValue: 0
+        },
+        slide: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: false
         }
     },
     {

@@ -15,6 +15,19 @@ MovieController.getAll = (req, res, next) => {
         });
 };
 
+MovieController.getBanner = (req, res, next) => {
+    MovieService.getBanner()
+        .then((rs) => {
+            return res.status(200).json(rs);
+        })
+        .catch((err) => {
+            console.log(err);
+            return res
+                .status(500)
+                .json({ status: "error", message: "Has a fucking error" });
+        });
+};
+
 MovieController.createOne = (req, res, next) => {
     const name = req.body.name;
     const aka = req.body.aka;
@@ -165,6 +178,46 @@ MovieController.deleteGenre = (req, res, next) => {
     const idGenre = req.params.idGenre;
     if (id) {
         MovieService.deleteGenre(id, idGenre)
+            .then((rs) => {
+                return res.status(200).json(rs);
+            })
+            .catch((err) => {
+                console.log(err);
+                return res
+                    .status(500)
+                    .json({ status: "error", message: "Has a fucking error" });
+            });
+    } else {
+        return res
+            .status(400)
+            .json({ status: "failed", message: "Missing params" });
+    }
+};
+
+MovieController.addBanner = (req, res, next) => {
+    const id = req.body.idMovie;
+    if (id) {
+        MovieService.addBanner(id)
+            .then((rs) => {
+                return res.status(200).json(rs);
+            })
+            .catch((err) => {
+                console.log(err);
+                return res
+                    .status(500)
+                    .json({ status: "error", message: "Has a fucking error" });
+            });
+    } else {
+        return res
+            .status(400)
+            .json({ status: "failed", message: "Missing params" });
+    }
+};
+
+MovieController.deleteBanner = (req, res, next) => {
+    const id = req.params.id;
+    if (id) {
+        MovieService.deleteBanner(id)
             .then((rs) => {
                 return res.status(200).json(rs);
             })

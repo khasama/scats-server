@@ -226,4 +226,80 @@ MovieService.deleteGenre = async (id, idGenre) => {
     }
 };
 
+MovieService.getBanner = async () => {
+    try {
+        const banners = await MovieModel.findAll(
+            {
+                where: {
+                    slide: true
+                },
+                limit: 6,
+                attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked'],
+                include: [
+                    {
+                        model: GenreModel,
+                        attributes: ['id', 'name', 'slug']
+                    },
+                    {
+                        model: CountryModel,
+                        attributes: ['id', 'name', 'slug']
+                    },
+                    {
+                        model: TypeModel,
+                        attributes: ['id', 'name', 'slug']
+                    },
+                    {
+                        model: StatusModel,
+                        attributes: ['id', 'name', 'slug']
+                    },
+                    {
+                        model: YearModel,
+                        attributes: ['id', 'name', 'slug']
+                    },
+                ]
+
+            });
+        return { status: "success", data: banners };
+    } catch (error) {
+        throw error;
+    }
+};
+
+MovieService.addBanner = async (id) => {
+    try {
+        const isBanner = await MovieModel.findOne(
+            {
+                where: {
+                    id,
+                    slide: true
+                }
+            });
+        if (isBanner) return { status: "failed", message: "Movie already exists" };
+        await MovieModel.update(
+            {
+                slide: true
+            },
+            {
+                where: { id }
+            });
+        return { status: "success" };
+    } catch (error) {
+        throw error;
+    }
+};
+MovieService.deleteBanner = async (id) => {
+    try {
+        await MovieModel.update(
+            {
+                slide: false
+            },
+            {
+                where: { id }
+            });
+        return { status: "success" };
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = MovieService;
