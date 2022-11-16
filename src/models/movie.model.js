@@ -67,7 +67,13 @@ const Movie = sequelize.define(
         slide: {
             type: Sequelize.BOOLEAN,
             defaultValue: false
-        }
+        },
+        imdb: {
+            type: Sequelize.STRING,
+        },
+        rating: {
+            type: Sequelize.DOUBLE,
+        },
     },
     {
         timestamps: true,

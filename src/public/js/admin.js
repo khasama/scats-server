@@ -295,6 +295,7 @@ $(document).ready(function () {
         const year = $("#addYear").val();
         const country = $("#addCountry").val();
         const type = $("#addType").val();
+        const imdb = $("#addIMDB").val().trim();
         if (name && aka && content && year && country && type) {
             formData.append("name", name);
             formData.append("aka", aka);
@@ -304,6 +305,7 @@ $(document).ready(function () {
             formData.append("type", type);
             formData.append("thumb", thumb);
             formData.append("background", background);
+            formData.append("imdb", imdb);
             $.ajax({
                 type: "POST",
                 url: `/api/v1/movie/`,
@@ -341,6 +343,7 @@ $(document).ready(function () {
         const status = $("#editStatus").val();
         const viewed = $("#editViewed").val().trim();
         const liked = $("#editLiked").val().trim();
+        const imdb = $("#editIMDB").val().trim();
         if (name && aka && content && year && country && type && status && viewed && liked) {
             formData.append("id", id);
             formData.append("name", name);
@@ -354,6 +357,7 @@ $(document).ready(function () {
             formData.append("liked", liked);
             formData.append("thumb", thumb);
             formData.append("background", background);
+            formData.append("imdb", imdb);
             $.ajax({
                 type: "PUT",
                 url: `/api/v1/movie/${id}`,

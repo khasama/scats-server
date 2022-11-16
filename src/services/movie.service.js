@@ -10,14 +10,36 @@ const LinkModel = require("../models/link.model");
 const ServerModel = require("../models/server.model");
 const drive = require("../utils/drive");
 const image = require("../utils/image");
+const { getDataIMDB } = require("../utils/")
 const slug = require("slug");
 
 const MovieService = {};
 
+MovieService.updateAll = async () => {
+    try {
+        let movies = await MovieModel.findAll({});
+        movies = JSON.parse(JSON.stringify(movies));
+        for (const movie of movies) {
+            try {
+                const imdb = movie.imdb;
+                const rs = await getDataIMDB(imdb);
+                const rating = rs.rating.star;
+                console.log({ rating });
+                await MovieModel.update({ rating }, { where: { id: movie.id } });
+            } catch (error) {
+                console.log({ id: movie.id });
+            }
+        }
+        return { status: "success" };
+    } catch (error) {
+        throw error;
+    }
+}
+
 MovieService.getAll = async () => {
     try {
         const movies = await MovieModel.findAll({
-            attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked'],
+            attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked', 'rating'],
             include: [
                 {
                     model: GenreModel,
@@ -58,6 +80,7 @@ MovieService.createOne = async (data) => {
             type_id: data.type,
             country_id: data.country
         }
+        if (data.imdb) movie = { ...movie, ...{ imdb: data.imdb } };
         if (data.thumb) {
             const thumb = data.thumb;
             const thumbBuffer = await image.resize(thumb.data, "thumb");
@@ -106,6 +129,7 @@ MovieService.updateOne = async (data) => {
             const backgroundID = await drive.uploadFile({ name: `${slug(data.name)}-bg.webp`, buffer: backgroundBuffer, type: "webp" }, true);
             movie = { ...movie, ...{ background: `https://drive.google.com/uc?id=${backgroundID}` } };
         }
+        if (data.imdb) movie = { ...movie, ...{ imdb: data.imdb } };
         await MovieModel.update(
             movie,
             {
@@ -131,7 +155,7 @@ MovieService.delete = async (id) => {
 MovieService.getInformation = async (id) => {
     try {
         const movie = await MovieModel.findOne({
-            attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked'],
+            attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked', 'rating'],
             where: {
                 id
             },
@@ -234,7 +258,7 @@ MovieService.getBanner = async () => {
                     slide: true
                 },
                 limit: 6,
-                attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked'],
+                attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked', 'rating'],
                 include: [
                     {
                         model: GenreModel,
@@ -258,7 +282,8 @@ MovieService.getBanner = async () => {
                     },
                 ]
 
-            });
+            }
+        );
         return { status: "success", data: banners };
     } catch (error) {
         throw error;
@@ -287,6 +312,7 @@ MovieService.addBanner = async (id) => {
         throw error;
     }
 };
+
 MovieService.deleteBanner = async (id) => {
     try {
         await MovieModel.update(

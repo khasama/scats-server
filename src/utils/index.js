@@ -1,5 +1,6 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
+const fetch = require("node-fetch");
 
 function getRealLink(idServer, link) {
     switch (parseInt(idServer)) {
@@ -56,12 +57,18 @@ module.exports = {
             })
         });
     },
-    getRealLink,
     convertMulti: (multi, idMovie) => {
         const arrEps = multi.split('\n');
         const newArrEps = arrEps.map(ep => {
             return { episode: ep.split('|')[0], hls: ep.split('|')[1], movie_id: idMovie };
         });
         return newArrEps;
+    },
+    getDataIMDB: async (id) => {
+        const response = await fetch(`https://imdb-api.tprojects.workers.dev/title/${id}`, {
+            method: "GET",
+        });
+        const data = await response.json();
+        return data;
     }
 }
