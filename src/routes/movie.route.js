@@ -14,7 +14,12 @@ router.delete("/delete-banner/:id", verifyTokenManager(2), MovieController.delet
 router.delete("/delete-genre/:idMovie-:idGenre", verifyTokenManager(2), MovieController.deleteGenre);
 // router.delete("/:id", MovieController.deleteSoft);
 // router.put("/activate/:id", MovieController.activateOne);
-router.get("/update-all", MovieController.updateAll);
+router.get("/search", MovieController.search);
+router.get("/new", MovieController.getNew);
+router.get("/top/view", MovieController.getTopView);
+router.get("/top/like", MovieController.getTopLike);
+router.get("/top/search", MovieController.getTopSearch);
+// router.get("/update-all", MovieController.updateAll);
 router.get("/:id", MovieController.getInformation);
 
 module.exports = router;

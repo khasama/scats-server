@@ -1,3 +1,4 @@
+const { Op } = require("sequelize")
 const MovieModel = require("../models/movie.model");
 const CountryModel = require("../models/country.model");
 const YearModel = require("../models/year.model");
@@ -21,11 +22,13 @@ MovieService.updateAll = async () => {
         movies = JSON.parse(JSON.stringify(movies));
         for (const movie of movies) {
             try {
-                const imdb = movie.imdb;
-                const rs = await getDataIMDB(imdb);
-                const rating = rs.rating.star;
-                console.log({ rating });
-                await MovieModel.update({ rating }, { where: { id: movie.id } });
+                if (movie.rating == null) {
+                    const imdb = movie.imdb;
+                    const rs = await getDataIMDB(imdb);
+                    const rating = rs.rating.star;
+                    console.log({ rating });
+                    await MovieModel.update({ rating }, { where: { id: movie.id } });
+                }
             } catch (error) {
                 console.log({ id: movie.id });
             }
@@ -155,7 +158,7 @@ MovieService.delete = async (id) => {
 MovieService.getInformation = async (id) => {
     try {
         const movie = await MovieModel.findOne({
-            attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked', 'rating'],
+            attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked', 'rating', 'imdb'],
             where: {
                 id
             },
@@ -194,6 +197,7 @@ MovieService.getInformation = async (id) => {
                 },
             ]
         });
+        updateRating(movie);
         return { status: "success", data: movie };
     } catch (error) {
         throw error;
@@ -327,5 +331,213 @@ MovieService.deleteBanner = async (id) => {
         throw error;
     }
 };
+
+MovieService.search = async (key, page) => {
+    try {
+        const moviesPerPage = 20;
+        const skip = (page - 1) * moviesPerPage;
+        const movies = await MovieModel.findAll({
+            where: {
+                [Op.or]: [
+                    {
+                        name: {
+                            [Op.like]: `%${key}%`
+                        }
+                    },
+                    {
+                        aka: {
+                            [Op.like]: `%${key}%`
+                        }
+                    }
+                ]
+            },
+            limit: moviesPerPage,
+            offset: skip,
+            attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked', 'rating'],
+            include: [
+                {
+                    model: GenreModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: CountryModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: TypeModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: StatusModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: YearModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+            ]
+        });
+        return { status: "success", data: movies };
+    } catch (error) {
+        throw error;
+    }
+};
+
+MovieService.getNew = async () => {
+    try {
+        const movies = await MovieModel.findAll({
+            order: [
+                ['new', 'DESC'],
+            ],
+            limit: 20,
+            attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked', 'rating', 'new'],
+            include: [
+                {
+                    model: GenreModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: CountryModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: TypeModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: StatusModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: YearModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+            ]
+        });
+        return { status: "success", data: movies };
+    } catch (error) {
+        throw error;
+    }
+};
+
+MovieService.getTopView = async () => {
+    try {
+        const movies = await MovieModel.findAll({
+            order: [
+                ['viewed', 'DESC'],
+            ],
+            limit: 10,
+            attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked', 'rating'],
+            include: [
+                {
+                    model: GenreModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: CountryModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: TypeModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: StatusModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: YearModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+            ]
+        });
+        return { status: "success", data: movies };
+    } catch (error) {
+        throw error;
+    }
+};
+
+MovieService.getTopLike = async () => {
+    try {
+        const movies = await MovieModel.findAll({
+            order: [
+                ['liked', 'DESC'],
+            ],
+            limit: 10,
+            attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked', 'rating'],
+            include: [
+                {
+                    model: GenreModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: CountryModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: TypeModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: StatusModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: YearModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+            ]
+        });
+        return { status: "success", data: movies };
+    } catch (error) {
+        throw error;
+    }
+};
+
+MovieService.getTopSearch = async () => {
+    try {
+        const movies = await MovieModel.findAll({
+            order: [
+                ['searched', 'DESC'],
+            ],
+            limit: 10,
+            attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked', 'searched', 'rating'],
+            include: [
+                {
+                    model: GenreModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: CountryModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: TypeModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: StatusModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: YearModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+            ]
+        });
+        return { status: "success", data: movies };
+    } catch (error) {
+        throw error;
+    }
+};
+
+
+async function updateRating(movie) {
+    const m = JSON.parse(JSON.stringify(movie));
+    const imdb = m.imdb;
+    const rs = await getDataIMDB(imdb);
+    const rating = rs.rating.star;
+    await MovieModel.update({ rating }, { where: { id: m.id } });
+}
 
 module.exports = MovieService;

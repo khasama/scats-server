@@ -1,3 +1,4 @@
+const MovieModel = require("../models/movie.model");
 const EpisodeModel = require("../models/episode.model");
 const LinkModel = require("../models/link.model");
 const { convertMulti } = require("../utils");
@@ -31,6 +32,7 @@ EpisodeService.createOne = async (data) => {
             hls: data.hls,
             movie_id: data.idMovie
         });
+        setNew(data.idMovie);
         return { status: "success", data: newEpisode };
     } catch (error) {
         throw error;
@@ -63,6 +65,7 @@ EpisodeService.addMultiEpisode = async (data) => {
         episodes.sort((a, b) => {
             return parseInt(a.episode) - parseInt(b.episode);
         });
+        setNew(data.idMovie);
         return { status: "success", data: episodes };
     } catch (error) {
         throw error;
@@ -92,6 +95,18 @@ EpisodeService.deleteOne = async (id) => {
         await LinkModel.destroy({ where: { episode_id: id }, force: true });
         await EpisodeModel.destroy({ where: { id }, force: true });
         return { status: "success" };
+    } catch (error) {
+        throw error;
+    }
+};
+
+async function setNew(id) {
+    try {
+        const maxNew = await MovieModel.max('new');
+        await MovieModel.update(
+            { new: maxNew + 1 },
+            { where: { id } }
+        );
     } catch (error) {
         throw error;
     }

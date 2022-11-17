@@ -250,4 +250,72 @@ MovieController.deleteBanner = (req, res, next) => {
     }
 };
 
+MovieController.search = (req, res, next) => {
+    const key = req.query.key;
+    let page = req.query.page;
+    if (!page || page < 1) page = 1;
+    MovieService.search(String(key).trim().toLowerCase(), parseInt(page))
+        .then((rs) => {
+            return res.status(200).json(rs);
+        })
+        .catch((err) => {
+            console.log(err);
+            return res
+                .status(500)
+                .json({ status: "error", message: "Has a fucking error" });
+        });
+};
+
+MovieController.getNew = (req, res, next) => {
+    MovieService.getNew()
+        .then((rs) => {
+            return res.status(200).json(rs);
+        })
+        .catch((err) => {
+            console.log(err);
+            return res
+                .status(500)
+                .json({ status: "error", message: "Has a fucking error" });
+        });
+};
+
+MovieController.getTopLike = (req, res, next) => {
+    MovieService.getTopLike()
+        .then((rs) => {
+            return res.status(200).json(rs);
+        })
+        .catch((err) => {
+            console.log(err);
+            return res
+                .status(500)
+                .json({ status: "error", message: "Has a fucking error" });
+        });
+};
+
+MovieController.getTopView = (req, res, next) => {
+    MovieService.getTopView()
+        .then((rs) => {
+            return res.status(200).json(rs);
+        })
+        .catch((err) => {
+            console.log(err);
+            return res
+                .status(500)
+                .json({ status: "error", message: "Has a fucking error" });
+        });
+};
+
+MovieController.getTopSearch = (req, res, next) => {
+    MovieService.getTopSearch()
+        .then((rs) => {
+            return res.status(200).json(rs);
+        })
+        .catch((err) => {
+            console.log(err);
+            return res
+                .status(500)
+                .json({ status: "error", message: "Has a fucking error" });
+        });
+};
+
 module.exports = MovieController;
