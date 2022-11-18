@@ -332,10 +332,11 @@ MovieService.deleteBanner = async (id) => {
     }
 };
 
-MovieService.search = async (key, page) => {
+MovieService.search = async (key, l, page) => {
     try {
-        const moviesPerPage = 20;
-        const skip = (page - 1) * moviesPerPage;
+        let limit = 20;
+        if (l) limit = parseInt(l);
+        const skip = (page - 1) * limit;
         const movies = await MovieModel.findAll({
             where: {
                 [Op.or]: [
@@ -351,7 +352,7 @@ MovieService.search = async (key, page) => {
                     }
                 ]
             },
-            limit: moviesPerPage,
+            limit,
             offset: skip,
             attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked', 'rating'],
             include: [
@@ -383,14 +384,61 @@ MovieService.search = async (key, page) => {
     }
 };
 
-MovieService.getNew = async () => {
+MovieService.getNew = async (l) => {
     try {
+        let limit = 20;
+        if (l) limit = parseInt(l);
         const movies = await MovieModel.findAll({
             order: [
                 ['new', 'DESC'],
             ],
-            limit: 20,
+            limit,
             attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked', 'rating', 'new'],
+            include: [
+                {
+                    model: GenreModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: CountryModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: TypeModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: StatusModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: YearModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+            ]
+        });
+        return { status: "success", data: movies };
+    } catch (error) {
+        throw error;
+    }
+};
+
+MovieService.getFilter = async ({ genre, year, country, type, limit, page }) => {
+    try {
+        let filter = {};
+        let l = 20;
+        let p = 1;
+        if (page >= 1) p = page;
+        if (limit) l = parseInt(limit);
+        if (year) filter = { ...filter, ...{ year_id: parseInt(year) } };
+        if (country) filter = { ...filter, ...{ country_id: parseInt(country) } };
+        if (type) filter = { ...filter, ...{ type_id: parseInt(type) } };
+        const skip = (p - 1) * l;
+        const movies = await MovieModel.findAll({
+            where: filter,
+            limit: l,
+            offset: skip,
+            attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked', 'rating', 'new', 'year_id', 'type_id', 'country_id'],
             include: [
                 {
                     model: GenreModel,

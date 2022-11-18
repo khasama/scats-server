@@ -253,8 +253,28 @@ MovieController.deleteBanner = (req, res, next) => {
 MovieController.search = (req, res, next) => {
     const key = req.query.key;
     let page = req.query.page;
+    const limit = req.query.limit;
     if (!page || page < 1) page = 1;
-    MovieService.search(String(key).trim().toLowerCase(), parseInt(page))
+    if (key) {
+        MovieService.search(String(key).trim().toLowerCase(), limit, parseInt(page))
+            .then((rs) => {
+                return res.status(200).json(rs);
+            })
+            .catch((err) => {
+                console.log(err);
+                return res
+                    .status(500)
+                    .json({ status: "error", message: "Has a fucking error" });
+            });
+    } else {
+        return res
+            .status(400)
+            .json({ status: "failed", message: "Missing params" });
+    }
+};
+
+MovieController.getNew = (req, res, next) => {
+    MovieService.getNew(req.query.limit)
         .then((rs) => {
             return res.status(200).json(rs);
         })
@@ -266,17 +286,29 @@ MovieController.search = (req, res, next) => {
         });
 };
 
-MovieController.getNew = (req, res, next) => {
-    MovieService.getNew()
-        .then((rs) => {
-            return res.status(200).json(rs);
-        })
-        .catch((err) => {
-            console.log(err);
-            return res
-                .status(500)
-                .json({ status: "error", message: "Has a fucking error" });
-        });
+MovieController.getFilter = (req, res, next) => {
+    const genre = req.query.genre;
+    const year = req.query.year;
+    const country = req.query.country;
+    const type = req.query.type;
+    const limit = req.query.limit;
+    const page = req.query.page;
+    if (year || country || type) {
+        MovieService.getFilter({ genre, year, country, type, limit, page })
+            .then((rs) => {
+                return res.status(200).json(rs);
+            })
+            .catch((err) => {
+                console.log(err);
+                return res
+                    .status(500)
+                    .json({ status: "error", message: "Has a fucking error" });
+            });
+    } else {
+        return res
+            .status(400)
+            .json({ status: "failed", message: "Missing params" });
+    }
 };
 
 MovieController.getTopLike = (req, res, next) => {
