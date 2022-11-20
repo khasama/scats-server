@@ -378,7 +378,23 @@ MovieService.search = async (key, l, page) => {
                 },
             ]
         });
-        return { status: "success", data: movies };
+        const count = await MovieModel.count({
+            where: {
+                [Op.or]: [
+                    {
+                        name: {
+                            [Op.like]: `%${key}%`
+                        }
+                    },
+                    {
+                        aka: {
+                            [Op.like]: `%${key}%`
+                        }
+                    }
+                ]
+            },
+        });
+        return { status: "success", data: { movies, count } };
     } catch (error) {
         throw error;
     }
@@ -462,7 +478,8 @@ MovieService.getFilter = async ({ genre, year, country, type, limit, page }) => 
                 },
             ]
         });
-        return { status: "success", data: movies };
+        const count = await MovieModel.count({ where: filter, });
+        return { status: "success", data: { movies, count } };
     } catch (error) {
         throw error;
     }
