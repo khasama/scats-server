@@ -1086,7 +1086,7 @@ function login() {
     if (username && password) {
         $.ajax({
             type: "POST",
-            url: `/api/v1/user/login-admin`,
+            url: `/api/v1/auth/login-admin`,
             data: {
                 username,
                 password
@@ -1110,7 +1110,7 @@ function login() {
 
 function logout() {
     $.ajax({
-        url: `/api/v1/user/logout`,
+        url: `/api/v1/auth/logout`,
         success: (result) => {
             if (result.status == "success") {
                 window.location = '/login';
@@ -1148,7 +1148,7 @@ function calculateTime(date) {
 
 function sendRefreshToken() {
     $.ajax({
-        url: `/api/v1/user/refresh-token`,
+        url: `/api/v1/auth/refresh-token`,
         type: "POST",
         success: (result) => {
             if (result.status == "success") {

@@ -24,6 +24,9 @@ const User = sequelize.define(
             type: Sequelize.INTEGER,
             defaultValue: 3
         },
+        refresh_token: {
+            type: Sequelize.STRING,
+        },
     },
     {
         timestamps: true,

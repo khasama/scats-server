@@ -10,6 +10,7 @@ const statusRoute = require("./status.route");
 const episodeRoute = require("./episode.route");
 const userRoute = require("./user.route");
 const roleRoute = require("./role.route");
+const authRoute = require("./auth.route");
 const linkRoute = require("./link.route");
 
 router.use("/movie", movieRoute);
@@ -23,5 +24,6 @@ router.use("/episode", episodeRoute);
 router.use("/user", userRoute);
 router.use("/role", roleRoute);
 router.use("/link", linkRoute);
+router.use("/auth", authRoute);
 
 module.exports = router;
