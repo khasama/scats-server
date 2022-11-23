@@ -1,7 +1,4 @@
-require("dotenv").config();
 const AuthService = require("../services/auth.service");
-const jwt = require("jsonwebtoken");
-const { signAccessToken } = require("../utils");
 
 const AuthController = {};
 
@@ -17,8 +14,7 @@ AuthController.loginAdminSite = (req, res, next) => {
             .then((rs) => {
                 if (rs.status == "success") {
                     req.session.user = rs.data.user;
-                    req.session.access_token = rs.data.accessToken;
-                    req.session.refresh_token = rs.data.refreshToken;
+                    req.session.access_token = rs.data.access_token;
                 }
                 return res.status(200).json(rs);
             })
@@ -52,8 +48,7 @@ AuthController.login = (req, res, next) => {
             .then((rs) => {
                 if (rs.status == "success") {
                     req.session.user = rs.data.user;
-                    req.session.access_token = rs.data.accessToken;
-                    req.session.refresh_token = rs.data.refreshToken;
+                    req.session.access_token = rs.data.access_token;
                 }
                 return res.status(200).json(rs);
             })
@@ -96,29 +91,24 @@ AuthController.register = (req, res, next) => {
 };
 
 AuthController.refreshToken = async (req, res, next) => {
-    const token = req.session.refresh_token;
-    if (!token) return res.status(200).json({ status: "failed" });
-
-    jwt.verify(
-        token,
-        process.env.REFRESH_TOKEN_SECRET,
-        async (err, payload) => {
-            if (err) {
-                req.session.destroy();
-                return res.status(200).json({ status: "failed" });
+    const idUser = req.body.id;
+    if (idUser) {
+        try {
+            const rs = await AuthService.refreshToken(idUser);
+            if (rs.status == "success") {
+                req.session.user = rs.data.user;
+                req.session.access_token = rs.data.access_token;
+                return res.status(200).json(rs);
+            } else {
+                return res.status(200).json(rs);
             }
-
-            const user = {
-                id: payload.id,
-                username: payload.id,
-                avatar: payload.avatar,
-                role: payload.role,
-            };
-            const accessToken = await signAccessToken(user);
-            req.session.access_token = accessToken;
-            return res.status(200).json({ status: "success" });
+        } catch (error) {
+            console.log(error);
+            return res
+                .status(500)
+                .json({ status: "error", message: "Has a fucking error" });
         }
-    );
+    }
 };
 
 module.exports = AuthController;

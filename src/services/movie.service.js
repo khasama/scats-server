@@ -25,7 +25,7 @@ MovieService.updateAll = async () => {
                 if (movie.rating == null) {
                     const imdb = movie.imdb;
                     const rs = await getDataIMDB(imdb);
-                    const rating = rs.rating.star;
+                    const rating = rs.imDb;
                     console.log({ rating });
                     await MovieModel.update({ rating }, { where: { id: movie.id } });
                 }
@@ -598,11 +598,15 @@ MovieService.getTopSearch = async () => {
 
 
 async function updateRating(movie) {
-    const m = JSON.parse(JSON.stringify(movie));
-    const imdb = m.imdb;
-    const rs = await getDataIMDB(imdb);
-    const rating = rs.rating.star;
-    await MovieModel.update({ rating }, { where: { id: m.id } });
+    try {
+        const m = JSON.parse(JSON.stringify(movie));
+        const imdb = m.imdb;
+        const rs = await getDataIMDB(imdb);
+        const rating = rs.imDb;
+        await MovieModel.update({ rating }, { where: { id: m.id } });
+    } catch (error) {
+
+    }
 }
 
 module.exports = MovieService;

@@ -2,6 +2,8 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const fetch = require("node-fetch");
 
+const imdbApi = process.env.IMDB_API;
+
 function getRealLink(idServer, link) {
     switch (parseInt(idServer)) {
         case 4:
@@ -65,7 +67,7 @@ module.exports = {
         return newArrEps;
     },
     getDataIMDB: async (id) => {
-        const response = await fetch(`https://imdb-api.tprojects.workers.dev/title/${id}`, {
+        const response = await fetch(`https://imdb-api.com/en/API/Ratings/${imdbApi}/${id}`, {
             method: "GET",
         });
         const data = await response.json();

@@ -1,6 +1,8 @@
+require("dotenv").config();
 const UserModel = require("../models/user.model");
 const RoleModel = require("../models/role.model");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const { signAccessToken, signRefreshToken } = require("../utils");
 
 const AuthService = {};
@@ -38,7 +40,8 @@ AuthService.login = async (data) => {
             if (match) {
                 const user = {
                     id: hasUser.id,
-                    username: hasUser.id,
+                    username: hasUser.username,
+                    email: hasUser.email,
                     avatar: hasUser.avatar,
                     role: hasUser.Role.name,
                 };
@@ -54,7 +57,7 @@ AuthService.login = async (data) => {
                         }
                     });
 
-                return { status: "success", data: { user, accessToken } };
+                return { status: "success", data: { user, access_token: accessToken } };
             } else {
                 return { status: "failed", message: "Wrong password" };
             }
@@ -63,6 +66,26 @@ AuthService.login = async (data) => {
         }
     } catch (error) {
         throw error;
+    }
+};
+
+AuthService.refreshToken = async (id) => {
+    try {
+        const u = await UserModel.findOne({ where: { id } });
+        const token = JSON.parse(JSON.stringify(u)).refresh_token;
+
+        const payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+        const user = {
+            id: payload.id,
+            username: payload.username,
+            email: payload.email,
+            avatar: payload.avatar,
+            role: payload.role,
+        };
+        const accessToken = await signAccessToken(user);
+        return { status: "success", data: { user, access_token: accessToken } };
+    } catch (error) {
+        return { status: "failed" };
     }
 };
 
@@ -84,6 +107,7 @@ AuthService.loginAdminSite = async (data) => {
                     const user = {
                         id: hasUser.id,
                         username: hasUser.id,
+                        email: hasUser.email,
                         avatar: hasUser.avatar,
                         role: hasUser.Role.name,
                     };
@@ -100,7 +124,7 @@ AuthService.loginAdminSite = async (data) => {
                             }
                         });
 
-                    return { status: "success", data: { user, accessToken } };
+                    return { status: "success", data: { user, access_token: accessToken } };
                 } else {
                     return { status: "failed", message: "You not admin" };
                 }

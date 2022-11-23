@@ -1094,6 +1094,7 @@ function login() {
             success: (result) => {
                 if (result.status == "success") {
                     alert(result.status);
+                    sessionStorage.setItem('u', JSON.stringify(result.data.user));
                     window.location = '/admin';
                 } else {
                     alert(result.message);
@@ -1113,6 +1114,7 @@ function logout() {
         url: `/api/v1/auth/logout`,
         success: (result) => {
             if (result.status == "success") {
+                sessionStorage.removeItem('u');
                 window.location = '/login';
             } else {
                 alert(result.message);
@@ -1147,8 +1149,10 @@ function calculateTime(date) {
 }
 
 function sendRefreshToken() {
+    const u = JSON.parse(sessionStorage.getItem('u'));
     $.ajax({
         url: `/api/v1/auth/refresh-token`,
+        data: { id: u.id },
         type: "POST",
         success: (result) => {
             if (result.status == "success") {
