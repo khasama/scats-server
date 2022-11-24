@@ -39,6 +39,29 @@ module.exports = {
             );
         };
     },
+    verifyUser: () => {
+        return (req, res, next) => {
+            const idUSer = req.body.idUser;
+            let token;
+            if (req.headers.authorization) {
+                token = req.headers.authorization.split(' ')[1];
+            } else {
+                token = req.session.access_token
+            }
+            if (!token) return next(createError.Unauthorized());
+            jwt.verify(
+                token,
+                process.env.ACCESS_TOKEN_SECRET,
+                (err, payload) => {
+                    if (err) return next(createError.Unauthorized());
+                    const id = payload.id;
+                    if (id != idUSer) return next(createError.Forbidden());
+                    return next();
+                }
+            );
+
+        };
+    },
     checkRef: (req, res, next) => {
         const ref = req.headers.referer;
         if (ref) {

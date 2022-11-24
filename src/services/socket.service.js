@@ -1,24 +1,37 @@
+const RoomModel = require("../models/room.model");
 const SocketService = {};
 
 let rooms = [];
 
 SocketService.init = (socket) => {
     let room = {
-        roomId: "",
+        id: "",
         master: "",
         video: {},
         playlist: [],
         viewers: [],
     };
-    socket.on("join-room", (roomId) => {
+    socket.on("join-room", (roomId, userId) => {
+        console.log({ roomId, userId })
         if (hasRoom(roomId)) {
-            addViewer(roomId, socket.id);
+            addViewer(roomId, userId);
             if (Object.keys(getCurrentVideo(roomId)).length !== 0) {
                 socket.emit("change-video", getCurrentVideo(roomId));
             }
+            socket.to(roomId).emit('user-join-room', userId);
         } else {
-            room.roomId = roomId;
-            room.master = socket.id;
+            RoomModel.update(
+                {
+                    live: true
+                },
+                {
+                    where: {
+                        id: roomId
+                    }
+                }
+            );
+            room.id = roomId;
+            room.master = userId;
             socket.emit("master");
             rooms.push(room);
         }
@@ -26,7 +39,8 @@ SocketService.init = (socket) => {
         socket.join(roomId);
 
         socket.on("change-video", (video) => {
-            if (checkMaster(roomId, socket.id)) {
+            console.log(video);
+            if (checkMaster(roomId, userId)) {
                 socket.emit("master-change-video", video);
                 socket.to(roomId).emit("change-video", video);
                 setCurrentVideo(roomId, video);
@@ -34,6 +48,7 @@ SocketService.init = (socket) => {
         });
 
         socket.on("position", (position) => {
+            console.log(parseInt(position));
             socket.to(roomId).emit("position", position);
         });
 
@@ -46,36 +61,38 @@ SocketService.init = (socket) => {
         });
 
         socket.on("disconnect", () => {
-            if (checkMaster(roomId, socket.id)) {
-                removeViewer(roomId, socket.id);
+            if (checkMaster(roomId, userId)) {
+                console.log("master-disconnect");
+                removeViewer(roomId, userId);
                 socket.to(roomId).emit("master-disconnect");
             } else {
-                removeViewer(roomId, socket.id);
-                socket.to(roomId).emit("viewer-disconnect");
+                console.log("viewer-disconnect");
+                removeViewer(roomId, userId);
+                socket.to(roomId).emit("viewer-disconnect", userId);
             }
         });
     });
 };
 
 function hasRoom(id) {
-    return rooms.findIndex((e) => e.roomId === id) > -1;
+    return rooms.findIndex((e) => e.id === id) > -1;
 }
 
 function setCurrentVideo(id, video) {
     rooms.map((room) => {
-        if (room.roomId === id) {
-            room.video = video;
+        if (room.id === id) {
+            room.video = JSON.parse(video);
         }
     });
 }
 
 function getCurrentVideo(id) {
-    return rooms[rooms.findIndex((e) => e.roomId === id)].video;
+    return rooms[rooms.findIndex((e) => e.id === id)].video;
 }
 
 function addViewer(id, viewer) {
     rooms.map((room) => {
-        if (room.roomId === id) {
+        if (room.id === id) {
             room.viewers.push(viewer);
         }
     });
@@ -84,12 +101,12 @@ function addViewer(id, viewer) {
 function removeViewer(id, viewer) {
     if (checkMaster(id, viewer)) {
         rooms.splice(
-            rooms.findIndex((e) => e.roomId === id),
+            rooms.findIndex((e) => e.id === id),
             1
         );
     } else {
         rooms.map((room) => {
-            if (room.roomId === id) {
+            if (room.id === id) {
                 const index = room.viewers.indexOf(viewer);
                 room.viewers.splice(index, 1);
             }
@@ -98,8 +115,8 @@ function removeViewer(id, viewer) {
 }
 
 function checkMaster(id, viewer) {
-    if (rooms.findIndex((e) => e.roomId === id) > -1) {
-        return rooms[rooms.findIndex((e) => e.roomId === id)].master === viewer;
+    if (rooms.findIndex((e) => e.id === id) > -1) {
+        return rooms[rooms.findIndex((e) => e.id === id)].master === viewer;
     }
 }
 
