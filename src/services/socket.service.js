@@ -1,9 +1,11 @@
 const RoomModel = require("../models/room.model");
+const UserModel = require("../models/user.model");
+const RoleModel = require("../models/role.model");
 const SocketService = {};
 
 let rooms = [];
 
-SocketService.init = (socket) => {
+SocketService.init = (socket, io) => {
     let room = {
         id: "",
         master: "",
@@ -11,35 +13,44 @@ SocketService.init = (socket) => {
         playlist: [],
         viewers: [],
     };
-    socket.on("join-room", (roomId, userId) => {
-        console.log({ roomId, userId })
+    socket.on("join-room", async (roomId, userId) => {
+
+        const user = await getInforUser(userId);
         if (hasRoom(roomId)) {
-            addViewer(roomId, userId);
+            addViewer(roomId, user);
             if (Object.keys(getCurrentVideo(roomId)).length !== 0) {
                 socket.emit("change-video", getCurrentVideo(roomId));
             }
-            socket.to(roomId).emit('user-join-room', userId);
+            socket.emit("update-viewers", getViewers(roomId));
+            socket.to(roomId).emit("user-join-room", user);
         } else {
-            RoomModel.update(
-                {
-                    live: true
-                },
-                {
-                    where: {
-                        id: roomId
+            const isMaster = await isRealMaster(roomId, userId);
+            if (isMaster) {
+                RoomModel.update(
+                    {
+                        live: true
+                    },
+                    {
+                        where: {
+                            id: roomId
+                        }
                     }
-                }
-            );
-            room.id = roomId;
-            room.master = userId;
-            socket.emit("master");
-            rooms.push(room);
+                );
+                room.id = roomId;
+                room.master = parseInt(userId);
+                socket.emit("master");
+                socket.emit('user-join-room', user);
+                rooms.push(room);
+            } else {
+                socket.emit("fuck-off");
+            }
         }
 
         socket.join(roomId);
 
+        addViewer(roomId, user);
+
         socket.on("change-video", (video) => {
-            console.log(video);
             if (checkMaster(roomId, userId)) {
                 socket.emit("master-change-video", video);
                 socket.to(roomId).emit("change-video", video);
@@ -47,9 +58,41 @@ SocketService.init = (socket) => {
             }
         });
 
+        socket.on("add-playlist", (video) => {
+            if (checkMaster(roomId, userId)) {
+                rooms.map((room) => {
+                    if (room.id === roomId) {
+                        if (room.playlist.some(e => e.id === video.id)) {
+                            console.log('co roi');
+                        } else {
+                            console.log('chua co');
+                            room.playlist.push(video);
+                            io.to(roomId).emit('add-playlist', video);
+                        }
+                    }
+                });
+
+            }
+        });
+
+        socket.on("delete-playlist", (video) => {
+            if (checkMaster(roomId, userId)) {
+                rooms.map((room) => {
+                    if (room.id === roomId) {
+                        if (room.playlist.some(e => e.id === video.id)) {
+                            room.playlist.splice(room.playlist.findIndex(v => v.id === video.id), 1);
+                            io.to(roomId).emit('delete-playlist', video);
+                        }
+                    }
+                });
+
+            }
+        });
+
         socket.on("position", (position) => {
-            console.log(parseInt(position));
-            socket.to(roomId).emit("position", position);
+            if (checkMaster(roomId, userId)) {
+                socket.to(roomId).emit("position", position);
+            }
         });
 
         socket.on("pause", () => {
@@ -62,13 +105,21 @@ SocketService.init = (socket) => {
 
         socket.on("disconnect", () => {
             if (checkMaster(roomId, userId)) {
-                console.log("master-disconnect");
                 removeViewer(roomId, userId);
                 socket.to(roomId).emit("master-disconnect");
+                RoomModel.update(
+                    {
+                        live: false
+                    },
+                    {
+                        where: {
+                            id: roomId
+                        }
+                    }
+                );
             } else {
-                console.log("viewer-disconnect");
                 removeViewer(roomId, userId);
-                socket.to(roomId).emit("viewer-disconnect", userId);
+                socket.to(roomId).emit("viewer-disconnect", user);
             }
         });
     });
@@ -81,7 +132,7 @@ function hasRoom(id) {
 function setCurrentVideo(id, video) {
     rooms.map((room) => {
         if (room.id === id) {
-            room.video = JSON.parse(video);
+            room.video = video;
         }
     });
 }
@@ -98,6 +149,10 @@ function addViewer(id, viewer) {
     });
 }
 
+function getViewers(id) {
+    return rooms[rooms.findIndex((e) => e.id === id)].viewers;
+}
+
 function removeViewer(id, viewer) {
     if (checkMaster(id, viewer)) {
         rooms.splice(
@@ -107,8 +162,8 @@ function removeViewer(id, viewer) {
     } else {
         rooms.map((room) => {
             if (room.id === id) {
-                const index = room.viewers.indexOf(viewer);
-                room.viewers.splice(index, 1);
+                const newViewer = room.viewers.filter(v => v.id != viewer)
+                room.viewers = newViewer;
             }
         });
     }
@@ -116,8 +171,33 @@ function removeViewer(id, viewer) {
 
 function checkMaster(id, viewer) {
     if (rooms.findIndex((e) => e.id === id) > -1) {
-        return rooms[rooms.findIndex((e) => e.id === id)].master === viewer;
+        return rooms[rooms.findIndex((e) => e.id === id)].master === parseInt(viewer);
     }
+}
+
+async function isRealMaster(roomId, userId) {
+    const room = await RoomModel.findOne({ where: { id: roomId } });
+    const master = JSON.parse(JSON.stringify(room)).master;
+    return master == parseInt(userId);
+}
+
+async function getInforUser(userId) {
+    let user = await UserModel.findOne(
+        {
+            attributes: ['id', 'username', 'email', 'avatar', 'role_id'],
+            where: {
+                id: userId
+            },
+            include: [
+                {
+                    model: RoleModel,
+                    attributes: ['id', 'name']
+                },
+            ]
+        }
+    );
+    user = JSON.parse(JSON.stringify(user));
+    return user;
 }
 
 module.exports = SocketService;

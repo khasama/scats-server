@@ -400,6 +400,37 @@ MovieService.search = async (key, l, page) => {
     }
 };
 
+MovieService.searchLive = async (key) => {
+    try {
+        const movies = await EpisodeModel.findAll({
+            attributes: ['id', 'episode', 'hls', 'movie_id'],
+            include: [
+                {
+                    model: MovieModel,
+                    attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked', 'rating'],
+                    where: {
+                        [Op.or]: [
+                            {
+                                name: {
+                                    [Op.like]: `%${key}%`
+                                }
+                            },
+                            {
+                                aka: {
+                                    [Op.like]: `%${key}%`
+                                }
+                            }
+                        ]
+                    },
+                },
+            ]
+        });
+        return { status: "success", data: movies };
+    } catch (error) {
+        throw error;
+    }
+};
+
 MovieService.getNew = async (l) => {
     try {
         let limit = 20;

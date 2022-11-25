@@ -273,6 +273,26 @@ MovieController.search = (req, res, next) => {
     }
 };
 
+MovieController.searchLive = (req, res, next) => {
+    const key = req.query.key;
+    if (key) {
+        MovieService.searchLive(String(key).trim().toLowerCase())
+            .then((rs) => {
+                return res.status(200).json(rs);
+            })
+            .catch((err) => {
+                console.log(err);
+                return res
+                    .status(500)
+                    .json({ status: "error", message: "Has a fucking error" });
+            });
+    } else {
+        return res
+            .status(400)
+            .json({ status: "failed", message: "Missing params" });
+    }
+};
+
 MovieController.getNew = (req, res, next) => {
     MovieService.getNew(req.query.limit)
         .then((rs) => {

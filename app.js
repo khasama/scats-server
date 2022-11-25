@@ -48,7 +48,7 @@ app.use(
 );
 
 io.on("connection", (socket) => {
-    SocketService.init(socket);
+    SocketService.init(socket, io);
 });
 
 app.use("/api/v1", require("./src/routes"));
