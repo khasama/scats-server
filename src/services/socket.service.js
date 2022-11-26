@@ -41,6 +41,8 @@ SocketService.init = (socket, io) => {
                 socket.emit("master");
                 socket.emit('user-join-room', user);
                 rooms.push(room);
+                addViewer(roomId, user);
+
             } else {
                 socket.emit("fuck-off");
             }
@@ -48,7 +50,6 @@ SocketService.init = (socket, io) => {
 
         socket.join(roomId);
 
-        addViewer(roomId, user);
 
         socket.on("change-video", (video) => {
             if (checkMaster(roomId, userId)) {

@@ -47,7 +47,7 @@ AuthService.login = async (data) => {
                 };
                 const accessToken = await signAccessToken(user);
                 const refreshToken = await signRefreshToken(user);
-                UserModel.update(
+                await UserModel.update(
                     {
                         refresh_token: refreshToken
                     },
@@ -56,7 +56,6 @@ AuthService.login = async (data) => {
                             id: hasUser.id
                         }
                     });
-
                 return { status: "success", data: { user, access_token: accessToken } };
             } else {
                 return { status: "failed", message: "Wrong password" };
@@ -73,7 +72,6 @@ AuthService.refreshToken = async (id) => {
     try {
         const u = await UserModel.findOne({ where: { id } });
         const token = JSON.parse(JSON.stringify(u)).refresh_token;
-
         const payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
         const user = {
             id: payload.id,
@@ -114,7 +112,7 @@ AuthService.loginAdminSite = async (data) => {
                     const accessToken = await signAccessToken(user);
                     const refreshToken = await signRefreshToken(user);
 
-                    UserModel.update(
+                    await UserModel.update(
                         {
                             refresh_token: refreshToken
                         },

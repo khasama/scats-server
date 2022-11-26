@@ -57,6 +57,34 @@ Upload.uploadFile = async (file, share) => {
     }
 };
 
+Upload.uploadAvatar = async (file, share) => {
+    try {
+        let type, folder;
+        if (file.type === "webp") {
+            type = `image/${file.type}`;
+            folder = process.env.FOLDER_USER;
+            const createFile = await drive.files.create({
+                requestBody: {
+                    name: file.name,
+                    mimeType: type,
+                    parents: [folder]
+                },
+                media: {
+                    mimeType: type,
+                    body: Readable.from(file.buffer)
+                }
+            });
+            const fileId = createFile.data.id;
+            if (share) await setFilePublic(fileId);
+            return fileId;
+        }
+
+    } catch (error) {
+        console.log({ func: "upload drive", status: error.response.status, msg: error.response.statusText });
+        throw error;
+    }
+};
+
 Upload.deleteFile = async (fileId) => {
     try {
         const deleteFile = await drive.files.delete({ fileId });

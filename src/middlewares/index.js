@@ -48,6 +48,7 @@ module.exports = {
             } else {
                 token = req.session.access_token
             }
+            console.log({ idUSer, token });
             if (!token) return next(createError.Unauthorized());
             jwt.verify(
                 token,

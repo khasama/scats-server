@@ -18,14 +18,14 @@ const User = sequelize.define(
         },
         avatar: {
             type: Sequelize.STRING,
-            defaultValue: "unknow.jpg"
+            defaultValue: "https://drive.google.com/uc?id=1medVHZnNZJj8A_XHEqsPx8cl6dT1MRnu"
         },
         role_id: {
             type: Sequelize.INTEGER,
             defaultValue: 3
         },
         refresh_token: {
-            type: Sequelize.STRING,
+            type: Sequelize.STRING(500),
         },
     },
     {

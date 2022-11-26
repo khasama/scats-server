@@ -9,6 +9,9 @@ Image.resize = async (img, type) => {
     if (type == "background") {
         imgBuffer = await sharp(img).resize(550, 300, { fit: 'fill' }).webp().toBuffer();
     }
+    if (type == "avatar") {
+        imgBuffer = await sharp(img).resize(400, 400, { fit: 'fill' }).webp().toBuffer();
+    }
     return imgBuffer;
 }
 

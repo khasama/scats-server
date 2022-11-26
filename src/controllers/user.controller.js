@@ -54,4 +54,23 @@ UserController.changeRole = (req, res, next) => {
     }
 };
 
+UserController.update = (req, res, next) => {
+    const { idUser, username, email, avatar } = req.body;
+    if (idUser && username) {
+        UserService.update({ idUser, username, email, avatar })
+            .then((rs) => {
+                return res.status(200).json(rs);
+            })
+            .catch((err) => {
+                return res
+                    .status(500)
+                    .json({ status: "error", message: "Has a fucking error" });
+            });
+    } else {
+        return res
+            .status(400)
+            .json({ status: "failed", message: "Mising params" });
+    }
+};
+
 module.exports = UserController;
