@@ -87,6 +87,7 @@ UserService.update = async ({ idUser, username, email, avatar }) => {
                 },
             ]
         });
+
         const user = {
             id: newUser.id,
             username: newUser.username,
