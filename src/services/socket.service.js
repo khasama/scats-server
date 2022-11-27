@@ -64,9 +64,7 @@ SocketService.init = (socket, io) => {
                 rooms.map((room) => {
                     if (room.id === roomId) {
                         if (room.playlist.some(e => e.id === video.id)) {
-                            console.log('co roi');
                         } else {
-                            console.log('chua co');
                             room.playlist.push(video);
                             io.to(roomId).emit('add-playlist', video);
                         }
@@ -74,6 +72,11 @@ SocketService.init = (socket, io) => {
                 });
 
             }
+        });
+
+        socket.on("send-message", (message) => {
+            const mess = { message, user };
+            io.to(roomId).emit('send-message', mess);
         });
 
         socket.on("delete-playlist", (video) => {

@@ -67,4 +67,21 @@ RoomService.getMyRoom = async (idUser) => {
     }
 };
 
+RoomService.checkPass = async ({ id, pass }) => {
+    try {
+        const room = await RoomModel.findOne(
+            {
+                where: {
+                    id,
+                    pass
+                },
+            }
+        );
+        if (room) return { status: "success" };
+        return { status: "failed", message: "Sai mật khẩu" };
+    } catch (error) {
+        throw error;
+    }
+};
+
 module.exports = RoomService;

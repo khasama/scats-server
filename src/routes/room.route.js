@@ -4,6 +4,7 @@ const RoomController = require("../controllers/room.controller");
 const { verifyTokenManager, verifyUser } = require('../middlewares');
 
 router.get("/live", RoomController.getRoomLive);
+router.post("/check", RoomController.checkPass);
 router.post("/my-room", verifyUser(), RoomController.getMyRoom);
 router.post("/", verifyUser(), RoomController.createOne);
 // router.put("/:id", CountryController.updateOne);

@@ -1,4 +1,4 @@
-const { Op } = require("sequelize")
+const { Op, where } = require("sequelize")
 const MovieModel = require("../models/movie.model");
 const CountryModel = require("../models/country.model");
 const YearModel = require("../models/year.model");
@@ -473,6 +473,7 @@ MovieService.getNew = async (l) => {
 MovieService.getFilter = async ({ genre, year, country, type, limit, page }) => {
     try {
         let filter = {};
+        let genres = [];
         let l = 20;
         let p = 1;
         if (page >= 1) p = page;
@@ -480,6 +481,12 @@ MovieService.getFilter = async ({ genre, year, country, type, limit, page }) => 
         if (year) filter = { ...filter, ...{ year_id: parseInt(year) } };
         if (country) filter = { ...filter, ...{ country_id: parseInt(country) } };
         if (type) filter = { ...filter, ...{ type_id: parseInt(type) } };
+        if (genre) {
+            const g = genre.split(',');
+            g.map((e) => {
+                genres.push({ GenreId: e })
+            });
+        }
         const skip = (p - 1) * l;
         const movies = await MovieModel.findAll({
             where: filter,
@@ -489,7 +496,7 @@ MovieService.getFilter = async ({ genre, year, country, type, limit, page }) => 
             include: [
                 {
                     model: GenreModel,
-                    attributes: ['id', 'name', 'slug']
+                    attributes: ['id', 'name', 'slug'],
                 },
                 {
                     model: CountryModel,
@@ -509,12 +516,80 @@ MovieService.getFilter = async ({ genre, year, country, type, limit, page }) => 
                 },
             ]
         });
-        const count = await MovieModel.count({ where: filter, });
+        const count = await MovieModel.count({
+            where: filter,
+
+        });
         return { status: "success", data: { movies, count } };
     } catch (error) {
         throw error;
     }
 };
+
+// MovieService.getFilter = async ({ genre, year, country, type, limit, page }) => {
+//     try {
+//         let filter = {};
+//         let genres = [];
+//         let l = 20;
+//         let p = 1;
+//         if (page >= 1) p = page;
+//         if (limit) l = parseInt(limit);
+//         if (year) filter = { ...filter, ...{ year_id: parseInt(year) } };
+//         if (country) filter = { ...filter, ...{ country_id: parseInt(country) } };
+//         if (type) filter = { ...filter, ...{ type_id: parseInt(type) } };
+//         if (genre) {
+//             const g = genre.split(',');
+//             g.map((e) => {
+//                 genres.push({ GenreId: e })
+//             });
+//         }
+//         console.log(genres);
+//         const skip = (p - 1) * l;
+//         const movies = await GenreMovie.findAll({
+//             where: {
+//                 GenreId: genre.split(',')
+//             },
+//             // limit: l,
+//             // offset: skip,
+//             // include: [
+//             //     {
+//             //         where: filter,
+//             //         model: MovieModel,
+//             //         attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked', 'rating', 'new', 'year_id', 'type_id', 'country_id', 'status_id'],
+//             //         include: [
+//             //             {
+//             //                 model: GenreModel,
+//             //                 attributes: ['id', 'name', 'slug'],
+//             //             },
+//             //             {
+//             //                 model: CountryModel,
+//             //                 attributes: ['id', 'name', 'slug']
+//             //             },
+//             //             {
+//             //                 model: TypeModel,
+//             //                 attributes: ['id', 'name', 'slug']
+//             //             },
+//             //             {
+//             //                 model: StatusModel,
+//             //                 attributes: ['id', 'name', 'slug']
+//             //             },
+//             //             {
+//             //                 model: YearModel,
+//             //                 attributes: ['id', 'name', 'slug']
+//             //             },
+//             //         ]
+//             //     }
+//             // ]
+//         })
+//         // const count = await MovieModel.count({
+//         //     where: filter,
+
+//         // });
+//         return { status: "success", data: movies };
+//     } catch (error) {
+//         throw error;
+//     }
+// };
 
 MovieService.getTopView = async () => {
     try {

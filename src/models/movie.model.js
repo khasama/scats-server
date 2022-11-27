@@ -126,6 +126,23 @@ Movie.hasMany(Episode, {
     onUpdate: 'RESTRICT'
 });
 Movie.belongsToMany(Genre, { through: GenreMovie });
+Genre.belongsToMany(Movie, { through: GenreMovie });
+Movie.hasMany(GenreMovie);
+GenreMovie.belongsTo(Movie, {
+    foreignKey: {
+        name: 'MovieId'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
+Genre.hasMany(GenreMovie);
+GenreMovie.belongsTo(Genre, {
+    foreignKey: {
+        name: 'GenreId'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
 
 Episode.hasMany(Link, {
     foreignKey: {
@@ -149,13 +166,8 @@ Link.belongsTo(Server, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT'
 });
-GenreMovie.belongsTo(Genre, {
-    foreignKey: {
-        name: 'GenreId'
-    },
-    onDelete: 'RESTRICT',
-    onUpdate: 'RESTRICT'
-});
+
+
 
 
 module.exports = Movie;

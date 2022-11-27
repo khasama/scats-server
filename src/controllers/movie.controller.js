@@ -313,7 +313,7 @@ MovieController.getFilter = (req, res, next) => {
     const type = req.query.type;
     const limit = req.query.limit;
     const page = req.query.page;
-    if (year || country || type) {
+    if (genre || year || country || type) {
         MovieService.getFilter({ genre, year, country, type, limit, page })
             .then((rs) => {
                 return res.status(200).json(rs);
