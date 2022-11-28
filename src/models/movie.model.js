@@ -9,6 +9,9 @@ const Episode = require("./episode.model");
 const Link = require("./link.model");
 const Server = require("./server.model");
 const GenreMovie = require("./genre.movie.model");
+const User = require("./user.model");
+const Comment = require("./comment.model");
+const Reply = require("./comment.reply.model");
 
 const Movie = sequelize.define(
     'Movie',
@@ -125,6 +128,13 @@ Movie.hasMany(Episode, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT'
 });
+Movie.hasMany(Comment, {
+    foreignKey: {
+        name: 'movie_id'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
 Movie.belongsToMany(Genre, { through: GenreMovie });
 Genre.belongsToMany(Movie, { through: GenreMovie });
 Movie.hasMany(GenreMovie);
@@ -158,7 +168,6 @@ Link.belongsTo(Episode, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT'
 });
-
 Link.belongsTo(Server, {
     foreignKey: {
         name: 'server_id'
@@ -167,7 +176,42 @@ Link.belongsTo(Server, {
     onUpdate: 'RESTRICT'
 });
 
+Comment.belongsTo(Movie, {
+    foreignKey: {
+        name: 'movie_id'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
+Comment.belongsTo(User, {
+    foreignKey: {
+        name: 'user_id'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
+Comment.hasMany(Reply, {
+    foreignKey: {
+        name: 'comment_id'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
 
+Reply.belongsTo(Comment, {
+    foreignKey: {
+        name: 'comment_id'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
+Reply.belongsTo(User, {
+    foreignKey: {
+        name: 'user_id'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
 
 
 module.exports = Movie;
