@@ -4,7 +4,6 @@ const CommentController = {};
 
 CommentController.getCmtOfMovie = (req, res, next) => {
     const idMovie = req.params.id;
-    console.log(idMovie)
     CommentService.getCmtOfMovie(parseInt(idMovie))
         .then((rs) => {
             return res.status(200).json(rs);

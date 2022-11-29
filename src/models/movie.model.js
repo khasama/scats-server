@@ -213,5 +213,4 @@ Reply.belongsTo(User, {
     onUpdate: 'RESTRICT'
 });
 
-
 module.exports = Movie;

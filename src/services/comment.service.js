@@ -2,7 +2,9 @@ const sequelize = require("../configs/sequelize.config");
 const CommentModel = require("../models/comment.model");
 const ReplyModel = require("../models/comment.reply.model");
 const UserModel = require("../models/user.model");
+const EpisodeModel = require("../models/episode.model");
 const slug = require("slug");
+
 
 const CommentService = {};
 
@@ -11,45 +13,32 @@ CommentService.getCmtOfMovie = async (id) => {
         const limit = 20;
         let p = 1;
         const skip = (p - 1) * limit;
-        // const [comments] = await sequelize.query(
-        //     `
-        //         SELECT 
-        //             cmt.id, cmt.content, cmt.user_id, cmt.movie_id, cmt.created_at,
-        //             u.id, u.username, u.avatar
-        //         FROM tb_comment cmt
-        //         INNER JOIN tb_user u
-        //         ON cmt.user_id = u.id
-        //         WHERE movie_id = :idMovie;
-        //     `,
-        //     {
-        //         replacements: { idMovie: id },
-        //     }
-        // );
         const comments = await CommentModel.findAll({
-            // where: {
-            //     movie_id: id
-            // },
-            // limit,
-            // offset: skip,
-            // attributes: ['id', 'content', 'user_id', 'movie_id', 'created_at'],
-            // include: [
-            //     {
-            //         model: UserModel,
-            //         attributes: ['id', 'username', 'avatar'],
-            //     },
-            //     {
-            //         model: ReplyModel,
-            //         attributes: ['id', 'content', 'comment_id', 'user_id', 'created_at'],
-            //         include: [
-            //             {
-            //                 model: UserModel,
-            //                 attributes: ['id', 'username', 'avatar'],
-            //             },
-            //         ]
-            //     },
-            // ]
+            where: {
+                movie_id: id
+            },
+            limit,
+            offset: skip,
+            attributes: ['id', 'content', 'user_id', 'movie_id', 'created_at'],
+            include: [
+                {
+                    model: UserModel,
+                    attributes: ['id', 'username', 'avatar'],
+                },
+                {
+                    model: ReplyModel,
+                    attributes: ['id', 'content', 'comment_id', 'user_id', 'created_at'],
+                    include: [
+                        {
+                            model: UserModel,
+                            attributes: ['id', 'username', 'avatar'],
+                        },
+                    ]
+                },
+            ]
         });
-        return { status: "success", data: { comments, count: JSON.parse(JSON.stringify(comments)).length } };
+        const count = await CommentModel.count({ where: { id } });
+        return { status: "success", data: { comments, count } };
     } catch (error) {
         throw error;
     }
