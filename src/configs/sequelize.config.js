@@ -13,11 +13,22 @@ const sequelize = new Sequelize(
         dialect: 'mysql',
         logging: false,
         pool: {
-            max: 5,
+            max: 10,
             min: 0,
             acquire: 30000,
             idle: 10000
-        }
+        },
+        dialectOptions: {
+            dateStrings: true,
+            typeCast: function (field, next) { // for reading from database
+                if (field.type === 'DATETIME') {
+                    return field.string();
+                    // return field.string()
+                }
+                return next()
+            },
+        },
+        timezone: '+07:00',
     }
 );
 sequelize.authenticate().then(() => {
