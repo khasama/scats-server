@@ -1,4 +1,4 @@
-const { Op, where } = require("sequelize")
+const { Op } = require("sequelize");
 const MovieModel = require("../models/movie.model");
 const CountryModel = require("../models/country.model");
 const YearModel = require("../models/year.model");
@@ -476,22 +476,20 @@ MovieService.getFilter = async ({ genre, year, country, type, limit, page }) => 
         let genres = [];
         let l = 20;
         let p = 1;
-        if (page >= 1) p = page;
-        if (limit) l = parseInt(limit);
-        if (year) filter = { ...filter, ...{ year_id: parseInt(year) } };
-        if (country) filter = { ...filter, ...{ country_id: parseInt(country) } };
-        if (type) filter = { ...filter, ...{ type_id: parseInt(type) } };
+        if (page >= 1) p = parseInt(page);
+        if (limit && limit > 0) l = parseInt(limit);
+        if (year && year != 0) filter = { ...filter, ...{ year_id: parseInt(year) } };
+        if (country && country != 0) filter = { ...filter, ...{ country_id: parseInt(country) } };
+        if (type && type != 0) filter = { ...filter, ...{ type_id: parseInt(type) } };
         if (genre) {
             const g = genre.split(',');
             g.map((e) => {
-                genres.push({ GenreId: e })
+                genres.push(parseInt(e));
             });
         }
         const skip = (p - 1) * l;
-        const movies = await MovieModel.findAll({
+        let movies = await MovieModel.findAll({
             where: filter,
-            limit: l,
-            offset: skip,
             attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked', 'rating', 'new', 'year_id', 'type_id', 'country_id'],
             include: [
                 {
@@ -516,80 +514,19 @@ MovieService.getFilter = async ({ genre, year, country, type, limit, page }) => 
                 },
             ]
         });
-        const count = await MovieModel.count({
-            where: filter,
-
+        movies = JSON.parse(JSON.stringify(movies));
+        const filterMovies = movies.filter((movie) => {
+            const arrGenres = [];
+            movie.Genres.map(g => arrGenres.push(g.id));
+            return genres.every(g => arrGenres.indexOf(g) > - 1);
         });
-        return { status: "success", data: { movies, count } };
+        const m = filterMovies.slice(skip, skip + l);
+        const count = filterMovies.length;
+        return { status: "success", data: { movies: m, count } };
     } catch (error) {
         throw error;
     }
 };
-
-// MovieService.getFilter = async ({ genre, year, country, type, limit, page }) => {
-//     try {
-//         let filter = {};
-//         let genres = [];
-//         let l = 20;
-//         let p = 1;
-//         if (page >= 1) p = page;
-//         if (limit) l = parseInt(limit);
-//         if (year) filter = { ...filter, ...{ year_id: parseInt(year) } };
-//         if (country) filter = { ...filter, ...{ country_id: parseInt(country) } };
-//         if (type) filter = { ...filter, ...{ type_id: parseInt(type) } };
-//         if (genre) {
-//             const g = genre.split(',');
-//             g.map((e) => {
-//                 genres.push({ GenreId: e })
-//             });
-//         }
-//         console.log(genres);
-//         const skip = (p - 1) * l;
-//         const movies = await GenreMovie.findAll({
-//             where: {
-//                 GenreId: genre.split(',')
-//             },
-//             // limit: l,
-//             // offset: skip,
-//             // include: [
-//             //     {
-//             //         where: filter,
-//             //         model: MovieModel,
-//             //         attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked', 'rating', 'new', 'year_id', 'type_id', 'country_id', 'status_id'],
-//             //         include: [
-//             //             {
-//             //                 model: GenreModel,
-//             //                 attributes: ['id', 'name', 'slug'],
-//             //             },
-//             //             {
-//             //                 model: CountryModel,
-//             //                 attributes: ['id', 'name', 'slug']
-//             //             },
-//             //             {
-//             //                 model: TypeModel,
-//             //                 attributes: ['id', 'name', 'slug']
-//             //             },
-//             //             {
-//             //                 model: StatusModel,
-//             //                 attributes: ['id', 'name', 'slug']
-//             //             },
-//             //             {
-//             //                 model: YearModel,
-//             //                 attributes: ['id', 'name', 'slug']
-//             //             },
-//             //         ]
-//             //     }
-//             // ]
-//         })
-//         // const count = await MovieModel.count({
-//         //     where: filter,
-
-//         // });
-//         return { status: "success", data: movies };
-//     } catch (error) {
-//         throw error;
-//     }
-// };
 
 MovieService.getTopView = async () => {
     try {

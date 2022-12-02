@@ -22,6 +22,7 @@ SocketService.init = (socket, io) => {
                 socket.emit("change-video", getCurrentVideo(roomId));
             }
             socket.emit("update-viewers", getViewers(roomId));
+            socket.emit("update-playlist", getPlaylist(roomId));
             socket.to(roomId).emit("user-join-room", user);
         } else {
             const isMaster = await isRealMaster(roomId, userId);
@@ -151,6 +152,10 @@ function addViewer(id, viewer) {
             room.viewers.push(viewer);
         }
     });
+}
+
+function getPlaylist(id) {
+    return rooms[rooms.findIndex((e) => e.id === id)].playlist;
 }
 
 function getViewers(id) {
