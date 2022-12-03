@@ -21,7 +21,7 @@ router.get("/filter", MovieController.getFilter);
 router.get("/top/view", MovieController.getTopView);
 router.get("/top/like", MovieController.getTopLike);
 router.get("/top/search", MovieController.getTopSearch);
-// router.get("/update-all", MovieController.updateAll);
+router.get("/update-all", MovieController.updateAll);
 router.get("/:id", MovieController.getInformation);
 
 module.exports = router;

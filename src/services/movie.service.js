@@ -646,6 +646,7 @@ async function updateRating(movie) {
         const imdb = m.imdb;
         const rs = await getDataIMDB(imdb);
         const rating = rs.imDb;
+        // console.log(rating);
         await MovieModel.update({ rating }, { where: { id: m.id } });
     } catch (error) {
 
