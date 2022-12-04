@@ -8,7 +8,6 @@ CountryController.getAll = (req, res, next) => {
             return res.status(200).json(rs);
         })
         .catch((err) => {
-            console.log(err);
             return res
                 .status(500)
                 .json({ status: "error", message: "Has a fucking error" });
@@ -23,7 +22,6 @@ CountryController.createOne = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -48,7 +46,6 @@ CountryController.updateOne = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -68,7 +65,6 @@ CountryController.deleteOne = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -88,7 +84,6 @@ CountryController.getInformation = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });

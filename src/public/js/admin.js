@@ -34,7 +34,7 @@ $(document).ready(function () {
                     }
                 },
                 error: (err) => {
-                    console.log(err);
+
                 },
             });
         } else {
@@ -61,7 +61,7 @@ $(document).ready(function () {
                     }
                 },
                 error: (err) => {
-                    console.log(err);
+
                 },
             });
         } else {
@@ -87,7 +87,7 @@ $(document).ready(function () {
                     }
                 },
                 error: (err) => {
-                    console.log(err);
+
                 },
             });
         } else {
@@ -114,7 +114,7 @@ $(document).ready(function () {
                     }
                 },
                 error: (err) => {
-                    console.log(err);
+
                 },
             });
         } else {
@@ -140,7 +140,7 @@ $(document).ready(function () {
                     }
                 },
                 error: (err) => {
-                    console.log(err);
+
                 },
             });
         } else {
@@ -167,7 +167,7 @@ $(document).ready(function () {
                     }
                 },
                 error: (err) => {
-                    console.log(err);
+
                 },
             });
         } else {
@@ -195,7 +195,7 @@ $(document).ready(function () {
                     }
                 },
                 error: (err) => {
-                    console.log(err);
+
                 },
             });
         } else {
@@ -224,7 +224,7 @@ $(document).ready(function () {
                     }
                 },
                 error: (err) => {
-                    console.log(err);
+
                 },
             });
         } else {
@@ -250,7 +250,7 @@ $(document).ready(function () {
                     }
                 },
                 error: (err) => {
-                    console.log(err);
+
                 },
             });
         } else {
@@ -277,7 +277,7 @@ $(document).ready(function () {
                     }
                 },
                 error: (err) => {
-                    console.log(err);
+
                 },
             });
         } else {
@@ -321,7 +321,7 @@ $(document).ready(function () {
                     }
                 },
                 error: (err) => {
-                    console.log(err);
+
                 },
             });
         } else {
@@ -365,7 +365,7 @@ $(document).ready(function () {
                 processData: false,
                 contentType: false,
                 success: (result) => {
-                    console.log(result);
+                    (result);
                     if (result.status == "success") {
                         alert(result.status);
                         location.reload();
@@ -374,7 +374,7 @@ $(document).ready(function () {
                     }
                 },
                 error: (err) => {
-                    console.log(err);
+
                 },
             });
         } else {
@@ -413,7 +413,7 @@ $(document).ready(function () {
                     }
                 },
                 error: (err) => {
-                    console.log(err);
+
                 },
             });
         } else {
@@ -454,7 +454,7 @@ $(document).ready(function () {
                     }
                 },
                 error: (err) => {
-                    console.log(err);
+
                 },
             });
         } else {
@@ -477,7 +477,7 @@ $(document).ready(function () {
                         }
                     },
                     error: (err) => {
-                        console.log(err);
+
                     },
                 });
             }
@@ -517,7 +517,7 @@ $(document).ready(function () {
                     }
                 },
                 error: (err) => {
-                    console.log(err);
+
                 },
             });
         } else {
@@ -543,7 +543,7 @@ $(document).ready(function () {
                     }
                 },
                 error: (err) => {
-                    console.log(err);
+
                 },
             });
         } else {
@@ -582,7 +582,7 @@ $(document).ready(function () {
                     }
                 },
                 error: (err) => {
-                    console.log(err);
+
                 },
             });
         } else {
@@ -609,7 +609,7 @@ $(document).ready(function () {
                         }
                     },
                     error: (err) => {
-                        console.log(err);
+
                     },
                 });
             } else {
@@ -662,7 +662,7 @@ function getInforGenre(ele) {
             }
         },
         error: (err) => {
-            console.log(err);
+
         },
     });
 }
@@ -682,7 +682,7 @@ function deleteGenre(ele) {
                 }
             },
             error: (err) => {
-                console.log(err)
+                (err)
             },
         });
     }
@@ -892,7 +892,7 @@ function addGenreOfMovie(ele) {
             }
         },
         error: (err) => {
-            console.log(err);
+
         },
     });
 }
@@ -910,7 +910,7 @@ function deleteGenreMovie(ele) {
             }
         },
         error: (err) => {
-            console.log(err);
+
         },
     });
 }
@@ -1036,7 +1036,7 @@ function getUser(ele) {
             }
         },
         error: (err) => {
-            console.log(err);
+
         },
     });
 }
@@ -1057,7 +1057,7 @@ function addBanner(ele) {
             }
         },
         error: (err) => {
-            console.log(err);
+
         },
     });
 }
@@ -1075,7 +1075,7 @@ function deleteBanner(ele) {
             }
         },
         error: (err) => {
-            console.log(err);
+
         },
     });
 }
@@ -1101,7 +1101,7 @@ function login() {
                 }
             },
             error: (err) => {
-                console.log(err);
+
             },
         });
     } else {
@@ -1121,7 +1121,7 @@ function logout() {
             }
         },
         error: (err) => {
-            console.log(err);
+
         },
     });
 }

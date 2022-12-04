@@ -1,8 +1,8 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../configs/sequelize.config");
-const Movie = require("./movie.model");
-const User = require("./user.model");
-const Reply = require("./comment.reply.model");
+// const Movie = require("./movie.model");
+// const User = require("./user.model");
+// const Reply = require("./comment.reply.model");
 
 const Comment = sequelize.define(
     'Comment',

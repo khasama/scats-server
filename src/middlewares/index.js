@@ -41,7 +41,7 @@ module.exports = {
     },
     verifyUser: () => {
         return (req, res, next) => {
-            const idUSer = req.body.idUser;
+            const idUser = req.body.idUser || req.params.id;
             let token;
             if (req.headers.authorization) {
                 token = req.headers.authorization.split(' ')[1];
@@ -55,7 +55,7 @@ module.exports = {
                 (err, payload) => {
                     if (err) return next(createError.Unauthorized());
                     const id = payload.id;
-                    if (id != idUSer) return next(createError.Forbidden());
+                    if (id != idUser) return next(createError.Forbidden());
                     return next();
                 }
             );
@@ -66,7 +66,7 @@ module.exports = {
         const ref = req.headers.referer;
         if (ref) {
             const origin = ref.split("//")[1].replace("/", "");
-            // console.log(origin);
+            // (origin);
         }
 
         next();

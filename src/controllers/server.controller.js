@@ -8,7 +8,6 @@ ServerController.getAll = (req, res, next) => {
             return res.status(200).json(rs);
         })
         .catch((err) => {
-            console.log(err);
             return res
                 .status(500)
                 .json({ status: "error", message: "Has a fucking error" });
@@ -28,7 +27,6 @@ ServerController.createOne = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -55,7 +53,6 @@ ServerController.updateOne = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -75,7 +72,6 @@ ServerController.deleteOne = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -95,7 +91,6 @@ ServerController.getInformation = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });

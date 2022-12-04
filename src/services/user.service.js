@@ -97,7 +97,7 @@ UserService.update = async ({ idUser, username, email, avatar }) => {
         };
         return { status: "success", data: user };
     } catch (error) {
-        console.log(error);
+        (error);
         throw error;
     }
 };

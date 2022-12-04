@@ -10,7 +10,6 @@ LinkController.getFullLink = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -30,7 +29,6 @@ LinkController.getInformation = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -52,7 +50,6 @@ LinkController.createOne = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -77,7 +74,6 @@ LinkController.updateOne = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -97,7 +93,6 @@ LinkController.deleteOne = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });

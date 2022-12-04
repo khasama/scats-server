@@ -10,7 +10,6 @@ EpisodeController.getInformation = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -32,7 +31,6 @@ EpisodeController.createOne = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -57,7 +55,6 @@ EpisodeController.addMultiEpisode = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -84,7 +81,6 @@ EpisodeController.updateOne = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -104,7 +100,6 @@ EpisodeController.deleteOne = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });

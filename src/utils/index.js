@@ -67,7 +67,6 @@ module.exports = {
         return newArrEps;
     },
     getDataIMDB: async (id) => {
-        console.log(`https://imdb-api.com/en/API/Ratings/${imdbApi}/${id}`)
         const response = await fetch(`https://imdb-api.com/en/API/Ratings/${imdbApi}/${id}`, {
             method: "GET",
         });

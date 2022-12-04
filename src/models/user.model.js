@@ -1,6 +1,7 @@
 const Sequelize = require("sequelize");
 const sequelize = require("../configs/sequelize.config");
 const Role = require("./role.model");
+const Library = require("./library.model");
 
 const User = sequelize.define(
     'User',
@@ -38,6 +39,13 @@ const User = sequelize.define(
 User.belongsTo(Role, {
     foreignKey: {
         name: 'role_id'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
+User.hasMany(Library, {
+    foreignKey: {
+        name: 'user_id'
     },
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT'

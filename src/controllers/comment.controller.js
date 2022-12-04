@@ -9,7 +9,6 @@ CommentController.getCmtOfMovie = (req, res, next) => {
             return res.status(200).json(rs);
         })
         .catch((err) => {
-            console.log(err);
             return res
                 .status(500)
                 .json({ status: "error", message: "Has a fucking error" });
@@ -24,7 +23,6 @@ CommentController.newComment = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -44,7 +42,6 @@ CommentController.newReply = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -64,7 +61,6 @@ CommentController.deleteComment = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -84,7 +80,6 @@ CommentController.deleteReply = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });

@@ -8,7 +8,6 @@ RoleController.getAll = (req, res, next) => {
             return res.status(200).json(rs);
         })
         .catch((err) => {
-            console.log(err);
             return res
                 .status(500)
                 .json({ status: "error", message: "Has a fucking error" });
@@ -23,7 +22,6 @@ RoleController.getInformation = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -43,7 +41,6 @@ RoleController.createOne = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -68,7 +65,6 @@ RoleController.updateOne = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -88,7 +84,6 @@ RoleController.deleteOne = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });

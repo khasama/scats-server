@@ -26,11 +26,10 @@ MovieService.updateAll = async () => {
                     const imdb = movie.imdb;
                     const rs = await getDataIMDB(imdb);
                     const rating = rs.imDb;
-                    console.log({ rating });
                     await MovieModel.update({ rating }, { where: { id: movie.id } });
                 }
             } catch (error) {
-                console.log({ id: movie.id });
+                ({ id: movie.id });
             }
         }
         return { status: "success" };
@@ -646,7 +645,6 @@ async function updateRating(movie) {
         const imdb = m.imdb;
         const rs = await getDataIMDB(imdb);
         const rating = rs.imDb;
-        console.log(rating);
         if (rating) await MovieModel.update({ rating }, { where: { id: m.id } });
     } catch (error) {
 

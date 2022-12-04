@@ -19,7 +19,6 @@ AuthController.loginAdminSite = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -53,7 +52,6 @@ AuthController.login = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -70,15 +68,14 @@ AuthController.register = (req, res, next) => {
     const password = req.body.password;
     if (username && password) {
         const data = {
-            username,
-            password,
+            username: username.trim().toLowerCase(),
+            password: password.trim().toLowerCase(),
         };
         AuthService.register(data)
             .then((rs) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -103,7 +100,6 @@ AuthController.refreshToken = async (req, res, next) => {
                 return res.status(200).json(rs);
             }
         } catch (error) {
-            console.log(error);
             return res
                 .status(500)
                 .json({ status: "error", message: "Has a fucking error" });

@@ -26,7 +26,7 @@ async function setFilePublic(fileId) {
             }
         });
     } catch (error) {
-        console.log(error);
+        (error);
     }
 };
 
@@ -52,7 +52,7 @@ Upload.uploadFile = async (file, share) => {
         if (share) await setFilePublic(fileId);
         return fileId;
     } catch (error) {
-        console.log({ func: "upload drive", status: error.response.status, msg: error.response.statusText });
+        ({ func: "upload drive", status: error.response.status, msg: error.response.statusText });
         throw error;
     }
 };
@@ -80,7 +80,7 @@ Upload.uploadAvatar = async (file, share) => {
         }
 
     } catch (error) {
-        console.log({ func: "upload drive", status: error.response.status, msg: error.response.statusText });
+        ({ func: "upload drive", status: error.response.status, msg: error.response.statusText });
         throw error;
     }
 };
@@ -92,7 +92,7 @@ Upload.deleteFile = async (fileId) => {
             return true;
         }
     } catch (error) {
-        console.log({ func: "delete drive", status: error.response.status, msg: error.response.statusText });
+        ({ func: "delete drive", status: error.response.status, msg: error.response.statusText });
         throw error;
     }
 };

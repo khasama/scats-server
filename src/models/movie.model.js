@@ -12,6 +12,7 @@ const GenreMovie = require("./genre.movie.model");
 const User = require("./user.model");
 const Comment = require("./comment.model");
 const Reply = require("./comment.reply.model");
+const Library = require("./library.model");
 
 const Movie = sequelize.define(
     'Movie',
@@ -212,5 +213,29 @@ Reply.belongsTo(User, {
     onDelete: 'RESTRICT',
     onUpdate: 'RESTRICT'
 });
+
+Library.belongsTo(Movie, {
+    foreignKey: {
+        name: 'movie_id'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
+
+Library.belongsTo(User, {
+    foreignKey: {
+        name: 'user_id'
+    },
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT'
+});
+
+// Movie.hasMany(Library, {
+//     foreignKey: {
+//         name: 'movie_id'
+//     },
+//     onDelete: 'RESTRICT',
+//     onUpdate: 'RESTRICT'
+// })
 
 module.exports = Movie;

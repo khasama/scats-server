@@ -14,6 +14,7 @@ const authRoute = require("./auth.route");
 const linkRoute = require("./link.route");
 const roomRoute = require("./room.route");
 const commentRoute = require("./comment.route");
+const libraryRoute = require("./library.route");
 
 router.use("/movie", movieRoute);
 router.use("/genre", genreRoute);
@@ -29,5 +30,6 @@ router.use("/link", linkRoute);
 router.use("/auth", authRoute);
 router.use("/room", roomRoute);
 router.use("/comment", commentRoute);
+router.use("/library", libraryRoute);
 
 module.exports = router;

@@ -8,7 +8,6 @@ MovieController.updateAll = (req, res, next) => {
             res.status(200).json(rs);
         })
         .catch((err) => {
-            console.log(err);
             return res
                 .status(500)
                 .json({ status: "error", message: "Has a fucking error" });
@@ -21,7 +20,6 @@ MovieController.getAll = (req, res, next) => {
             return res.status(200).json(rs);
         })
         .catch((err) => {
-            console.log(err);
             return res
                 .status(500)
                 .json({ status: "error", message: "Has a fucking error" });
@@ -34,7 +32,6 @@ MovieController.getBanner = (req, res, next) => {
             return res.status(200).json(rs);
         })
         .catch((err) => {
-            console.log(err);
             return res
                 .status(500)
                 .json({ status: "error", message: "Has a fucking error" });
@@ -69,7 +66,6 @@ MovieController.createOne = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -116,7 +112,6 @@ MovieController.updateOne = (req, res, next) => {
                 res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -136,7 +131,6 @@ MovieController.delete = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -156,7 +150,6 @@ MovieController.getInformation = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -177,7 +170,6 @@ MovieController.addGenre = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -198,7 +190,6 @@ MovieController.deleteGenre = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -218,7 +209,6 @@ MovieController.addBanner = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -238,7 +228,6 @@ MovieController.deleteBanner = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -261,7 +250,6 @@ MovieController.search = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -281,7 +269,6 @@ MovieController.searchLive = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -299,7 +286,6 @@ MovieController.getNew = (req, res, next) => {
             return res.status(200).json(rs);
         })
         .catch((err) => {
-            console.log(err);
             return res
                 .status(500)
                 .json({ status: "error", message: "Has a fucking error" });
@@ -326,7 +312,6 @@ MovieController.getFilter = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -344,7 +329,6 @@ MovieController.getTopLike = (req, res, next) => {
             return res.status(200).json(rs);
         })
         .catch((err) => {
-            console.log(err);
             return res
                 .status(500)
                 .json({ status: "error", message: "Has a fucking error" });
@@ -357,7 +341,6 @@ MovieController.getTopView = (req, res, next) => {
             return res.status(200).json(rs);
         })
         .catch((err) => {
-            console.log(err);
             return res
                 .status(500)
                 .json({ status: "error", message: "Has a fucking error" });
@@ -370,7 +353,6 @@ MovieController.getTopSearch = (req, res, next) => {
             return res.status(200).json(rs);
         })
         .catch((err) => {
-            console.log(err);
             return res
                 .status(500)
                 .json({ status: "error", message: "Has a fucking error" });

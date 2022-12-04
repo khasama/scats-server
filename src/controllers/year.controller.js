@@ -8,7 +8,7 @@ YearController.getAll = (req, res, next) => {
             return res.status(200).json(rs);
         })
         .catch((err) => {
-            console.log(err);
+
             return res
                 .status(500)
                 .json({ status: "error", message: "Has a fucking error" });
@@ -23,7 +23,7 @@ YearController.getInformation = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
+
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -43,7 +43,7 @@ YearController.createOne = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
+
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -68,7 +68,7 @@ YearController.updateOne = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
+
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
@@ -88,7 +88,7 @@ YearController.deleteOne = (req, res, next) => {
                 return res.status(200).json(rs);
             })
             .catch((err) => {
-                console.log(err);
+
                 return res
                     .status(500)
                     .json({ status: "error", message: "Has a fucking error" });
