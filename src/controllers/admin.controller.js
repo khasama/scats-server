@@ -9,11 +9,17 @@ const EpisodeModel = require("../models/episode.model");
 const UserModel = require("../models/user.model");
 const RoleModel = require("../models/role.model");
 const LinkModel = require("../models/link.model");
+const RoomModel = require("../models/room.model");
 
 const AdminController = {};
 
-AdminController.home = (req, res) => {
-    res.render("");
+AdminController.home = async (req, res) => {
+    const movies = await MovieModel.count();
+    const users = await UserModel.count();
+    const rooms = await RoomModel.count({
+        where: { live: true }
+    });
+    res.render("", { movies, users, rooms });
 };
 
 AdminController.getAllMovie = async (req, res) => {
