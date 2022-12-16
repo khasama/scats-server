@@ -16,6 +16,22 @@ $(document).ready(function () {
         }
     );
 
+    $("#generator").click(() => {
+        const total = parseInt($("#generatorEp").val());
+        const end = $('#generatorEnd').is(":checked");
+        let strEp = '';
+        if (total) {
+            for (let i = 1; i <= total; i++) {
+                if (end && i == total) {
+                    strEp += `${i}-end|`;
+                } else {
+                    strEp += `${i}|${i == total ? '' : '\n'}`;
+                }
+            }
+            $("#multiEp").val(strEp);
+        }
+    });
+
     $("#newGenre").click(() => {
         const genre = $("#addGenre").val().trim();
         if (genre) {

@@ -9,13 +9,14 @@ const AuthService = {};
 
 AuthService.register = async (data) => {
     try {
-        const hasUser = await UserModel.findOne({ where: { username: data.username } });
+        const username = data.username.toLowerCase().trim().replace(' ', '');
+        const hasUser = await UserModel.findOne({ where: { username } });
         if (hasUser) return { status: "failed", message: "Username already used" };
         const pass = data.password;
         const hash = await bcrypt.hash(pass, 10);
         const newUser = await UserModel.create({
             email: '',
-            username: data.username,
+            username,
             password: hash,
         });
         return { status: "success", data: newUser };
@@ -26,8 +27,9 @@ AuthService.register = async (data) => {
 
 AuthService.login = async (data) => {
     try {
+        const username = data.username.toLowerCase().trim().replace(' ', '');
         const hasUser = await UserModel.findOne({
-            where: { username: data.username },
+            where: { username },
             include: [
                 {
                     model: RoleModel,
@@ -89,8 +91,9 @@ AuthService.refreshToken = async (id) => {
 
 AuthService.loginAdminSite = async (data) => {
     try {
+        const username = data.username.toLowerCase().trim().replace(' ', '');
         const hasUser = await UserModel.findOne({
-            where: { username: data.username },
+            where: { username },
             include: [
                 {
                     model: RoleModel,
