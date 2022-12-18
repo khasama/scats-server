@@ -17,6 +17,7 @@ router.delete("/delete-genre/:idMovie-:idGenre", verifyTokenManager(2), MovieCon
 router.get("/search", MovieController.search);
 router.get("/search-live", MovieController.searchLive);
 router.get("/new", MovieController.getNew);
+router.get("/anime-new", MovieController.getAnimeNew);
 router.get("/filter", MovieController.getFilter);
 router.get("/top/view", MovieController.getTopView);
 router.get("/top/like", MovieController.getTopLike);

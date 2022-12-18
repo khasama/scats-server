@@ -70,6 +70,7 @@ module.exports = {
         const response = await fetch(`https://imdb-api.com/en/API/Ratings/${imdbApi}/${id}`, {
             method: "GET",
         });
+        console.log(`https://imdb-api.com/en/API/Ratings/${imdbApi}/${id}`)
         const data = await response.json();
         return data;
     }

@@ -83,7 +83,12 @@ const Movie = sequelize.define(
         timestamps: true,
         paranoid: true,
         underscored: true,
-        tableName: 'tb_movie'
+        tableName: 'tb_movie',
+        indexes: [
+            {
+                fields: ['new']
+            }
+        ]
     }
 );
 Movie.belongsTo(Country, {

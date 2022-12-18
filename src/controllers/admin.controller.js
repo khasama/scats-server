@@ -19,7 +19,7 @@ AdminController.home = async (req, res) => {
     const rooms = await RoomModel.count({
         where: { live: true }
     });
-    res.render("", { movies, users, rooms });
+    res.render("", { movies, users, rooms, user: req.session.user });
 };
 
 AdminController.getAllMovie = async (req, res) => {
@@ -60,6 +60,7 @@ AdminController.getAllMovie = async (req, res) => {
             servers,
             types,
             genres,
+            user: req.session.user
         });
     } catch (error) {
         throw error;
@@ -109,6 +110,7 @@ AdminController.getMovie = async (req, res) => {
             servers,
             types,
             statuses,
+            user: req.session.user
         });
     } catch (error) {
         throw error;
@@ -138,7 +140,8 @@ AdminController.getEpisodes = async (req, res) => {
         return res.render("pages/episode", {
             movie,
             servers,
-            episodes
+            episodes,
+            user: req.session.user
         });
     } catch (error) {
         throw error;
@@ -148,7 +151,7 @@ AdminController.getEpisodes = async (req, res) => {
 AdminController.getAllGenre = async (req, res) => {
     try {
         const genres = await GenreModel.findAll();
-        return res.render("pages/genre", { genres });
+        return res.render("pages/genre", { genres, user: req.session.user });
     } catch (error) {
         throw error;
     }
@@ -157,7 +160,7 @@ AdminController.getAllGenre = async (req, res) => {
 AdminController.getAllYear = async (req, res) => {
     try {
         const years = await YearModel.findAll();
-        return res.render("pages/year", { years });
+        return res.render("pages/year", { years, user: req.session.user });
     } catch (error) {
         throw error;
     }
@@ -166,7 +169,7 @@ AdminController.getAllYear = async (req, res) => {
 AdminController.getAllCountry = async (req, res) => {
     try {
         const countries = await CountryModel.findAll();
-        return res.render("pages/country", { countries });
+        return res.render("pages/country", { countries, user: req.session.user });
     } catch (error) {
         throw error;
     }
@@ -175,7 +178,7 @@ AdminController.getAllCountry = async (req, res) => {
 AdminController.getAllServer = async (req, res) => {
     try {
         const servers = await ServerModel.findAll();
-        return res.render("pages/server", { servers });
+        return res.render("pages/server", { servers, user: req.session.user });
     } catch (error) {
         throw error;
     }
@@ -184,7 +187,7 @@ AdminController.getAllServer = async (req, res) => {
 AdminController.getAllType = async (req, res) => {
     try {
         const types = await TypeModel.findAll();
-        return res.render("pages/type", { types });
+        return res.render("pages/type", { types, user: req.session.user });
     } catch (error) {
         throw error;
     }
@@ -196,7 +199,7 @@ AdminController.getAllUser = async (req, res) => {
             include: [RoleModel]
         });
         const roles = await RoleModel.findAll();
-        return res.render("pages/user", { users, roles });
+        return res.render("pages/user", { users, roles, user: req.session.user });
     } catch (error) {
         throw error;
     }
@@ -210,7 +213,7 @@ AdminController.getAllBanner = async (req, res) => {
             }
         });
         const movies = await MovieModel.findAll();
-        return res.render("pages/banner", { banners, movies });
+        return res.render("pages/banner", { banners, movies, user: req.session.user });
     } catch (error) {
         throw error;
     }

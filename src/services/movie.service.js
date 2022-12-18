@@ -196,7 +196,7 @@ MovieService.getInformation = async (id) => {
                 },
             ]
         });
-        updateRating(movie);
+        // updateRating(movie);
         return { status: "success", data: movie };
     } catch (error) {
         throw error;
@@ -444,6 +444,46 @@ MovieService.getNew = async (l) => {
                 {
                     model: GenreModel,
                     attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: CountryModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: TypeModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: StatusModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+                {
+                    model: YearModel,
+                    attributes: ['id', 'name', 'slug']
+                },
+            ]
+        });
+        return { status: "success", data: movies };
+    } catch (error) {
+        throw error;
+    }
+};
+
+MovieService.getAnimeNew = async (l) => {
+    try {
+        let limit = 20;
+        if (l) limit = parseInt(l);
+        const movies = await MovieModel.findAll({
+            order: [
+                ['new', 'DESC'],
+            ],
+            limit,
+            attributes: ['id', 'name', 'slug', 'aka', 'content', 'thumb', 'background', 'viewed', 'liked', 'rating', 'new'],
+            include: [
+                {
+                    model: GenreModel,
+                    attributes: ['id', 'name', 'slug'],
+                    where: { id: 25 }
                 },
                 {
                     model: CountryModel,

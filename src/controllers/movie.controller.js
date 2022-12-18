@@ -291,6 +291,17 @@ MovieController.getNew = (req, res, next) => {
                 .json({ status: "error", message: "Has a fucking error" });
         });
 };
+MovieController.getAnimeNew = (req, res, next) => {
+    MovieService.getAnimeNew(req.query.limit)
+        .then((rs) => {
+            return res.status(200).json(rs);
+        })
+        .catch((err) => {
+            return res
+                .status(500)
+                .json({ status: "error", message: "Has a fucking error" });
+        });
+};
 
 MovieController.getFilter = (req, res, next) => {
     const genre = req.query.genre;

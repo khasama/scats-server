@@ -107,7 +107,7 @@ AuthService.loginAdminSite = async (data) => {
                 if (hasUser.role_id == 1 || hasUser.role_id == 2) {
                     const user = {
                         id: hasUser.id,
-                        username: hasUser.id,
+                        username: hasUser.username,
                         email: hasUser.email,
                         avatar: hasUser.avatar,
                         role: hasUser.Role.name,
