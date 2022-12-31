@@ -2,6 +2,10 @@ const MovieService = require("../services/movie.service");
 
 const MovieController = {};
 
+MovieController.test = (req, res, next) => {
+    console.log(req.headers)
+};
+
 MovieController.updateAll = (req, res, next) => {
     MovieService.updateAll()
         .then((rs) => {

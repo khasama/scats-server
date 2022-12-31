@@ -14,6 +14,7 @@ router.delete("/delete-banner/:id", verifyTokenManager(2), MovieController.delet
 router.delete("/delete-genre/:idMovie-:idGenre", verifyTokenManager(2), MovieController.deleteGenre);
 // router.delete("/:id", MovieController.deleteSoft);
 // router.put("/activate/:id", MovieController.activateOne);
+router.get("/test", MovieController.test);
 router.get("/search", MovieController.search);
 router.get("/search-live", MovieController.searchLive);
 router.get("/new", MovieController.getNew);
