@@ -20,7 +20,7 @@ const fileUpload = require("express-fileupload");
 // const clientRedis = new Redis();
 const SocketService = require("./src/services/socket.service");
 const { verifyTokenManager } = require("./src/middlewares");
-
+app.disable('x-powered-by');
 app.set("view engine", "ejs");
 app.set("views", "./src/views");
 app.use("/public", express.static("./src/public"));
